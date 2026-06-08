@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" fill="none" preserveAspectRatio="xMidYMid slice">
+  <g filter="url(#filter0_n_19_71)">
+    <rect width="1920" height="1080" fill="white"/>
+    <rect width="1920" height="1080" fill="url(#paint0_radial_19_71)" fill-opacity="0.5" style="mix-blend-mode:hard-light"/>
+    
+    <g>
+      <g transform="matrix(-0.544062 0.478564 -0.148896 -0.169274 2073.5 -126.5)">
+        
+        <foreignObject x="-7500" y="-7500" width="15000" height="15000">
+          <div class="animated-gradient" xmlns="http://www.w3.org/1999/xhtml" style="background:conic-gradient(from 90deg,rgba(184, 102, 47, 1) 0deg,rgba(255, 182, 0, 1) 32.7837deg,rgba(115, 24, 93, 1) 327.941deg,rgba(184, 102, 47, 1) 360deg);height:100%;width:100%;opacity:0.22"></div>
+        </foreignObject>
+        
+      </g>
+    </g>
+  </g>
+  
+  <defs>
+    <filter id="filter0_n_19_71" x="0" y="0" width="1920" height="1080" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.58823525905609131 0.58823525905609131" stitchTiles="stitch" numOctaves="3" result="noise" seed="3802"/>
+      <feColorMatrix in="noise" type="luminanceToAlpha" result="alphaNoise"/>
+      <feComponentTransfer in="alphaNoise" result="coloredNoise1">
+        <feFuncA type="discrete" tableValues="0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 "/>
+      </feComponentTransfer>
+      <feComposite operator="in" in2="shape" in="coloredNoise1" result="noise1Clipped"/>
+      <feFlood flood-color="rgba(212, 151, 190, 0.41)" result="color1Flood"/>
+      <feComposite operator="in" in2="noise1Clipped" in="color1Flood" result="color1"/>
+      <feMerge result="effect1_noise_19_71">
+        <feMergeNode in="shape"/>
+        <feMergeNode in="color1"/>
+      </feMerge>
+    </filter>
+    
+    <clipPath id="paint1_angular_19_71_clip_path"><rect width="1920" height="1080"/></clipPath>
+    
+    <radialGradient id="paint0_radial_19_71" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1920 1269.5) rotate(-140.607) scale(2111.73 4205)">
+      <stop offset="0.173686" stop-color="#FFC73B"/>
+      <stop offset="0.476928" stop-color="#F04957"/>
+      <stop offset="0.709483" stop-color="#B30081" stop-opacity="0.68"/>
+    </radialGradient>
+  </defs>
+</svg>

@@ -1,16 +1,22 @@
 {
   "name": "bedziedobrze",
-  "version": "1.0.0",
+  "version": "1.0",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "eleventy --serve",
     "build": "eleventy"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "keywords": ["11ty", "motion", "cube-css", "creative agency"],
+  "author": "Helio62 Mateusz Nowak",
+  "license": "MIT",
+  "homepage": "https://bedziedobrze.space",
+  "description": "Creative digital solusions for business growth",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ursusmeles/bedziedobrze.git"
+  },
   "devDependencies": {
     "@11ty/eleventy": "^3.1.5"
   }
