@@ -3,7 +3,15 @@ import { defineConfig } from 'astro/config';
 
 import vercel from '@astrojs/vercel';
 
-// https://astro.build/config
 export default defineConfig({
-  adapter: vercel()
+  site: 'https://bedziedobrze.space', 
+  adapter: vercel(),
+    build: {
+    format: 'directory',
+  },
+
+  prefetch: {
+    prefetchAll: true,
+    defaultStrategy: 'viewport',
+  }
 });

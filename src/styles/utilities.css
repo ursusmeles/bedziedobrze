@@ -1,0 +1,29 @@
+/* UTILITIES */
+
+/* Visually hidden utility class for accessibility */
+
+.visually-hidden-focusable:not(:focus):not(:focus-within) {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.visually-hidden-focusable:focus,
+.visually-hidden-focusable:focus-within {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  background: var(--c-black);
+  padding: var(--space-s) var(--space-m);
+  margin-block-start: var(--space-s);
+  border-radius: var(--r-medium);
+  color: var(--c-super);
+}

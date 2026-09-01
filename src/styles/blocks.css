@@ -1,0 +1,53 @@
+/* BLOCKS */
+
+/* --- SECTION --- */
+section {
+  min-height: 20vh;
+  &.super {background-color: var(--c-super); }
+  &.dark :is(p, span) { font-weight: var(--font-regular); }
+}
+
+/* --- BUTTON --- */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xs) var(--space-s);
+  border-radius: 0;
+  font-weight: var(--font-semibold);
+  text-decoration: none;
+  line-height: var(--lh-small);
+  border: 1px solid transparent;
+  appearance: none;
+  -webkit-appearance: none;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  
+  /* Lock intrinsic size */
+  width: fit-content;
+  
+  /* Baseline transform to prevent visual snapping */
+  transform: translateY(0) scale(1);
+  will-change: transform;
+  transition: all 0.1s var(--ease-3);
+  
+  /* Default: Navy */
+  background-color: var(--c-black);
+  color: var(--c-offwhite);
+}
+
+.button:hover,
+.button:focus-visible {
+  /* Elevate */
+  transform: translateY(-2px) scale(1);
+  transition-timing-function: var(--ease-out-3); 
+}
+
+.button:active {
+  /* Maintain elevation AND scale down */
+  transform: translateY(-2px) scale(0.75);
+  transition-timing-function: var(--ease-spring-3);
+  transition-duration: 0.1s;
+}

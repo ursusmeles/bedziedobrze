@@ -1,0 +1,30 @@
+/* src/styles/global.css */
+
+/* LAYER MANIFEST */
+@layer reset, tokens, base, composition, blocks, utilities, exceptions;
+
+@import './reset.css' layer(reset); /* Based on Andy Bell's modern CSS reset */
+@import './tokens.css' layer(tokens); /* Variables and design tokens with fluid spacing and typography */
+@import './open-props.css' layer(tokens); /* Open Props variables, only the ones I need — easing and animations */
+@import './base.css' layer(base); /* Base styles for HTML elements */
+@import './composition.css' layer(composition); /* Heavily based on Andy Bell's Every Layout */
+@import './blocks.css' layer(blocks); /* Block-level components and patterns */
+@import './utilities.css' layer(utilities); /* Single-purpose utility classes */
+@import './exceptions.css' layer(exceptions); /* [data-] attributes and other exceptions to the rules */
+
+/* FONT FACES */
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url('/fonts/space-grotesk.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Ferro IV';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/ferro-iv.woff2') format('woff2');
+}

@@ -1,0 +1,98 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+}
+
+const {
+  title = "będzie\\dobrze",
+  description = "Wspieramy Cię w biznesie: pomagamy skalować sprzedaż, rozwijamy Twoją obecność online i budujemy wizerunek.",
+  image = "/og-image.jpg",
+  type = "website"
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Basic SEO -->
+  <title>{title === "będzie\\dobrze" ? title : `${title} | będzie\\dobrze`}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonicalURL} />
+
+  <!-- GEO & Local SEO -->
+  <meta name="geo.region" content="PL-PM" />
+  <meta name="geo.placename" content="Gdańsk" />
+  <meta name="geo.position" content="54.400414649565285;18.591991085026432">
+  <meta name="ICBM" content="54.400414649565285 18.591991085026432">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content={type} />
+  <meta property="og:url" content={canonicalURL} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={new URL(image, Astro.site)} />
+  <meta property="og:locale" content="pl_PL" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={new URL(image, Astro.site)} />
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="będzie\\dobrze" />
+  <link rel="manifest" href="/site.webmanifest" />
+
+  <!-- Font Preloading -->
+  <link rel="preload" href="/fonts/space-grotesk.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/ferro-iv.woff2" as="font" type="font/woff2" crossorigin />
+
+  <!-- Astro View Transitions (Smooth page routing) -->
+  <ClientRouter />
+
+  <!-- Local Business Schema -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Cooperative",
+      "name": "Będzie Dobrze",
+      "url": "https://bedziedobrze.space",
+      "telephone": "698673078",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Rzeczpospolitej 8/215",
+        "addressLocality": "Gdańsk",
+        "postalCode": "80-369",
+        "addressCountry": "PL"
+      }
+    }
+  </script>
+</head>
+<body>
+  <!-- A11y Skip Link -->
+  <a href="#main-content" class="skip-link visually-hidden-focusable">Przejdź do treści</a>
+
+  <slot name="header" />
+
+  <main class="layout-grid" id="main-content" tabindex="-1" transition:animate="slide">
+    <slot />
+  </main>
+
+  <slot name="footer" />
+</body>
+</html>
