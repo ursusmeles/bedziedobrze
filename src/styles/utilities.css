@@ -1,5 +1,12 @@
 /* UTILITIES */
 
+.hot {
+  color: var(--c-hot);
+}
+.decorative {
+  font-family: var(--font-display);
+}
+
 /* Visually hidden utility class for accessibility */
 
 .visually-hidden-focusable:not(:focus):not(:focus-within) {

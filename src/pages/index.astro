@@ -3,50 +3,78 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 <BaseLayout>
-
-<div class="font-test full-bleed-wrapper">
-  <div>
-  <h2>Ferro IV (Base 400)</h2>
-  <p class="ferro">Zażółć gęślą jaźń. ZAŻÓŁĆ GĘŚLĄ JAŹŃ.</p>
-
-  <h2>Space Grotesk (Variable Weights)</h2>
-  <div class="grotesk">
-    <p class="w-300">Light (300): Zażółć gęślą jaźń. 0123456789</p>
-    <p class="w-400">Regular (400): Zażółć gęślą jaźń. 0123456789</p>
-    <p class="w-500">Medium (500): Zażółć gęślą jaźń. 0123456789</p>
-    <p class="w-600">Semibold (600): Zażółć gęślą jaźń. 0123456789</p>
+<section class="super full-bleed-wrapper" id="hero">
+  <h1 class="decorative">będzie dobrze</h1>
+  <p><strong>będzie\\dobrze to gdański label kreatywny.</strong></p>
+  <p>Wspieramy Cię w&nbsp;biznesie: pomagamy skalować sprzedaż, rozwijamy Twoją obecność online i&nbsp;budujemy wizerunek.</p>
+</section>
+<section id="manifest">
+  <h2>Dlaczego będzie dobrze</h2>
+  <p>Pracujemy partnersko.</p>
+  <p>Zawsze dajemy od siebie coś ekstra.</p>
+  <p>Odrzucamy świat agencyjnych calli, account managerów i&nbsp;żonglowania setką klientów.</p>
+  <p>U nas masz zawsze bezpośredni dostęp do naszej wiedzy i&nbsp;umiejętności — <mark>founder to founder</mark>.</p>
+</section>
+<section id="uslugi">
+  <h2>Co robimy, żeby było dobrze</h2>
+  <span class="hot decorative">1</span>
+  <h3>Strategia i&nbsp;wzrost sprzedaży</h3>
+  <p>Przekujemy Twoje przewagi w konkretny plan działań, skierowanych do właściwych odbiorców. Zdefiniujemy do kogo mówisz i jak mówisz oraz dlaczego klienci powinni wybrać Ciebie, a nie konkurencję.</p>
+  <p>Zaprojektujemy i wdrożymy wielokanałowe kampanie marketingowe oparte na szczegółowej analityce. Zoptymalizujemy je tak, by każda złotówka wydana na marketing się zwróciła.</p>
+  <div class="cluster">
+    <h4 class="decorative">strategia</h4>
+    <h4 class="decorative">design</h4>
+    <h4 class="decorative">ads</h4>
+    <h4 class="decorative">analityka</h4>
+    <h4 class="decorative">offline</h4>
   </div>
+  <span class="hot decorative">2</span>
+  <h3>Wideo, foto &&nbsp;studio</h3>
+  <p>Stworzymy materiały filmowe na najwyższym poziomie — od koncepcji po postprodukcję.</p>
+  <p>Prowadzimy własne studio nagrań na gdańskim Przymorzu, gotowe do produkcji podcastów, kursów online, rolek i do streamingu.</p>
+  <div class="cluster">
+    <h4 class="decorative">podkasty</h4>
+    <h4 class="decorative">reels</h4>
+    <h4 class="decorative">streaming</h4>
   </div>
-</div>
-
-<style>
-  .font-test {
-    padding: 2rem;
-    background-color: #111;
-    color: #fff;
-  }
-  h2 {
-    font-family: system-ui, sans-serif;
-    color: #888;
-    font-size: 0.875rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-block-start: 2rem;
-    margin-block-end: 1rem;
-  }
-  .ferro {
-    font-family: 'Ferro IV', sans-serif;
-    font-weight: 400;
-    font-size: 2.5rem;
-  }
-  .grotesk p {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 1.5rem;
-    margin-block: 0.5rem;
-  }
-  .w-300 { font-weight: 300; }
-  .w-400 { font-weight: 400; }
-  .w-500 { font-weight: 500; }
-  .w-600 { font-weight: 600; }
-</style>
+  <span class="hot decorative">3</span>
+  <h3>Web design &&nbsp;development</h3>
+  <p>Zbudujemy ultraszybką stronę internetową lub sklep e-commerce tak, by rzeczywiście sprzedawały. Bez kompromisów w kwestii user experience, pozycjonowania, responsywności i dostępności.</p>
+  <div class="cluster">
+    <h4 class="decorative">css/html</h4>
+    <h4 class="decorative">ux/ui</h4>
+    <h4 class="decorative">seo</h4>
+    <h4 class="decorative">cms</h4>
+  </div>
+</section>
+<section id="proces">
+  <h2>Jak to zrobimy</h2>
+  <p>Bez zbędnych procesów. Tak, żeby było dobrze.</p>
+  <span class="hot decorative">1</span>
+  <h3>Diagnoza</h3>
+  <p>Zaczynamy od szczerej rozmowy.</p>
+  <p>Szukamy miejsc, gdzie nasza praca przyniesie Ci największą korzyść.</p>
+  <span class="hot decorative">2</span>
+  <h3>Strategia</h3>
+  <p>Dobieramy usługi na miarę Twoich potrzeb, branży i budżetu.</p>
+  <span class="hot decorative">3</span>
+  <h3>Wdrożenie</h3>
+  <p>Przechodzimy do pracy.</p>
+  <p>Opieramy się na wymiernych danych i optymalizacji.</p>
+  <p>Jesteś z nami na każdym etapie procesu.</p>
+</section>
+<section class="super full-bleed-wrapper" id="o-nas">
+  <h2>Kim jesteśmy</h2>
+  <h3 class="hot decorative">Mikołaj</h3>
+  <p>Producent wideo i strateg wizualny. Ekspert przekładania założeń biznesowych na angażujący obraz i dźwięk. Odpowiada za produkcje filmowe, fotografię oraz nasze studio. Miłośnik sportów walki i szybkich samochodów (w simrigu — jeździ skodą).</p>
+  <h3 class="hot decorative">Mateusz</h3>
+  <p>Ekspert od skalowania biznesu, strategii wizerunkowych i projektowania. Ex-CEO z doświadczeniem w optymalizacji procesów. Zwolennik otwartego oprogramowania oraz długodystansowych wypraw gravelowych.</p>
+  <h3>Nasz zespół</h3>
+  <p>Zaprzyjaźnieni flmowcy, oświetleniowcy, specjaliści od social media, designerzy i graficy. Najpierw diagnozujemy Twoje potrzeby, a potem dobieramy optymalny zespół do ich realizacji. Ty zawsze rozmawiasz z nami.</p>
+</section>
+<section class="super full-bleed-wrapper" id="kontakt">
+  <h2>Porozmawiajmy</h2>
+  <p>Masz projekt? Problem do rozwiązania? Napisz do nas, my zajmiemy się resztą.</p>
+  <a class="button">Wyślij</a>
+</section>
 </BaseLayout>

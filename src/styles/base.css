@@ -1,1 +1,115 @@
 /* BASE */
+
+::selection {
+  background-color: var(--c-hot);
+  color: var(--c-black);
+}
+
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--c-hot);
+  outline-offset: var(--focus-offset, 0.1lh);
+}
+
+body {
+  font-family: var(--font-text);
+  font-size: var(--step-0);
+  font-weight: var(--font-light);
+  color: var(--c-black);
+  background-color: var(--c-offwhite);
+  line-height: var(--lh-large);
+  letter-spacing: 0em;
+}
+
+section {
+  --section-top: var(--space-xl-3xl);
+  --section-bottom: var(--space-xl-3xl);
+  min-height: 20vh;
+  padding-block: var(--section-top) var(--section-bottom);
+  &.super {background-color: var(--c-super); }
+  &.super :is(p, span) { font-weight: var(--font-regular); }
+}
+
+h1, h2, h3, h4, h5 {
+  font-weight: var(--font-medium);
+  line-height: var(--lh-small);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--c-black);
+}
+
+h1, h2 { font-size: var(--step-4); max-width: 10ch; letter-spacing: -0.04em;}
+h3 { font-size: var(--step-3); max-width: 15ch; }
+h4 { font-size: var(--step-2); max-width: 45ch; }
+h5 { font-size: var(--step-1); max-width: 50ch; }
+
+p {
+  max-width: 45ch;
+  text-wrap: pretty;
+}
+
+/* Global anchor link styling */
+a {
+  color: currentColor;
+  text-decoration-thickness: 0.125em;
+  text-underline-offset: 0.125em;
+  transition: var(--transition-default);
+}
+
+a:hover,
+a:focus-visible {
+  color: var(--c-hot);
+}
+
+/* Ensure strong tags respect Space Grotesk weights */
+strong, b {
+  font-weight: var(--font-semibold);
+}
+
+mark {
+  color: var(--c-black);
+  background: var(--c-hot);
+  font-weight: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+img {
+  height: auto;
+}
+
+svg:not([class]) {
+  width: auto;
+  height: 1lh;
+}
+
+svg {
+  flex-shrink: 0;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  text-align: left;
+}
+
+th, td {
+  padding: var(--space-s);
+  border-bottom: 1px solid var(--c-hot);
+}
+
+th {
+  font-weight: var(--font-semibold);
+}
+
+input[type="checkbox"],
+input[type="radio"],
+input[type="range"],
+progress {
+  accent-color: var(--c-hot);
+}

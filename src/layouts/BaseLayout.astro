@@ -85,11 +85,11 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 </head>
 <body>
   <!-- A11y Skip Link -->
-  <a href="#main-content" class="skip-link visually-hidden-focusable">Przejdź do treści</a>
+  <a href="#main" class="skip-link visually-hidden-focusable">Przejdź do treści</a>
 
   <slot name="header" />
 
-  <main class="layout-grid" id="main-content" tabindex="-1" transition:animate="slide">
+  <main class="layout-grid" id="main" tabindex="-1" transition:animate="slide">
     <slot />
   </main>
 

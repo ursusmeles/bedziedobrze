@@ -1,12 +1,5 @@
 /* BLOCKS */
 
-/* --- SECTION --- */
-section {
-  min-height: 20vh;
-  &.super {background-color: var(--c-super); }
-  &.dark :is(p, span) { font-weight: var(--font-regular); }
-}
-
 /* --- BUTTON --- */
 .button {
   display: inline-flex;
