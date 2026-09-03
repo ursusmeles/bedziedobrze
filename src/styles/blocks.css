@@ -55,7 +55,7 @@
 
 /* BREAKPOINTS */
 
-@media (min-width: 43rem) {
+@media (min-width: 44rem) {
   .hero {
     min-height: 60vh;
   }
@@ -161,7 +161,7 @@
   
   /* SUMMARY */
 
-/* 2. TAB BUTTONS & FONT SWAP */
+/* 1. TAB BUTTONS & FONT SWAP */
 .tab-btn {
   cursor: pointer;
   background: transparent;
@@ -221,7 +221,7 @@
   border-color: var(--c-super);
 }
 
-/* 3. PANELS CONTAINER & DRAWER ANIMATION */
+/* 2. PANELS CONTAINER & DRAWER ANIMATION */
 .panels-container {
   display: grid;
 }

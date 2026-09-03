@@ -1,13 +1,53 @@
 <header class="layout-grid site-header">
-  <nav aria-label="Główna nawigacja" class="site-nav">
-    <ul role="list" class="nav-list">
-      <li><a href="#manifest">Studio</a></li>
-      <li><a href="#uslugi">Co robimy</a></li>
-      <li><a href="#proces">Jak działamy</a></li>
-      <li><a href="#onas">Kim jesteśmy</a></li>
-      <li><a href="#kontakt">Porozmawiajmy</a></li>
-    </ul>
-  </nav>
+<!-- MOBILE TOGGLE BUTTON -->
+  <button class="menu-toggle" aria-expanded="false" aria-controls="mobile-nav" aria-label="Otwórz menu">
+    <img src="/img/glyph-m.svg" alt="" aria-hidden="true" draggable="false" />
+  </button>
+<!-- NAVIGATION -->
+<nav id="mobile-nav" aria-label="Główna nawigacja" class="site-nav" data-state="closed">
+  <ul role="list" class="nav-list">
+    <li>
+      <a href="#manifest">
+        <span class="grid-overlap">
+          <span class="f-text">Studio</span>
+          <span class="f-disp" aria-hidden="true">Studio</span>
+        </span>
+      </a>
+    </li>
+    <li>
+      <a href="#uslugi">
+        <span class="grid-overlap">
+          <span class="f-text">Co robimy</span>
+          <span class="f-disp" aria-hidden="true">Co robimy</span>
+        </span>
+      </a>
+    </li>
+    <li>
+      <a href="#proces">
+        <span class="grid-overlap">
+          <span class="f-text">Jak działamy</span>
+          <span class="f-disp" aria-hidden="true">Jak działamy</span>
+        </span>
+      </a>
+    </li>
+    <li>
+      <a href="#onas">
+        <span class="grid-overlap">
+          <span class="f-text">Kim jesteśmy</span>
+          <span class="f-disp" aria-hidden="true">Kim jesteśmy</span>
+        </span>
+      </a>
+    </li>
+    <li>
+      <a href="#kontakt">
+        <span class="grid-overlap">
+          <span class="f-text">Porozmawiajmy</span>
+          <span class="f-disp" aria-hidden="true">Porozmawiajmy</span>
+        </span>
+      </a>
+    </li>
+  </ul>
+</nav>
 </header>
 
 <style>
@@ -16,21 +56,40 @@
     top: 0;
     inset-inline: 0;
     z-index: 50;
+  }
 
-    /* Initial State (No Blur) */
-    background-color: transparent;
-    backdrop-filter: blur(0px);
-    -webkit-backdrop-filter: blur(0px);
-    transition: background-color 0.3s ease, backdrop-filter 0.3s ease, -webkit-backdrop-filter 0.3s ease;
-}
-
-.site-header.is-scrolled {
+/* Progressive Blur Layer */
+.site-header::before {
+  content: '';
+  position: absolute;
+  
+  /* Extend the element below the actual header height to give the blur room to fade */
+  inset: 0 0 -50% 0; 
+  z-index: -1;
+  pointer-events: none;
+  
+  /* Apply the frosted glass effect */
+  background-color: rgb(255 255 255 / 1%); /* Adjust tint if needed */
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  
+  /* Mask the layer to fade out smoothly at the bottom */
+  mask-image: linear-gradient(to bottom, var(--c-super) 45%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, var(--c-super) 45%, transparent 100%);
+  
+  /* Start hidden, transition smoothly */
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-out-3);
+}
+
+/* Scrolled State */
+.site-header.is-scrolled::before {
+  opacity: 1;
 }
 
   .site-nav {
     grid-column: content;
+    z-inex: 1;
   }
 
   .nav-list {
@@ -41,12 +100,21 @@
     gap: var(--space-m);
     margin: 0;
     padding: 0;
-    height: 2lh;
+    padding-block-end: var(--space-s);
+    height: calc(2lh + var(--space-s));
   }
 
+  .nav-list .grid-overlap {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+}
+
+.nav-list .grid-overlap > * {
+  grid-area: 1 / 1;
+}
+
   .nav-list a {
-    text-transform: uppercase;
-    font-weight: var(--font-medium);
     line-height: var(--lh-small);
     letter-spacing: -0.02em;
     text-decoration: none;
@@ -55,10 +123,104 @@
     transition: color 0.2s var(--ease-out-3);
   }
 
-  .nav-list a:hover,
-  .nav-list a:focus-visible {
-    color: var(--c-hot);
+  /* FONT SWAP (REVERSED) */
+.nav-list .f-text,
+.nav-list .f-disp {
+  /* Animate both the wipe and the color change */
+  transition: clip-path 0.3s var(--ease-step-2), color 0.2s var(--ease-out-3);
+  text-transform: uppercase;
+}
+
+/* 1. Initial States */
+.nav-list .f-text {
+  font-family: var(--font-text);
+  clip-path: inset(0 0 0 0); /* Fully visible */
+}
+
+.nav-list .f-disp {
+  font-family: var(--font-display);
+  clip-path: inset(0 100% 0 0); /* Clipped to the right */
+}
+
+/* 2. Hover / Focus States */
+.nav-list a:hover .f-text,
+.nav-list a:focus-visible .f-text {
+  clip-path: inset(0 0 0 100%); /* Wipes away to the right */
+}
+
+.nav-list a:hover .f-disp,
+.nav-list a:focus-visible .f-disp {
+  clip-path: inset(0 0 0 0); /* Reveals from the left */
+
+}
+
+/* MOBILE TOGGLE BUTTON */
+.menu-toggle {
+  position: absolute; /* Absolute to the fixed header */
+  top: var(--space-m);
+  right: var(--fluid-margin);
+  width: var(--space-xl-3xl);
+  aspect-ratio: 1;
+  background-color: var(--c-offwhite);
+  border: var(--b-super);
+  z-index: 60; /* Sits above the drawer */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.menu-toggle img {
+  width: 60%;
+  height: auto;
+  pointer-events: none;
+}
+
+/* MOBILE DRAWER LAYOUT (< 44rem) */
+@media (max-width: 43.99rem) {
+  .site-nav {
+    position: fixed;
+    inset: 0 0 0 auto;
+    width: 80vw;
+    max-width: 24rem;
+    background-color: var(--c-offwhite);
+    z-index: 55;
+    padding: var(--space-3xl) var(--space-xl) var(--space-l);
+    
+    /* Hardware-accelerated drawer slide */
+    transform: translateX(100%);
+    transition: transform 0.4s var(--ease-out-3);
   }
+
+  .site-nav[data-state="open"] {
+    transform: translateX(0);
+  }
+
+.nav-list {
+    flex-direction: column;
+    align-items: flex-start;
+    
+    /* Overrides to prevent column wrapping */
+    flex-wrap: nowrap; 
+    height: auto; 
+    
+    /* Generous spacing between items */
+    gap: var(--space-2xl); 
+  }
+}
+
+/* DESKTOP LAYOUT (>= 44rem) */
+@media (min-width: 44rem) {
+  .menu-toggle {
+    display: none; /* Hide toggle on desktop */
+  }
+
+  .site-nav {
+    grid-column: content;
+    /* Ensure any lingering data-state doesn't override desktop placement */
+    transform: none !important; 
+  }
+}
 </style>
 
 <script>
@@ -67,12 +229,40 @@
     
     if (header) {
       const toggleScrollClass = () => {
-        // Adds the class if scrolled down more than 20px
-        header.classList.toggle('is-scrolled', window.scrollY > 200);
+        // Adds the class if scrolled down more than #px
+        header.classList.toggle('is-scrolled', window.scrollY > 100);
       };
 
       window.addEventListener('scroll', toggleScrollClass, { passive: true });
       toggleScrollClass(); // Check state on initial load
+    }
+  });
+</script>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const toggle = document.querySelector('.menu-toggle');
+    const nav = document.querySelector('#mobile-nav');
+    
+    if (toggle && nav) {
+      toggle.addEventListener('click', () => {
+        const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+        
+        // Toggle accessibility state
+        toggle.setAttribute('aria-expanded', !isExpanded ? 'true' : 'false');
+        
+        // Toggle visual state
+        nav.setAttribute('data-state', !isExpanded ? 'open' : 'closed');
+      });
+
+      // Optional: Close drawer when clicking a link
+      const links = nav.querySelectorAll('a');
+      links.forEach(link => {
+        link.addEventListener('click', () => {
+          toggle.setAttribute('aria-expanded', 'false');
+          nav.setAttribute('data-state', 'closed');
+        });
+      });
     }
   });
 </script>
