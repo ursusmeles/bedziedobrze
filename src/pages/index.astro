@@ -3,78 +3,267 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 <BaseLayout>
-<section class="super full-bleed-wrapper" id="hero">
-  <h1 class="decorative">będzie dobrze</h1>
-  <p><strong>będzie\\dobrze to gdański label kreatywny.</strong></p>
-  <p>Wspieramy Cię w&nbsp;biznesie: pomagamy skalować sprzedaż, rozwijamy Twoją obecność online i&nbsp;budujemy wizerunek.</p>
+<!-- HERO -->
+<section class="super full-bleed-wrapper hero" id="hero" aria-labelledby="hero-heading">
+  <div class="hero-top-row">
+    <div class="hero-content stack">
+      <h1 id="hero-heading" class="hero-text decorative">będzie dobrze</h1>
+      <p><strong>będzie&bsol;dobrze to gdański label kreatywny.</strong></p>
+      <p>Wspieramy Cię w&nbsp;biznesie: pomagamy skalować sprzedaż, rozwijamy Twoją obecność online i&nbsp;budujemy wizerunek.</p>
+    </div>
+  </div>
+  <img src="/img/heading.svg" alt="" aria-hidden="true" class="hero-svg" draggable="false"/>
 </section>
-<section id="manifest">
-  <h2>Dlaczego będzie dobrze</h2>
+<!-- BANNER -->
+<section class="breakout-wrapper studio-banner" aria-label="Studio" id="studio">
+  <img src="/img/studio.svg" alt="Studio" class="studio-logo" draggable="false" />
+</section>
+<!-- MANIFEST -->
+<section id="manifest" aria-labelledby="h-manifest">
+  <h2 id="h-manifest">Dlaczego będzie dobrze</h2>
   <p>Pracujemy partnersko.</p>
   <p>Zawsze dajemy od siebie coś ekstra.</p>
   <p>Odrzucamy świat agencyjnych calli, account managerów i&nbsp;żonglowania setką klientów.</p>
   <p>U nas masz zawsze bezpośredni dostęp do naszej wiedzy i&nbsp;umiejętności — <mark>founder to founder</mark>.</p>
 </section>
-<section id="uslugi">
-  <h2>Co robimy, żeby było dobrze</h2>
-  <span class="hot decorative">1</span>
-  <h3>Strategia i&nbsp;wzrost sprzedaży</h3>
-  <p>Przekujemy Twoje przewagi w konkretny plan działań, skierowanych do właściwych odbiorców. Zdefiniujemy do kogo mówisz i jak mówisz oraz dlaczego klienci powinni wybrać Ciebie, a nie konkurencję.</p>
-  <p>Zaprojektujemy i wdrożymy wielokanałowe kampanie marketingowe oparte na szczegółowej analityce. Zoptymalizujemy je tak, by każda złotówka wydana na marketing się zwróciła.</p>
-  <div class="cluster">
-    <h4 class="decorative">strategia</h4>
-    <h4 class="decorative">design</h4>
-    <h4 class="decorative">ads</h4>
-    <h4 class="decorative">analityka</h4>
-    <h4 class="decorative">offline</h4>
-  </div>
-  <span class="hot decorative">2</span>
-  <h3>Wideo, foto &&nbsp;studio</h3>
-  <p>Stworzymy materiały filmowe na najwyższym poziomie — od koncepcji po postprodukcję.</p>
-  <p>Prowadzimy własne studio nagrań na gdańskim Przymorzu, gotowe do produkcji podcastów, kursów online, rolek i do streamingu.</p>
-  <div class="cluster">
-    <h4 class="decorative">podkasty</h4>
-    <h4 class="decorative">reels</h4>
-    <h4 class="decorative">streaming</h4>
-  </div>
-  <span class="hot decorative">3</span>
-  <h3>Web design &&nbsp;development</h3>
-  <p>Zbudujemy ultraszybką stronę internetową lub sklep e-commerce tak, by rzeczywiście sprzedawały. Bez kompromisów w kwestii user experience, pozycjonowania, responsywności i dostępności.</p>
-  <div class="cluster">
-    <h4 class="decorative">css/html</h4>
-    <h4 class="decorative">ux/ui</h4>
-    <h4 class="decorative">seo</h4>
-    <h4 class="decorative">cms</h4>
-  </div>
+<section id="uslugi" aria-labelledby="h-uslugi">
+  <h2 id="h-uslugi">Co robimy, żeby było dobrze</h2>
+  <ol class="uslugi-list" role="list">
+    <!-- SERVICE 1 -->
+    <li>
+      <span class="hot decorative" aria-hidden="true">1</span>
+      <h3>Strategia i&nbsp;wzrost sprzedaży</h3>
+      <p>Przekujemy Twoje przewagi w konkretny plan działań, skierowanych do właściwych odbiorców. Zdefiniujemy do kogo mówisz i jak mówisz oraz dlaczego klienci powinni wybrać Ciebie, a nie konkurencję.</p>
+      <p>Zaprojektujemy i wdrożymy wielokanałowe kampanie marketingowe oparte na szczegółowej analityce. Zoptymalizujemy je tak, by każda złotówka wydana na marketing się zwróciła.</p>
+      <div class="stack" style="--gutter: var(--space-m);">
+        <div class="cluster" role="tablist">
+          <button role="tab" aria-selected="false" aria-controls="panel-strat-strategia" id="tab-strat-strategia" class="tab-btn">
+            <span class="grid-overlap">
+              <span class="f-disp">strategia</span>
+              <span class="f-text" aria-hidden="true">strategia</span>
+            </span>
+          </button>
+          <button role="tab" aria-selected="false" aria-controls="panel-strat-design" id="tab-strat-design" class="tab-btn">
+            <span class="grid-overlap">
+              <span class="f-disp">design</span>
+              <span class="f-text" aria-hidden="true">design</span>
+            </span>
+          </button>
+          <button role="tab" aria-selected="false" aria-controls="panel-strat-ads" id="tab-strat-ads" class="tab-btn">
+            <span class="grid-overlap">
+              <span class="f-disp">ads</span>
+              <span class="f-text" aria-hidden="true">ads</span>
+            </span>
+          </button>
+          <button role="tab" aria-selected="false" aria-controls="panel-strat-analityka" id="tab-strat-analityka" class="tab-btn">
+            <span class="grid-overlap">
+              <span class="f-disp">analityka</span>
+              <span class="f-text" aria-hidden="true">analityka</span>
+            </span>
+          </button>
+          <button role="tab" aria-selected="false" aria-controls="panel-strat-offline" id="tab-strat-offline" class="tab-btn">
+            <span class="grid-overlap">
+              <span class="f-disp">offline</span>
+              <span class="f-text" aria-hidden="true">offline</span>
+            </span>
+          </button>
+        </div>
+        <div class="panels-container">
+          <div id="panel-strat-strategia" role="tabpanel" aria-labelledby="tab-strat-strategia" class="details-wrapper" aria-hidden="true">
+            <div class="details-content"><p>Treść dla strategii...</p></div>
+          </div>
+          <div id="panel-strat-design" role="tabpanel" aria-labelledby="tab-strat-design" class="details-wrapper" aria-hidden="true">
+            <div class="details-content"><p>Treść dla designu...</p></div>
+          </div>
+          <div id="panel-strat-ads" role="tabpanel" aria-labelledby="tab-strat-ads" class="details-wrapper" aria-hidden="true">
+            <div class="details-content"><p>Treść dla ads...</p></div>
+          </div>
+          <div id="panel-strat-analityka" role="tabpanel" aria-labelledby="tab-strat-analityka" class="details-wrapper" aria-hidden="true">
+            <div class="details-content"><p>Treść dla analityki...</p></div>
+          </div>
+          <div id="panel-strat-offline" role="tabpanel" aria-labelledby="tab-strat-offline" class="details-wrapper" aria-hidden="true">
+            <div class="details-content"><p>Treść dla offline...</p></div>
+          </div>
+        </div>
+      </div>
+    </li>
+
+    <!-- SERVICE 2 -->
+    <li>
+      <span class="hot decorative" aria-hidden="true">2</span>
+      <h3>Wideo, foto &&nbsp;studio</h3>
+      <p>Stworzymy materiały filmowe na najwyższym poziomie — od koncepcji po postprodukcję.</p>
+      <p>Prowadzimy własne studio nagrań na gdańskim Przymorzu, gotowe do produkcji podcastów, kursów online, rolek i do streamingu.</p>
+      <div class="stack" style="--gutter: var(--space-m);">
+        <div class="cluster" role="tablist">
+          <button role="tab" aria-selected="false" aria-controls="panel-wideo-podkasty" id="tab-wideo-podkasty" class="tab-btn">
+            <span class="grid-overlap">
+              <span class="f-disp">podkasty</span>
+              <span class="f-text" aria-hidden="true">podkasty</span>
+            </span>
+          </button>
+          <button role="tab" aria-selected="false" aria-controls="panel-wideo-reels" id="tab-wideo-reels" class="tab-btn">
+            <span class="grid-overlap">
+              <span class="f-disp">reels</span>
+              <span class="f-text" aria-hidden="true">reels</span>
+            </span>
+          </button>
+          <button role="tab" aria-selected="false" aria-controls="panel-wideo-streaming" id="tab-wideo-streaming" class="tab-btn">
+            <span class="grid-overlap">
+              <span class="f-disp">streaming</span>
+              <span class="f-text" aria-hidden="true">streaming</span>
+            </span>
+          </button>
+        </div>
+        <div class="panels-container">
+          <div id="panel-wideo-podkasty" role="tabpanel" aria-labelledby="tab-wideo-podkasty" class="details-wrapper" aria-hidden="true">
+            <div class="details-content"><p>Treść dla podkastów...</p></div>
+          </div>
+          <div id="panel-wideo-reels" role="tabpanel" aria-labelledby="tab-wideo-reels" class="details-wrapper" aria-hidden="true">
+            <div class="details-content"><p>Treść dla reels...</p></div>
+          </div>
+          <div id="panel-wideo-streaming" role="tabpanel" aria-labelledby="tab-wideo-streaming" class="details-wrapper" aria-hidden="true">
+            <div class="details-content"><p>Treść dla streamingu...</p></div>
+          </div>
+        </div>
+      </div>
+    </li>
+
+    <!-- SERVICE 3 -->
+    <li>
+      <span class="hot decorative" aria-hidden="true">3</span>
+      <h3>Web design &&nbsp;development</h3>
+      <p>Zbudujemy ultraszybką stronę internetową lub sklep e-commerce tak, by rzeczywiście sprzedawały. Bez kompromisów w kwestii user experience, pozycjonowania, responsywności i dostępności.</p>
+      <div class="stack" style="--gutter: var(--space-m);">
+        <div class="cluster" role="tablist">
+          <button role="tab" aria-selected="false" aria-controls="panel-web-css" id="tab-web-css" class="tab-btn">
+            <span class="grid-overlap">
+              <span class="f-disp">css/html</span>
+              <span class="f-text" aria-hidden="true">css/html</span>
+            </span>
+          </button>
+          <button role="tab" aria-selected="false" aria-controls="panel-web-ux" id="tab-web-ux" class="tab-btn">
+            <span class="grid-overlap">
+              <span class="f-disp">ux/ui</span>
+              <span class="f-text" aria-hidden="true">ux/ui</span>
+            </span>
+          </button>
+          <button role="tab" aria-selected="false" aria-controls="panel-web-seo" id="tab-web-seo" class="tab-btn">
+            <span class="grid-overlap">
+              <span class="f-disp">seo</span>
+              <span class="f-text" aria-hidden="true">seo</span>
+            </span>
+          </button>
+          <button role="tab" aria-selected="false" aria-controls="panel-web-cms" id="tab-web-cms" class="tab-btn">
+            <span class="grid-overlap">
+              <span class="f-disp">cms</span>
+              <span class="f-text" aria-hidden="true">cms</span>
+            </span>
+          </button>
+        </div>
+        <div class="panels-container">
+          <div id="panel-web-css" role="tabpanel" aria-labelledby="tab-web-css" class="details-wrapper" aria-hidden="true">
+            <div class="details-content"><p>Treść dla css/html...</p></div>
+          </div>
+          <div id="panel-web-ux" role="tabpanel" aria-labelledby="tab-web-ux" class="details-wrapper" aria-hidden="true">
+            <div class="details-content"><p>Treść dla ux/ui...</p></div>
+          </div>
+          <div id="panel-web-seo" role="tabpanel" aria-labelledby="tab-web-seo" class="details-wrapper" aria-hidden="true">
+            <div class="details-content"><p>Treść dla seo...</p></div>
+          </div>
+          <div id="panel-web-cms" role="tabpanel" aria-labelledby="tab-web-cms" class="details-wrapper" aria-hidden="true">
+            <div class="details-content"><p>Treść dla cms...</p></div>
+          </div>
+        </div>
+      </div>
+    </li>
+  </ol>
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const tabWrappers = document.querySelectorAll('.stack'); 
+
+    tabWrappers.forEach(wrapper => {
+      const tabs = wrapper.querySelectorAll('[role="tab"]');
+      const panels = wrapper.querySelectorAll('[role="tabpanel"]');
+      let transitionTimeout: any;
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          const isSelected = tab.getAttribute('aria-selected') === 'true';
+          const anyOpen = Array.from(tabs).some(t => t.getAttribute('aria-selected') === 'true');
+
+          // 1. Immediately reset button states and close all panels
+          tabs.forEach(t => t.setAttribute('aria-selected', 'false'));
+          panels.forEach(p => p.setAttribute('aria-hidden', 'true'));
+          
+          // Clear any rapid-fire click timeouts
+          clearTimeout(transitionTimeout);
+
+          // 2. If we are opening a new tab
+          if (!isSelected) {
+            tab.setAttribute('aria-selected', 'true'); // Highlight button immediately
+            const targetPanel = wrapper.querySelector(`#${tab.getAttribute('aria-controls')}`);
+            
+            if (targetPanel) {
+              if (anyOpen) {
+                // If something was open, wait for it to close (400ms) before opening the new one
+                transitionTimeout = setTimeout(() => {
+                  targetPanel.setAttribute('aria-hidden', 'false');
+                }, 400); 
+              } else {
+                // If nothing was open, open instantly
+                targetPanel.setAttribute('aria-hidden', 'false');
+              }
+            }
+          }
+        });
+      });
+    });
+  });
+</script>
 </section>
-<section id="proces">
-  <h2>Jak to zrobimy</h2>
+<section id="proces" aria-labelledby="h-proces">
+  <h2 id="h-proces">Jak to zrobimy</h2>
   <p>Bez zbędnych procesów. Tak, żeby było dobrze.</p>
-  <span class="hot decorative">1</span>
-  <h3>Diagnoza</h3>
-  <p>Zaczynamy od szczerej rozmowy.</p>
-  <p>Szukamy miejsc, gdzie nasza praca przyniesie Ci największą korzyść.</p>
-  <span class="hot decorative">2</span>
-  <h3>Strategia</h3>
-  <p>Dobieramy usługi na miarę Twoich potrzeb, branży i budżetu.</p>
-  <span class="hot decorative">3</span>
-  <h3>Wdrożenie</h3>
-  <p>Przechodzimy do pracy.</p>
-  <p>Opieramy się na wymiernych danych i optymalizacji.</p>
-  <p>Jesteś z nami na każdym etapie procesu.</p>
+  <ol class="proces-list" role="list">
+    <li>
+      <span class="hot decorative" aria-hidden="true">1</span>
+      <h3>Diagnoza</h3>
+      <p>Zaczynamy od szczerej rozmowy.</p>
+      <p>Szukamy miejsc, gdzie nasza praca przyniesie Ci największą korzyść.</p>
+    </li>
+    <li>
+      <span class="hot decorative" aria-hidden="true">2</span>
+      <h3>Strategia</h3>
+      <p>Dobieramy usługi na miarę Twoich potrzeb, branży i budżetu.</p>
+    </li>
+    <li>
+      <span class="hot decorative" aria-hidden="true">3</span>
+      <h3>Wdrożenie</h3>
+      <p>Przechodzimy do pracy.</p>
+      <p>Opieramy się na wymiernych danych i optymalizacji.</p>
+      <p>Jesteś z nami na każdym etapie procesu.</p>
+    </li>
+  </ol>
 </section>
-<section class="super full-bleed-wrapper" id="o-nas">
-  <h2>Kim jesteśmy</h2>
-  <h3 class="hot decorative">Mikołaj</h3>
-  <p>Producent wideo i strateg wizualny. Ekspert przekładania założeń biznesowych na angażujący obraz i dźwięk. Odpowiada za produkcje filmowe, fotografię oraz nasze studio. Miłośnik sportów walki i szybkich samochodów (w simrigu — jeździ skodą).</p>
-  <h3 class="hot decorative">Mateusz</h3>
-  <p>Ekspert od skalowania biznesu, strategii wizerunkowych i projektowania. Ex-CEO z doświadczeniem w optymalizacji procesów. Zwolennik otwartego oprogramowania oraz długodystansowych wypraw gravelowych.</p>
-  <h3>Nasz zespół</h3>
-  <p>Zaprzyjaźnieni flmowcy, oświetleniowcy, specjaliści od social media, designerzy i graficy. Najpierw diagnozujemy Twoje potrzeby, a potem dobieramy optymalny zespół do ich realizacji. Ty zawsze rozmawiasz z nami.</p>
+<section class="super full-bleed-wrapper" id="onas" aria-labelledby="h-onas">
+  <h2 id="h-onas">Kim jesteśmy</h2>
+  <article>
+    <h3 class="hot decorative">Mikołaj</h3>
+    <p>Producent wideo i strateg wizualny. Ekspert przekładania założeń biznesowych na angażujący obraz i dźwięk. Odpowiada za produkcje filmowe, fotografię oraz nasze studio. Miłośnik sportów walki i szybkich samochodów (w simrigu — jeździ skodą).</p>
+  </article>
+  <article>
+    <h3 class="hot decorative">Mateusz</h3>
+    <p>Ekspert od skalowania biznesu, strategii wizerunkowych i projektowania. Ex-CEO z doświadczeniem w optymalizacji procesów. Zwolennik otwartego oprogramowania oraz długodystansowych wypraw gravelowych.</p>
+  </article>
+  <article>
+    <h3>Nasz zespół</h3>
+    <p>Zaprzyjaźnieni filmowcy, oświetleniowcy, specjaliści od social media, designerzy i graficy. Najpierw diagnozujemy Twoje potrzeby, a potem dobieramy optymalny zespół do ich realizacji. Ty zawsze rozmawiasz z nami.</p>
+  </article>
 </section>
-<section class="super full-bleed-wrapper" id="kontakt">
-  <h2>Porozmawiajmy</h2>
+<section class="super full-bleed-wrapper" id="kontakt" aria-labelledby="h-kontakt">
+  <h2 id="h-kontakt">Poroz&shy;mawia&shy;jmy</h2>
   <p>Masz projekt? Problem do rozwiązania? Napisz do nas, my zajmiemy się resztą.</p>
-  <a class="button">Wyślij</a>
+  <button class="button" type="submit">Wyślij</button>
 </section>
 </BaseLayout>

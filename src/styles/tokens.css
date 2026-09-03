@@ -69,7 +69,7 @@
 /* Border tokens */
 :root {
     --b-black: 1px solid var(--c-black);
-    --b-super: 1px solid var(--c-super);
+    --b-super: 2px solid var(--c-super);
     --b-hot: 1px solid var(--c-hot);
 }
 

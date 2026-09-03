@@ -81,6 +81,8 @@ button {
 
 img {
   height: auto;
+  -webkit-user-drag: none;
+  user-drag: none;
 }
 
 svg:not([class]) {

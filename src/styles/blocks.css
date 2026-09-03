@@ -1,5 +1,118 @@
 /* BLOCKS */
 
+/* HERO */
+.hero {
+  --section-top: var(--fluid-margin);
+  --section-bottom: var(--fluid-margin);
+  position: relative;
+  min-height: 50vh;
+  padding-block: var(--section-top) var(--section-bottom); 
+  
+  /* Pack content to the bottom edge */
+  align-content: end;
+  row-gap: var(--space-xl); 
+}
+
+.hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.hero::before {
+  content: '';  
+  position: absolute;
+  inset-block: var(--section-top) var(--section-bottom);
+  inset-inline: var(--fluid-margin);
+  background: url('/img/glyph1.svg') no-repeat left center / auto 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* TOP ROW (Default: Left-aligned for < 1300px) */
+.hero-top-row {
+  grid-column: content;
+  grid-row: 1;
+  display: flex;
+  align-items: flex-end; 
+  width: 100%;
+}
+
+.hero-content {
+  flex: 0 1 55ch;
+}
+
+/* BOTTOM ROW & SITE TITLE (Default: Mobile text visible, SVG hidden) */
+.hero-text {
+  display: block;
+}
+
+.hero-svg {
+  grid-column: content;
+  grid-row: 2;
+  align-self: end;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2000 / 216;
+  display: none; 
+}
+
+/* BREAKPOINTS */
+
+@media (min-width: 40rem) {
+  .hero {
+    min-height: 50vh;
+  }
+  
+  /* Push text to the right 50% */
+  .hero-top-row::before {
+    content: "";
+    flex: 1 1 50%;
+    min-width: 0;
+  }
+
+  /* Visually hide H1 for screen readers */
+  .hero-text {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+  }
+  
+  /* Reveal massive SVG */
+  .hero-svg {
+    display: block;
+  }
+}
+
+@media (min-width: 82rem){
+  .hero {
+    min-height: 80vh;
+  }
+}
+
+/* STUDIO BANNER BLOCK */
+.studio-banner {
+  background: url('/img/blok.webp') no-repeat center center;
+  background-size: cover;
+  align-content: center;
+  min-height: 50vh;
+}
+
+.studio-logo {
+  grid-column: content;
+  justify-self: center;
+  /* Constraints */
+  width: 100%;
+  max-width: 62rem;
+  height: auto;
+  display: block;
+}
+
 /* --- BUTTON --- */
 .button {
   display: inline-flex;
@@ -43,4 +156,95 @@
   transform: translateY(-2px) scale(0.75);
   transition-timing-function: var(--ease-spring-3);
   transition-duration: 0.1s;
+}
+  
+  /* SUMMARY */
+
+/* 2. TAB BUTTONS & FONT SWAP */
+.tab-btn {
+  cursor: pointer;
+  background: transparent;
+  color: inherit;
+  font-size: var(--step-1);
+  line-height: var(--lh-small);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  border: 2px solid transparent;
+  padding: 0;
+  transition: color 0.2s var(--ease-out-3), border-color 0.2s var(--ease-out-3);
+}
+
+.grid-overlap {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+}
+
+.grid-overlap > * {
+  grid-area: 1 / 1;
+}
+
+.f-disp, 
+.f-text {
+  /* Animate the clip-path */
+  transition: clip-path 0.3s var(--ease-step-2);
+}
+
+.f-disp {
+  font-family: var(--font-display);
+  clip-path: inset(0 0 0 0);
+}
+
+.f-text {
+  font-family: var(--font-text);
+  font-weight: var(--font-medium);
+  clip-path: inset(0 100% 0 0);
+}
+
+.tab-btn:hover .f-disp,
+.tab-btn[aria-selected="true"] .f-disp {
+  clip-path: inset(0 0 0 100%);
+}
+
+.tab-btn:hover .f-text,
+.tab-btn[aria-selected="true"] .f-text {
+  clip-path: inset(0 0 0 0);
+}
+
+.tab-btn:hover {
+  border-color: var(--c-super);
+}
+
+.tab-btn[aria-selected="true"] {
+  color: var(--c-hot);
+  border-color: var(--c-super);
+}
+
+/* 3. PANELS CONTAINER & DRAWER ANIMATION */
+.panels-container {
+  display: grid;
+}
+
+.details-wrapper {
+  grid-area: 1 / 1; /* Forces all panels to overlap in the same grid cell */
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.18s var(--ease-elastic-in-2);
+}
+
+.details-wrapper[aria-hidden="false"] {
+  grid-template-rows: 1fr;
+}
+
+.details-content {
+  overflow: hidden;
+  background-color: var(--c-super);
+  margin: 0;
+  padding-inline: var(--space-m);
+  padding-block: 0;
+  transition: padding-block 0.25s var(--ease-out-3);
+}
+
+.details-wrapper[aria-hidden="false"] .details-content {
+  padding-block: var(--space-m);
 }
