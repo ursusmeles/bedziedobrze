@@ -32,13 +32,10 @@
 .hero-top-row {
   grid-column: content;
   grid-row: 1;
-  display: flex;
-  align-items: flex-end; 
+  display: grid;
+  align-items: end; 
   width: 100%;
-}
-
-.hero-content {
-  flex: 0 1 55ch;
+  grid-template-columns: 1fr;
 }
 
 /* BOTTOM ROW & SITE TITLE (Default: Mobile text visible, SVG hidden) */
@@ -58,16 +55,20 @@
 
 /* BREAKPOINTS */
 
-@media (min-width: 40rem) {
+@media (min-width: 43rem) {
   .hero {
-    min-height: 50vh;
+    min-height: 60vh;
   }
-  
-  /* Push text to the right 50% */
-  .hero-top-row::before {
-    content: "";
-    flex: 1 1 50%;
-    min-width: 0;
+
+  .hero-top-row {
+    /* Splits the centered content track exactly in half */
+    grid-template-columns: 1fr 1fr; 
+  }
+
+  .hero-content {
+    /* Forces the text into the right half, starting exactly at the center line */
+    grid-column: 2;
+    padding-inline-start: var(--space-2xs);
   }
 
   /* Visually hide H1 for screen readers */
@@ -89,7 +90,7 @@
   }
 }
 
-@media (min-width: 82rem){
+@media (min-width: 80rem){
   .hero {
     min-height: 80vh;
   }

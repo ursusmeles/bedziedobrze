@@ -1,0 +1,78 @@
+<header class="layout-grid site-header">
+  <nav aria-label="Główna nawigacja" class="site-nav">
+    <ul role="list" class="nav-list">
+      <li><a href="#manifest">Studio</a></li>
+      <li><a href="#uslugi">Co robimy</a></li>
+      <li><a href="#proces">Jak działamy</a></li>
+      <li><a href="#onas">Kim jesteśmy</a></li>
+      <li><a href="#kontakt">Porozmawiajmy</a></li>
+    </ul>
+  </nav>
+</header>
+
+<style>
+  .site-header {
+    position: fixed;
+    top: 0;
+    inset-inline: 0;
+    z-index: 50;
+
+    /* Initial State (No Blur) */
+    background-color: transparent;
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    transition: background-color 0.3s ease, backdrop-filter 0.3s ease, -webkit-backdrop-filter 0.3s ease;
+}
+
+.site-header.is-scrolled {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+  .site-nav {
+    grid-column: content;
+  }
+
+  .nav-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-m);
+    margin: 0;
+    padding: 0;
+    height: 2lh;
+  }
+
+  .nav-list a {
+    text-transform: uppercase;
+    font-weight: var(--font-medium);
+    line-height: var(--lh-small);
+    letter-spacing: -0.02em;
+    text-decoration: none;
+    color: inherit;
+    /* Add transition for hover states using your tokens */
+    transition: color 0.2s var(--ease-out-3);
+  }
+
+  .nav-list a:hover,
+  .nav-list a:focus-visible {
+    color: var(--c-hot);
+  }
+</style>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const header = document.querySelector('.site-header');
+    
+    if (header) {
+      const toggleScrollClass = () => {
+        // Adds the class if scrolled down more than 20px
+        header.classList.toggle('is-scrolled', window.scrollY > 200);
+      };
+
+      window.addEventListener('scroll', toggleScrollClass, { passive: true });
+      toggleScrollClass(); // Check state on initial load
+    }
+  });
+</script>
