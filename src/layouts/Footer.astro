@@ -1,0 +1,38 @@
+<footer class="layout-grid site-footer">
+  <div class="footer-content">
+    
+    <!-- LEFT COLUMN -->
+    <div class="stack">
+      <p><strong>będzie&bsol;dobrze</strong></p>
+      <p>RZECZYPOSPOLITEJ 8, GDAŃSK</p>
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="stack">
+      <div class="cluster">
+        <strong>MATEUSZ</strong>
+        <a href="https://h62.pl" target="_blank" rel="noopener noreferrer">H62.PL</a>
+      </div>
+      
+      <div class="cluster">
+        <strong>MIKOŁAJ</strong>
+        <a href="https://mikthecreator.pl" target="_blank" rel="noopener noreferrer">MIKTHECREATOR.PL</a>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    padding-block: var(--fluid-margin) var(--space-xl-2xl);
+    background-color: var(--c-offwhite);
+  }
+
+  .footer-content {
+    grid-column: content;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 25rem), 1fr));
+    gap: var(--fluid-margin);
+  }
+</style>

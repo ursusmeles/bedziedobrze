@@ -55,8 +55,7 @@ p {
 /* Global anchor link styling */
 a {
   color: currentColor;
-  text-decoration-thickness: 0.125em;
-  text-underline-offset: 0.125em;
+  text-decoration: none;
   transition: var(--transition-default);
 }
 
