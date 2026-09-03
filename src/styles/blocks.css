@@ -114,6 +114,34 @@
   display: block;
 }
 
+/* --- MANIFEST --- */
+.manifest {
+  --repel-align: top;
+  --repel-gap-y: var(--space-l);
+  --repel-gap-x: var(--space-l);
+  & h2 {width: min-content;}
+}
+
+/* --- KLIENCI --- */
+.klienci {
+  grid-column: content;
+  min-width: 0;
+  --section-top: var(--space-xl);
+  & h2 {
+  font-size: var(--step-3);
+  max-width: 45ch;
+}
+}
+.klienci-list {
+  --reel-size: max-content;
+  --gutter: var(--space-2xl); 
+  grid-column: full;
+  align-items: center;
+  & img {
+    pointer-events: none;
+  }
+}
+
 /* --- BUTTON --- */
 .button {
   display: inline-flex;

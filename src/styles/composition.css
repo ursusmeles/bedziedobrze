@@ -178,12 +178,12 @@
 .reel {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: var(--reel-size, 80%);
+  grid-auto-columns: var(--reel-size, 25%);
   gap: var(--gutter, var(--space-m));
   overflow-x: auto;
   overscroll-behavior-x: contain;
-  scroll-snap-type: x mandatory;
   padding-block-end: var(--space-s); /* Prevents scrollbar clipping */
+  cursor: grab;
 }
 .reel > * {
   scroll-snap-align: start;
@@ -194,6 +194,9 @@
 }
 .reel {
   scrollbar-width: none;
+}
+.reel.is-dragging {
+  cursor: grabbing;
 }
 
 /* 
