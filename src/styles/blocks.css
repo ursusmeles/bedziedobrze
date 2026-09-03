@@ -5,7 +5,7 @@
   --section-top: var(--fluid-margin);
   --section-bottom: var(--fluid-margin);
   position: relative;
-  min-height: 50vh;
+  min-height: 60vh;
   padding-block: var(--section-top) var(--section-bottom); 
   
   /* Pack content to the bottom edge */
@@ -57,7 +57,7 @@
 
 @media (min-width: 44rem) {
   .hero {
-    min-height: 60vh;
+    min-height: 70vh;
   }
 
   .hero-top-row {
@@ -101,7 +101,7 @@
   background: url('/img/blok.webp') no-repeat center center;
   background-size: cover;
   align-content: center;
-  min-height: 50vh;
+  padding-block: calc(var(--space-2xl) * 2);
 }
 
 .studio-logo {
