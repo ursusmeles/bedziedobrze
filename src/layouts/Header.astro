@@ -71,8 +71,9 @@
   
   /* Apply the frosted glass effect */
   background-color: rgb(255 255 255 / 15%);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  --blur-effect: blur(12px);
+  -webkit-backdrop-filter: var(--blur-effect);
+  backdrop-filter: var(--blur-effect);
   
   /* Mask the layer to fade out smoothly at the bottom */
   mask-image: linear-gradient(to bottom, black 45%, transparent 100%);
