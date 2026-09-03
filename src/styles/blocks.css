@@ -100,11 +100,13 @@
 .studio-banner {
   background: url('/img/blok.webp') no-repeat center center;
   background-size: cover;
-  align-content: center;
+  display: grid;
+  place-items: center;
   padding-block: calc(var(--space-2xl) * 2);
+  overflow: hidden;
 }
 
-.studio-logo {
+.studio-text {
   grid-column: content;
   justify-self: center;
   /* Constraints */
@@ -112,6 +114,9 @@
   max-width: 62rem;
   height: auto;
   display: block;
+  margin-block-start: var(--space-2xl);
+  will-change: transform;
+  transform: scale(1);
 }
 
 /* --- MANIFEST --- */

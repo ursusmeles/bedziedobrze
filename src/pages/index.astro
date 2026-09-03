@@ -16,7 +16,39 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 </section>
 <!-- BANNER -->
 <section class="breakout-wrapper studio-banner" aria-label="Studio" id="studio">
-  <img src="/img/studio.svg" alt="Studio" class="studio-logo" draggable="false" />
+  <img src="/img/studio.svg" alt="Studio" class="studio-text" draggable="false" />
+  <script>
+  document.addEventListener('astro:page-load', () => {
+    const el = document.querySelector('.studio-text') as HTMLElement;
+    if (!el) return;
+
+    let ticking = false;
+
+    const updateParallax = () => {
+      const scrollY = window.scrollY;
+      
+      // scrollY * 0.15 = moves down 0.15px for every 1px scrolled (parallax)
+      // 1 + (scrollY * 0.0005) = scales up slightly as you scroll
+      el.style.transform = `translate3d(0, ${scrollY * -0.15}px, 0) scale(${1 + (scrollY * 0.0001)})`;
+      
+      ticking = false;
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(updateParallax);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    // Cleanup
+    document.addEventListener('astro:before-preparation', () => {
+      window.removeEventListener('scroll', onScroll);
+    }, { once: true });
+  });
+</script>
 </section>
 <!-- MANIFEST -->
 <section id="manifest" aria-labelledby="h-manifest" class="repel manifest">
@@ -51,59 +83,54 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <img src="/img/moldilus.svg" alt="Moldilus" loading="lazy" width="300" height="100" draggable="false" />
       </li>
     </ul>
-    <script>
+<script>
   document.addEventListener('astro:page-load', () => {
-    const slider = document.querySelector('.klienci-list.reel') as HTMLElement;
+    const slider = document.querySelector('.klienci-list.reel');
     
     if (!slider) return;
 
     // Drag states
     let isDown = false;
-    let startX: number;
-    let scrollLeft: number;
+    let startX;
+    let initialScrollLeft;
 
     // Auto-scroll states
-    let animationId: number;
-    let scrollSpeed = 0.5; // Pixels per frame. Adjust for speed.
-    let direction = 1; // 1 for right, -1 for left
+    let animationId;
+    let scrollSpeed = 0.5; 
+    let direction = 1; 
     let isHovered = false;
 
-    // 1. The Auto-Scroll Loop
     const autoScroll = () => {
-      // Only scroll if the user isn't interacting
       if (!isDown && !isHovered) {
         slider.scrollLeft += (scrollSpeed * direction);
         
-        // Reverse direction at boundaries (using Math.ceil/floor to avoid sub-pixel rounding traps)
+        // Reverse direction at boundaries
         if (Math.ceil(slider.scrollLeft) >= slider.scrollWidth - slider.clientWidth) {
           direction = -1;
         } else if (Math.floor(slider.scrollLeft) <= 0) {
           direction = 1;
         }
       }
-      
-      // Request next frame
       animationId = requestAnimationFrame(autoScroll);
     };
 
-    // Start the loop
     autoScroll();
 
-    // 2. Event Listeners for Interaction
+    // Event Listeners
     slider.addEventListener('mousedown', (e) => {
       isDown = true;
       slider.classList.add('is-dragging');
       startX = e.pageX - slider.offsetLeft;
-      scrollLeft = slider.scrollLeft;
+      initialScrollLeft = slider.scrollLeft;
     });
 
     slider.addEventListener('mouseenter', () => {
-      isHovered = true; // Pause on hover
+      isHovered = true; 
     });
 
     slider.addEventListener('mouseleave', () => {
       isDown = false;
-      isHovered = false; // Resume when mouse leaves
+      isHovered = false; 
       slider.classList.remove('is-dragging');
     });
 
@@ -117,18 +144,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       e.preventDefault(); 
       const x = e.pageX - slider.offsetLeft;
       const walk = (x - startX) * 1.5; 
-      slider.scrollLeft = scrollLeft - walk;
+      slider.scrollLeft = initialScrollLeft - walk;
     });
 
-    // 3. Cleanup for Astro View Transitions
-    // Prevents the loop from running in the background after changing pages
+    // Cleanup
     document.addEventListener('astro:before-preparation', () => {
       cancelAnimationFrame(animationId);
     }, { once: true });
     
   });
 </script>
- </section>
+</section>
 <!-- USŁUGI -->
 <section id="uslugi" aria-labelledby="h-uslugi">
   <h2 id="h-uslugi">Co robimy, żeby było dobrze</h2>
