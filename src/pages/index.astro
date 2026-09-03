@@ -91,11 +91,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     // Drag states
     let isDown = false;
-    let startX;
-    let initialScrollLeft;
+    let startX = 0;
+    let initialScrollLeft = 0;
 
     // Auto-scroll states
-    let animationId;
+    let animationId = null;
     let scrollSpeed = 0.5; 
     let direction = 1; 
     let isHovered = false;
@@ -156,7 +156,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 </script>
 </section>
 <!-- USŁUGI -->
-<section id="uslugi" aria-labelledby="h-uslugi">
+<section id="uslugi" aria-labelledby="h-uslugi" class="uslugi">
+  <img src="/img/glyph-d.svg" alt="" aria-hidden="true" loading="lazy" width="320" height="auto" draggable="false" />
   <h2 id="h-uslugi">Co robimy, żeby było dobrze</h2>
   <ol class="uslugi-list" role="list">
     <!-- SERVICE 1 -->
@@ -352,48 +353,78 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   });
 </script>
 </section>
-<section id="proces" aria-labelledby="h-proces">
-  <h2 id="h-proces">Jak to zrobimy</h2>
-  <p>Bez zbędnych procesów. Tak, żeby było dobrze.</p>
+<!-- LICZBY -->
+<section class="breakout-wrapper liczby-banner" aria-label="Liczby" id="liczby">
+<img src="/img/glyph-rp8.svg" alt="RP8" class="liczby-rp8" draggable="false" />
+<div class="card">...</div>
+</section>
+<!-- PROCES -->
+<section id="proces" aria-labelledby="h-proces" class="proces">
+  <img src="/img/glyph-b.svg" alt="" aria-hidden="true" loading="lazy" width="320" height="auto" draggable="false" />
+  <h2 id="h-proces">Poznaj nasz proces</h2>
   <ol class="proces-list" role="list">
     <li>
       <span class="hot decorative" aria-hidden="true">1</span>
       <h3>Diagnoza</h3>
-      <p>Zaczynamy od szczerej rozmowy.</p>
-      <p>Szukamy miejsc, gdzie nasza praca przyniesie Ci największą korzyść.</p>
+      <div class="card stack">
+        <p>Zaczynamy od szczerej rozmowy.</p>
+        <p>Szukamy miejsc, gdzie nasza praca przyniesie Ci największą korzyść.</p>
+      </div>
     </li>
     <li>
       <span class="hot decorative" aria-hidden="true">2</span>
       <h3>Strategia</h3>
-      <p>Dobieramy usługi na miarę Twoich potrzeb, branży i budżetu.</p>
+      <div class="card stack">
+        <p>Dobieramy usługi na miarę Twoich potrzeb, branży i budżetu.</p>
+      </div>
     </li>
     <li>
       <span class="hot decorative" aria-hidden="true">3</span>
       <h3>Wdrożenie</h3>
-      <p>Przechodzimy do pracy.</p>
-      <p>Opieramy się na wymiernych danych i optymalizacji.</p>
-      <p>Jesteś z nami na każdym etapie procesu.</p>
+      <div class="card stack">
+        <p>Przechodzimy do pracy.</p>
+        <p>Opieramy się na wymiernych danych i optymalizacji.</p>
+        <p>Jesteś z nami na każdym etapie procesu.</p>
+      </div>
     </li>
   </ol>
 </section>
 <section class="super full-bleed-wrapper" id="onas" aria-labelledby="h-onas">
-  <h2 id="h-onas">Kim jesteśmy</h2>
-  <article>
-    <h3 class="hot decorative">Mikołaj</h3>
-    <p>Producent wideo i strateg wizualny. Ekspert przekładania założeń biznesowych na angażujący obraz i dźwięk. Odpowiada za produkcje filmowe, fotografię oraz nasze studio. Miłośnik sportów walki i szybkich samochodów (w simrigu — jeździ skodą).</p>
-  </article>
-  <article>
-    <h3 class="hot decorative">Mateusz</h3>
-    <p>Ekspert od skalowania biznesu, strategii wizerunkowych i projektowania. Ex-CEO z doświadczeniem w optymalizacji procesów. Zwolennik otwartego oprogramowania oraz długodystansowych wypraw gravelowych.</p>
-  </article>
-  <article>
-    <h3>Nasz zespół</h3>
-    <p>Zaprzyjaźnieni filmowcy, oświetleniowcy, specjaliści od social media, designerzy i graficy. Najpierw diagnozujemy Twoje potrzeby, a potem dobieramy optymalny zespół do ich realizacji. Ty zawsze rozmawiasz z nami.</p>
-  </article>
+    <img src="/img/glyph-m.svg" alt="" aria-hidden="true" loading="lazy" width="320" height="auto" draggable="false" />
+    <h2 id="h-onas">Kim jesteśmy</h2>
+    <article>
+      <h3 class="hot decorative">Mikołaj</h3>
+      <p>Producent wideo i strateg wizualny. Ekspert przekładania założeń biznesowych na angażujący obraz i dźwięk. Odpowiada za produkcje filmowe, fotografię oraz nasze studio. Miłośnik sportów walki i szybkich samochodów (w simrigu — jeździ skodą).</p>
+    </article>
+    <article>
+      <h3 class="hot decorative">Mateusz</h3>
+      <p>Ekspert od skalowania biznesu, strategii wizerunkowych i projektowania. Ex-CEO z doświadczeniem w optymalizacji procesów. Zwolennik otwartego oprogramowania oraz długodystansowych wypraw gravelowych.</p>
+    </article>
+    <article class="card-titled" data-variant="darker">
+      <h3>Nasz zespół</h3>
+      <p>Zaprzyjaźnieni filmowcy, oświetleniowcy, specjaliści od social media, designerzy i graficy. Najpierw diagnozujemy Twoje potrzeby, a potem dobieramy optymalny zespół do ich realizacji. Ty zawsze rozmawiasz z nami.</p>
+    </article>
 </section>
-<section class="super full-bleed-wrapper" id="kontakt" aria-labelledby="h-kontakt">
-  <h2 id="h-kontakt">Poroz&shy;mawia&shy;jmy</h2>
-  <p>Masz projekt? Problem do rozwiązania? Napisz do nas, my zajmiemy się resztą.</p>
-  <button class="button" type="submit">Wyślij</button>
+<section class="super full-bleed-wrapper kontakt-banner" id="kontakt" aria-labelledby="h-kontakt">
+  <img src="/img/dobrze.svg" alt="będzie dobrze" loading="lazy" width="320" height="auto" draggable="false" />
+  <div class="card-titled">
+    <h2 id="h-kontakt">Poroz&shy;mawia&shy;jmy</h2>
+    <div class="stack">
+      <p>Masz projekt? Problem do rozwiązania? Napisz do nas, my zajmiemy się resztą.</p>
+      <form class="contact-form" action="#" method="POST">
+        <div class="field-group">
+      <label for="name">Imię</label>
+      <input type="text" id="name" name="name" autocomplete="name" required>
+        </div>
+      
+        <div class="field-group">
+      <label for="message">Wiadomość</label>
+      <textarea id="message" name="message" rows="5" required style="resize: none"></textarea>
+        </div>
+      
+        <button type="submit" class="button">Wyślij</button>
+      </form>
+    </div>
+  </div>
 </section>
 </BaseLayout>

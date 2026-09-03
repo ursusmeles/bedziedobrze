@@ -131,7 +131,7 @@
 .klienci {
   grid-column: content;
   min-width: 0;
-  --section-top: var(--space-xl);
+  --section-top: var(--space-2xl-3xl);
   & h2 {
   font-size: var(--step-3);
   max-width: 45ch;
@@ -146,6 +146,148 @@
     pointer-events: none;
   }
 }
+
+/* --- USŁUGI --- */
+.uslugi {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  column-gap: var(--space-l-xl);
+  row-gap: var(--space-3xl);
+  align-items: start;
+  & img {
+    grid-column: 1;
+    grid-row: 1 / -1;
+  }
+  & h2 {
+    grid-column: 3;
+    grid-row: 1;
+  }
+  & ol {
+    grid-column: 2 / -1;
+    grid-row: 2;
+    display: grid;
+    grid-template-columns: subgrid;
+    row-gap: calc(var(--space-2xl-3xl) * 2);
+  }
+  & li {
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-column: 1 / -1;
+    row-gap: var(--space-l);
+    & > span {
+      grid-column: 1;
+      font-size: var(--step-4);
+      line-height: var(--lh-small);
+      text-box: trim-both cap alphabetic;
+      margin: 0;
+      padding: 0;
+    }
+    & > h3,
+    & > p,
+    & > .stack {
+      grid-column: 2;
+    }
+    & > .stack {
+      & > .cluster {
+        max-width: 45ch;
+      }
+    }
+  }
+}
+
+/* --- PROCES --- */
+.proces {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  column-gap: var(--space-l-xl);
+  row-gap: var(--space-3xl);
+  align-items: start;
+  & img {
+    grid-column: 1;
+    grid-row: 1 / -1;
+  }
+  & h2,
+  & p {
+    grid-column: 3;
+  }
+  & ol {
+    grid-column: 2 / -1;
+    grid-row: 2;
+    display: grid;
+    grid-template-columns: subgrid;
+    row-gap: calc(var(--space-2xl-3xl) * 2);
+  }
+  & li {
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-column: 1 / -1;
+    row-gap: var(--space-l);
+    & > span {
+      grid-column: 1;
+      font-size: var(--step-4);
+      line-height: var(--lh-small);
+      text-box: trim-both cap alphabetic;
+      margin: 0;
+      padding: 0;
+    }
+    & > h3,
+    & > .stack {
+      grid-column: 2;
+    }
+  }
+}
+
+/* --- O NAS --- */
+.onas {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  column-gap: var(--space-l-xl);
+  row-gap: var(--space-3xl);
+  align-items: start;
+  & img {
+    grid-column: 1;
+    grid-row: 1 / -1;
+  }
+  & h2,
+  & p {
+    grid-column: 3;
+  }
+}
+
+/* --- LICZBY --- */
+.liczby-banner {
+  background: url('/img/wybrzeze.webp') no-repeat center center;
+  background-size: cover;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  min-height: 50vh;
+}
+
+/* --- KONTAKT --- */
+.kontakt-banner {
+  background: url('/img/brutalism.webp') no-repeat center center;
+  background-size: cover;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  min-height: 50vh;
+}
+
+/* --- CARDS --- */
+.card {
+  background-color: var(--c-super);
+  padding: var(--space-xs) var(--space-m) var(--space-xs) var(--space-m);
+}
+
+.card-titled {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--c-super);
+    padding: var(--space-m) var(--space-l);
+  }
 
 /* --- BUTTON --- */
 .button {

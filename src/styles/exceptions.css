@@ -1,1 +1,6 @@
 /* EXCEPTIONS */
+
+.card-titled[data-variant="darker"],
+.card[data-variant="darker"] {
+    background-color: var(--c-superd);
+}
