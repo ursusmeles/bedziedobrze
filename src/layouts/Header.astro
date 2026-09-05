@@ -64,18 +64,18 @@
   position: absolute;
   
   /* Extend the element below the actual header height to give the blur room to fade */
-  inset: 0 0 -50% 0; 
+  inset: 0 0 -100% 0; 
   z-index: -1;
   pointer-events: none;
-  transform: translateZ(0);
+  transform: translate3d(0, 0, 0);
   
   /* Apply the frosted glass effect */
   background-color: rgb(255 255 255 / 1%);
   -webkit-backdrop-filter: blur(12px);
   
   /* Mask the layer to fade out smoothly at the bottom */
-  mask-image: linear-gradient(to bottom, black 45%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, black 45%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 40%, transparent 90%);
+  -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 90%);
   
   /* Start hidden, transition smoothly */
   opacity: 0;
