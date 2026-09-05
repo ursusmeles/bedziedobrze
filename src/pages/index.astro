@@ -89,25 +89,26 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     
     if (!slider) return;
 
-    // Drag states
     let isDown = false;
     let startX = 0;
     let initialScrollLeft = 0;
 
-    // Auto-scroll states
     let animationId = null;
     let scrollSpeed = 0.5; 
     let direction = 1; 
     let isHovered = false;
+    
+    /* Decoupled scroll state to bypass Safari integer truncation */
+    let exactScroll = slider.scrollLeft;
 
     const autoScroll = () => {
       if (!isDown && !isHovered) {
-        slider.scrollLeft += (scrollSpeed * direction);
+        exactScroll += (scrollSpeed * direction);
+        slider.scrollLeft = exactScroll;
         
-        // Reverse direction at boundaries
-        if (Math.ceil(slider.scrollLeft) >= slider.scrollWidth - slider.clientWidth) {
+        if (Math.ceil(exactScroll) >= slider.scrollWidth - slider.clientWidth) {
           direction = -1;
-        } else if (Math.floor(slider.scrollLeft) <= 0) {
+        } else if (Math.floor(exactScroll) <= 0) {
           direction = 1;
         }
       }
@@ -116,12 +117,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     autoScroll();
 
-    // Event Listeners
     slider.addEventListener('mousedown', (e) => {
       isDown = true;
       slider.classList.add('is-dragging');
       startX = e.pageX - slider.offsetLeft;
       initialScrollLeft = slider.scrollLeft;
+      
+      /* Optional: Temporarily disable scroll-snap during drag/auto in Safari */
+      slider.style.scrollSnapType = 'none';
     });
 
     slider.addEventListener('mouseenter', () => {
@@ -132,11 +135,19 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       isDown = false;
       isHovered = false; 
       slider.classList.remove('is-dragging');
+      
+      /* Resync the decoupled variable after manual interaction */
+      exactScroll = slider.scrollLeft;
+      slider.style.scrollSnapType = '';
     });
 
     slider.addEventListener('mouseup', () => {
       isDown = false;
       slider.classList.remove('is-dragging');
+      
+      /* Resync the decoupled variable after drag */
+      exactScroll = slider.scrollLeft;
+      slider.style.scrollSnapType = '';
     });
 
     slider.addEventListener('mousemove', (e) => {
@@ -147,7 +158,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       slider.scrollLeft = initialScrollLeft - walk;
     });
 
-    // Cleanup
     document.addEventListener('astro:before-preparation', () => {
       cancelAnimationFrame(animationId);
     }, { once: true });
