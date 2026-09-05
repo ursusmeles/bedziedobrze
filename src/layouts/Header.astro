@@ -176,6 +176,17 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+
+  /* Baseline transform to prevent visual snapping */
+  transform: translateY(0) scale(1);
+  will-change: transform;
+  transition: all 0.1s var(--ease-3);
+}
+
+.menu-toggle:active {
+  transform: scale(0.75);
+  transition-timing-function: var(--ease-spring-3);
+  transition-duration: 0.1s;
 }
 
 .menu-toggle img {
@@ -197,11 +208,12 @@
     
     /* Hardware-accelerated drawer slide */
     transform: translateX(100%);
-    transition: transform 0.4s var(--ease-out-3);
+    transition: transform 0.3s var(--ease-circ-in);
   }
 
   .site-nav[data-state="open"] {
     transform: translateX(0);
+    transition: transform 0.3s var(--ease-circ-out);
   }
 
 .nav-list {
