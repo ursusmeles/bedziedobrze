@@ -149,48 +149,88 @@
 
 /* --- USŁUGI --- */
 .uslugi {
+  /* variables for spacing */
+  --_column-gap: var(--space-3xl);  /* Gap between columns in the master grid */
+  --_section-gap: calc(var(--space-2xl-3xl) * 2); /* Gap between IMG, H2, and OL */
+  --_list-gap: calc(var(--space-xl-2xl) * 2);    /* Gap between individual LI elements */
+  --_inner-gap: 0px;                /* Gap inside LI (0 on desktop, items are in columns) */
+
+  /* master grid definition */
   display: grid;
-  grid-template-columns: 1fr auto auto;
-  column-gap: var(--space-l-xl);
-  row-gap: var(--space-3xl);
+  grid-template-columns: clamp(15rem, 20vw, 20rem) 1fr 1fr;
+  column-gap: var(--_column-gap);
+  row-gap: var(--_section-gap);
   align-items: start;
-  & img {
+
+  & > img {
     grid-column: 1;
-    grid-row: 1 / -1;
+    width: 100%;
+    max-width: 20rem;
+    margin: 0;
   }
-  & h2 {
-    grid-column: 3;
-    grid-row: 1;
-  }
-  & ol {
+
+  & > h2 {
     grid-column: 2 / -1;
-    grid-row: 2;
-    display: grid;
-    grid-template-columns: subgrid;
-    row-gap: calc(var(--space-2xl-3xl) * 2);
+    margin: 0;
+    max-width: 20ch;
+    align-self: end;
+    text-box: trim-both cap alphabetic;
   }
-  & li {
+
+  /* 2. List Container (Subgrid) */
+  & > .uslugi-list {
+    grid-column: 1 / -1;
     display: grid;
     grid-template-columns: subgrid;
+    row-gap: var(--_list-gap);
+  }
+
+  /* 3. List Item (Subgrid) */
+  & .uslugi-list > li {
     grid-column: 1 / -1;
-    row-gap: var(--space-l);
-    & > span {
+    display: grid;
+    grid-template-columns: subgrid;
+    align-items: start;
+    row-gap: var(--_inner-gap);
+
+    /* Map inner elements to explicit columns */
+    & > .hot.decorative {
       grid-column: 1;
+      justify-self: end;
       font-size: var(--step-4);
       line-height: var(--lh-small);
       text-box: trim-both cap alphabetic;
       margin: 0;
-      padding: 0;
     }
-    & > h3,
-    & > p,
-    & > .stack {
+
+    /* Targets the text wrapper */
+    & > .stack:nth-of-type(1) {
       grid-column: 2;
     }
-    & > .stack {
-      & > .cluster {
-        max-width: 45ch;
-      }
+
+    /* Targets the tabs wrapper */
+    & > .stack:nth-of-type(2) {
+      grid-column: 3;
+    }
+  }
+}
+
+/* Responsive adjustment for smaller viewports */
+@media (max-width: 80rem) {
+  .uslugi {
+    /* Collapse to a single column on smaller viewports */
+    grid-template-columns: minmax(0, 1fr);
+    --_section-gap: var(--space-xl);
+    --_list-gap: var(--space-2xl);
+    --_inner-gap: var(--space-m);
+    
+    & > img,
+    & > h2 {
+      grid-column: 1;
+    }
+    
+    & .uslugi-list > li > .hot.decorative {
+      justify-self: end;
     }
   }
 }

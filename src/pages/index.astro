@@ -4,7 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 <BaseLayout>
 <!-- HERO -->
-<section class="super full-bleed-wrapper hero" id="hero" aria-labelledby="hero-heading">
+<section id="hero" class="super full-bleed-wrapper hero" aria-labelledby="hero-heading">
   <div class="hero-top-row">
     <div class="hero-content stack">
       <h1 id="hero-heading" class="hero-text decorative">będzie dobrze</h1>
@@ -15,7 +15,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <img src="/img/heading.svg" alt="" aria-hidden="true" class="hero-svg" draggable="false"/>
 </section>
 <!-- BANNER -->
-<section class="full-bleed-wrapper studio-banner" aria-label="Studio" id="studio">
+<section id="studio" class="full-bleed-wrapper studio-banner" aria-label="Studio">
   <img src="/img/studio.svg" alt="Studio" class="studio-text" draggable="false" />
   <script>
   document.addEventListener('astro:page-load', () => {
@@ -51,7 +51,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 </script>
 </section>
 <!-- MANIFEST -->
-<section id="manifest" aria-labelledby="h-manifest" class="repel manifest">
+<section id="manifest" class="repel manifest" aria-labelledby="h-manifest">
   <h2 id="h-manifest">Dlaczego będzie dobrze</h2>
   <div class="stack">
     <p>Pracujemy partnersko.</p>
@@ -61,7 +61,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   </div>
 </section>
 <!-- KLIENCI -->
- <section id="klienci" aria-labelledby="h-klienci" class="klienci">
+ <section id="klienci" class="klienci" aria-labelledby="h-klienci">
   <h2 id="h-klienci" class="hot decorative">Zaufali nam</h2>
     <ul class="klienci-list reel" role="list">
       <li>
@@ -166,16 +166,18 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 </script>
 </section>
 <!-- USŁUGI -->
-<section id="uslugi" aria-labelledby="h-uslugi" class="uslugi">
+<section id="uslugi" class="uslugi" aria-labelledby="h-uslugi">
   <img src="/img/glyph-d.svg" alt="" aria-hidden="true" loading="lazy" width="320" draggable="false" />
   <h2 id="h-uslugi">Co robimy, żeby było dobrze</h2>
   <ol class="uslugi-list" role="list">
     <!-- SERVICE 1 -->
     <li>
       <span class="hot decorative" aria-hidden="true">1</span>
-      <h3>Strategia i&nbsp;wzrost sprzedaży</h3>
-      <p>Przekujemy Twoje przewagi w konkretny plan działań, skierowanych do właściwych odbiorców. Zdefiniujemy do kogo mówisz i jak mówisz oraz dlaczego klienci powinni wybrać Ciebie, a nie konkurencję.</p>
-      <p>Zaprojektujemy i wdrożymy wielokanałowe kampanie marketingowe oparte na szczegółowej analityce. Zoptymalizujemy je tak, by każda złotówka wydana na marketing się zwróciła.</p>
+      <div class="stack">
+        <h3>Strategia i&nbsp;wzrost sprzedaży</h3>
+        <p>Przekujemy Twoje przewagi w konkretny plan działań, skierowanych do właściwych odbiorców. Zdefiniujemy do kogo mówisz i jak mówisz oraz dlaczego klienci powinni wybrać Ciebie, a nie konkurencję.</p>
+        <p>Zaprojektujemy i wdrożymy wielokanałowe kampanie marketingowe oparte na szczegółowej analityce. Zoptymalizujemy je tak, by każda złotówka wydana na marketing się zwróciła.</p>
+      </div>
       <div class="stack" style="--gutter: var(--space-m);">
         <div class="cluster" role="tablist">
           <button role="tab" aria-selected="false" aria-controls="panel-strat-strategia" id="tab-strat-strategia" class="tab-btn">
@@ -232,9 +234,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <!-- SERVICE 2 -->
     <li>
       <span class="hot decorative" aria-hidden="true">2</span>
-      <h3>Wideo, foto &&nbsp;studio</h3>
-      <p>Stworzymy materiały filmowe na najwyższym poziomie — od koncepcji po postprodukcję.</p>
-      <p>Prowadzimy własne studio nagrań na gdańskim Przymorzu, gotowe do produkcji podcastów, kursów online, rolek i do streamingu.</p>
+      <div class="stack">
+        <h3>Wideo, foto &&nbsp;studio</h3>
+        <p>Stworzymy materiały filmowe na najwyższym poziomie — od koncepcji po postprodukcję.</p>
+        <p>Prowadzimy własne studio nagrań na gdańskim Przymorzu, gotowe do produkcji podcastów, kursów online, rolek i do streamingu.</p>
+      </div>
       <div class="stack" style="--gutter: var(--space-m);">
         <div class="cluster" role="tablist">
           <button role="tab" aria-selected="false" aria-controls="panel-wideo-podkasty" id="tab-wideo-podkasty" class="tab-btn">
@@ -273,8 +277,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <!-- SERVICE 3 -->
     <li>
       <span class="hot decorative" aria-hidden="true">3</span>
-      <h3>Web design &&nbsp;development</h3>
-      <p>Zbudujemy ultraszybką stronę internetową lub sklep e-commerce tak, by rzeczywiście sprzedawały. Bez kompromisów w kwestii user experience, pozycjonowania, responsywności i dostępności.</p>
+      <div class="stack">
+        <h3>Web design &&nbsp;development</h3>
+        <p>Zbudujemy ultraszybką stronę internetową lub sklep e-commerce tak, by rzeczywiście sprzedawały. Bez kompromisów w kwestii user experience, pozycjonowania, responsywności i dostępności.</p>
+      </div>
       <div class="stack" style="--gutter: var(--space-m);">
         <div class="cluster" role="tablist">
           <button role="tab" aria-selected="false" aria-controls="panel-web-css" id="tab-web-css" class="tab-btn">
@@ -364,12 +370,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 </script>
 </section>
 <!-- LICZBY -->
-<section class="full-bleed-wrapper liczby-banner" aria-label="Liczby" id="liczby">
+<section id="liczby" class="full-bleed-wrapper liczby-banner" aria-label="Liczby">
 <img src="/img/glyph-rp8.svg" alt="RP8" class="liczby-rp8" draggable="false" />
 <div class="card">...</div>
 </section>
 <!-- PROCES -->
-<section id="proces" aria-labelledby="h-proces" class="proces">
+<section id="proces" class="proces" aria-labelledby="h-proces">
   <img src="/img/glyph-b.svg" alt="" aria-hidden="true" loading="lazy" width="320" draggable="false" />
   <h2 id="h-proces">Poznaj nasz proces</h2>
   <ol class="proces-list" role="list">
@@ -400,7 +406,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   </ol>
 </section>
 <!-- O NAS -->
-<section class="super full-bleed-wrapper" id="onas" aria-labelledby="h-onas">
+<section id="onas" class="super full-bleed-wrapper" aria-labelledby="h-onas">
     <img src="/img/glyph-m.svg" alt="" aria-hidden="true" loading="lazy" width="320" draggable="false" />
     <h2 id="h-onas">Kim jesteśmy</h2>
     <article>
@@ -417,7 +423,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </article>
 </section>
 <!-- KONTAKT -->
-<section class="super full-bleed-wrapper kontakt-banner" id="kontakt" aria-labelledby="h-kontakt">
+<section id="kontakt" class="super full-bleed-wrapper kontakt-banner" aria-labelledby="h-kontakt">
   <img src="/img/dobrze.svg" alt="będzie dobrze" loading="lazy" width="320" draggable="false" />
   <div class="card-titled">
     <h2 id="h-kontakt">Poroz&shy;mawia&shy;jmy</h2>

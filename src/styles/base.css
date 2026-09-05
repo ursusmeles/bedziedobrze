@@ -50,6 +50,7 @@ h5 { font-size: var(--step-1); max-width: 50ch; }
 p {
   max-width: 45ch;
   text-wrap: pretty;
+  hyphens: auto;
 }
 
 /* Global anchor link styling */
