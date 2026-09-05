@@ -16,23 +16,36 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 </section>
 <!-- BANNER -->
 <section id="studio" class="full-bleed-wrapper studio-banner" aria-label="Studio">
-  <img src="/img/studio.svg" alt="Studio" class="studio-text" draggable="false" />
-  <script>
+  <img src="/img/studio.svg" alt="Studio" class="studio-text" data-parallax data-speed="-0.15" data-anchor="2" draggable="false" />
+<script>
   document.addEventListener('astro:page-load', () => {
-    const el = document.querySelector('.studio-text') as HTMLElement;
-    if (!el) return;
+    // Select all elements that should have the parallax effect
+    const parallaxElements = document.querySelectorAll<HTMLElement>('[data-parallax]');
+    if (parallaxElements.length === 0) return;
 
     let ticking = false;
 
-    const updateParallax = () => {
-      const scrollY = window.scrollY;
+  const updateParallax = () => {
+    const windowCenter = window.innerHeight / 2;
+    
+    parallaxElements.forEach(el => {
+      // Read the datasets or fall back to defaults
+      const speed = parseFloat(el.dataset.speed) || -0.15;
+      const anchorDivisor = parseFloat(el.dataset.anchor) || 2;
+
+      const anchor = el.closest('section') || el.parentElement || el;
+      const rect = anchor.getBoundingClientRect();
       
-      // scrollY * 0.15 = moves down 0.15px for every 1px scrolled (parallax)
-      // 1 + (scrollY * 0.0005) = scales up slightly as you scroll
-      el.style.transform = `translate3d(0, ${scrollY * -0.15}px, 0) scale(${1 + (scrollY * 0.0001)})`;
+      // Apply the custom anchor divisor
+      const anchorCenter = rect.top + (rect.height / anchorDivisor);
+      const scrollEquivalent = windowCenter - anchorCenter;
       
-      ticking = false;
-    };
+      // Apply the custom speed
+      el.style.transform = `translate3d(0, ${scrollEquivalent * speed}px, 0) scale(${1 + (scrollEquivalent * 0.0001)})`;
+    });
+    
+    ticking = false;
+  };
 
     const onScroll = () => {
       if (!ticking) {
@@ -41,9 +54,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       }
     };
 
+    // Run once immediately to set correct initial positions before the user scrolls
+    updateParallax();
+    
     window.addEventListener('scroll', onScroll, { passive: true });
 
-    // Cleanup
+    // Cleanup for Astro view transitions
     document.addEventListener('astro:before-preparation', () => {
       window.removeEventListener('scroll', onScroll);
     }, { once: true });
@@ -166,19 +182,20 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 </script>
 </section>
 <!-- USŁUGI -->
-<section id="uslugi" class="uslugi" aria-labelledby="h-uslugi">
+<section id="uslugi" class="features" aria-labelledby="h-uslugi">
   <img src="/img/glyph-d.svg" alt="" aria-hidden="true" loading="lazy" width="320" draggable="false" />
   <h2 id="h-uslugi">Co robimy, żeby było dobrze</h2>
-  <ol class="uslugi-list" role="list">
+  <ol class="features-list" role="list">
     <!-- SERVICE 1 -->
     <li>
       <span class="hot decorative" aria-hidden="true">1</span>
       <div class="stack">
         <h3>Strategia i&nbsp;wzrost sprzedaży</h3>
-        <p>Przekujemy Twoje przewagi w konkretny plan działań, skierowanych do właściwych odbiorców. Zdefiniujemy do kogo mówisz i jak mówisz oraz dlaczego klienci powinni wybrać Ciebie, a nie konkurencję.</p>
-        <p>Zaprojektujemy i wdrożymy wielokanałowe kampanie marketingowe oparte na szczegółowej analityce. Zoptymalizujemy je tak, by każda złotówka wydana na marketing się zwróciła.</p>
+        <p>Przekujemy Twoje przewagi w&nbsp;konkretny plan działań, skierowanych do właściwych odbiorców. Zdefiniujemy do kogo mówisz i&nbsp;jak mówisz oraz dlaczego klienci powinni wybrać Ciebie, a&nbsp;nie kon&shy;kurencję.</p>
+        <p>Zaprojektujemy i&nbsp;wdrożymy wielokanałowe kampanie marketingowe oparte na szczegółowej analityce. Zoptymalizujemy je tak, by każda złotówka wydana na marketing się zwróciła.</p>
       </div>
       <div class="stack" style="--gutter: var(--space-m);">
+        <span class="eyebrow">Nasze narzędzia</span>
         <div class="cluster" role="tablist">
           <button role="tab" aria-selected="false" aria-controls="panel-strat-strategia" id="tab-strat-strategia" class="tab-btn">
             <span class="grid-overlap">
@@ -237,9 +254,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <div class="stack">
         <h3>Wideo, foto &&nbsp;studio</h3>
         <p>Stworzymy materiały filmowe na najwyższym poziomie — od koncepcji po postprodukcję.</p>
-        <p>Prowadzimy własne studio nagrań na gdańskim Przymorzu, gotowe do produkcji podcastów, kursów online, rolek i do streamingu.</p>
+        <p>Prowadzimy własne studio nagrań na gdańskim Przymorzu, gotowe do produkcji podcastów, kursów online, rolek i&nbsp;do streamingu.</p>
       </div>
       <div class="stack" style="--gutter: var(--space-m);">
+        <span class="eyebrow">Nasze narzędzia</span>
         <div class="cluster" role="tablist">
           <button role="tab" aria-selected="false" aria-controls="panel-wideo-podkasty" id="tab-wideo-podkasty" class="tab-btn">
             <span class="grid-overlap">
@@ -279,9 +297,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <span class="hot decorative" aria-hidden="true">3</span>
       <div class="stack">
         <h3>Web design &&nbsp;development</h3>
-        <p>Zbudujemy ultraszybką stronę internetową lub sklep e-commerce tak, by rzeczywiście sprzedawały. Bez kompromisów w kwestii user experience, pozycjonowania, responsywności i dostępności.</p>
+        <p>Zbudujemy ultraszybką stronę internetową lub sklep e-commerce tak, by rzeczywiście sprzedawały. Bez kompromisów w&nbsp;kwestii user experience, pozycjonowania, responsywności i&nbsp;dostępności.</p>
       </div>
       <div class="stack" style="--gutter: var(--space-m);">
+        <span class="eyebrow">Nasze narzędzia</span>
         <div class="cluster" role="tablist">
           <button role="tab" aria-selected="false" aria-controls="panel-web-css" id="tab-web-css" class="tab-btn">
             <span class="grid-overlap">
@@ -371,14 +390,23 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 </section>
 <!-- LICZBY -->
 <section id="liczby" class="full-bleed-wrapper liczby-banner" aria-label="Liczby">
-<img src="/img/glyph-rp8.svg" alt="RP8" class="liczby-rp8" draggable="false" />
-<div class="card">...</div>
+<img src="/img/glyph-rp8.svg" alt="" aria-hidden="true" class="liczby-rp8" data-parallax data-speed="-0.15" data-anchor="1" draggable="false" />
+<div class="stack">
+  <div class="card sidebar" data-variant="titled">
+    <span class="fixed">50+</span>
+    <p class="fluid">Współprac na przestrzeni 10 lat naszego doświadczenia.</p>
+  </div>
+  <div class="card sidebar" data-variant="titled">
+    <span class="fixed">+250%</span>
+    <p class="fluid">Wzrost zysku w sklepie e-commerce w branży suplementów diety w ciągu 4 miesięcy od rozpoczęcia współpracy.</p>
+  </div>
+</div>
 </section>
 <!-- PROCES -->
-<section id="proces" class="proces" aria-labelledby="h-proces">
+<section id="proces" class="features" aria-labelledby="h-proces" data-variant="proces">
   <img src="/img/glyph-b.svg" alt="" aria-hidden="true" loading="lazy" width="320" draggable="false" />
   <h2 id="h-proces">Poznaj nasz proces</h2>
-  <ol class="proces-list" role="list">
+  <ol class="features-list" role="list">
     <li>
       <span class="hot decorative" aria-hidden="true">1</span>
       <h3>Diagnoza</h3>
@@ -417,24 +445,24 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <h3 class="hot decorative">Mateusz</h3>
       <p>Ekspert od skalowania biznesu, strategii wizerunkowych i projektowania. Ex-CEO z doświadczeniem w optymalizacji procesów. Zwolennik otwartego oprogramowania oraz długodystansowych wypraw gravelowych.</p>
     </article>
-    <article class="card-titled" data-variant="darker">
+    <article class="card repel" data-color="darker" data-variant="titled">
       <h3>Nasz zespół</h3>
       <p>Zaprzyjaźnieni filmowcy, oświetleniowcy, specjaliści od social media, designerzy i graficy. Najpierw diagnozujemy Twoje potrzeby, a potem dobieramy optymalny zespół do ich realizacji. Ty zawsze rozmawiasz z nami.</p>
     </article>
 </section>
 <!-- KONTAKT -->
 <section id="kontakt" class="super full-bleed-wrapper kontakt-banner" aria-labelledby="h-kontakt">
-  <img src="/img/dobrze.svg" alt="będzie dobrze" loading="lazy" width="320" draggable="false" />
-  <div class="card-titled">
-    <h2 id="h-kontakt">Poroz&shy;mawia&shy;jmy</h2>
-    <div class="stack">
+  <img src="/img/dobrze.svg" alt="będzie dobrze" data-parallax data-speed="-0.12" data-anchor="1" loading="lazy" width="320" draggable="false" />
+  <div class="card sidebar" data-variant="titled">
+    <h2 id="h-kontakt" class="fixed">Poroz&shy;mawia&shy;jmy</h2>
+    <div class="fluid stack">
       <p>Masz projekt? Problem do rozwiązania? Napisz do nas, my zajmiemy się resztą.</p>
       <form class="contact-form" action="#" method="POST">
         <div class="field-group">
       <label for="name">Imię</label>
       <input type="text" id="name" name="name" autocomplete="name" required>
         </div>
-      
+
         <div class="field-group">
       <label for="message">Wiadomość</label>
       <textarea id="message" name="message" rows="5" required style="resize: none"></textarea>

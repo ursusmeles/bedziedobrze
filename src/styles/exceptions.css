@@ -1,6 +1,27 @@
 /* EXCEPTIONS */
 
-.card-titled[data-variant="darker"],
-.card[data-variant="darker"] {
+.card[data-color="darker"] {
     background-color: var(--c-superd);
+}
+
+.card[data-variant="titled"] {
+  --card-padding-block: var(--space-m);
+  --card-padding-inline: var(--space-l);
+}
+
+.features[data-variant="proces"] {
+  & > h2 {
+    max-width: 15ch;
+  }
+  
+  & .features-list > li {
+    & > h3 {
+      grid-column: 2;
+      margin: 0;
+    }
+
+    & > .card {
+      grid-column: 3;
+    }
+  }
 }

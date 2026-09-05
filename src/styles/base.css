@@ -56,13 +56,33 @@ p {
 /* Global anchor link styling */
 a {
   color: currentColor;
+  background-color: var(--c-hotl);
   text-decoration: none;
-  transition: var(--transition-default);
+  position: relative;
+  z-index: 1; /* Keeps text above the sliding background */
 }
 
-a:hover,
-a:focus-visible {
-  color: var(--c-hot);
+/* The sliding background layer */
+a::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-color: var(--c-hot); /* The color that slides in */
+  
+  /* Start collapsed to the left edge */
+  transform: scaleX(0);
+  transform-origin: right;
+  
+  /* Apply your custom easing tokens */
+  transition: transform 0.3s var(--ease-step-2);
+}
+
+/* Trigger the slide on hover/focus */
+a:hover::before,
+a:focus-visible::before {
+  transform: scaleX(1);
+  transform-origin: left;
 }
 
 /* Ensure strong tags respect Space Grotesk weights */

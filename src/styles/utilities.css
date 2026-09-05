@@ -7,6 +7,34 @@
   font-family: var(--font-display);
 }
 
+.eyebrow {
+  font-family: var(--font-text);
+  font-weight: var(--font-medium);
+  font-size: var(--step-0);
+  text-transform: uppercase;
+  color: var(--c-hot);
+  line-height: var(--lh-large);
+}
+
+/* KEYFRAMES FOR FONT SWAP */
+@keyframes wipe-in {
+  0% { 
+    clip-path: inset(0 100% 0 0); /* Right edge collapsed to the left */
+  } 
+  100% { 
+    clip-path: inset(0 0 0 0);    /* Fully visible */
+  }
+}
+
+@keyframes wipe-out {
+  0% { 
+    clip-path: inset(0 0 0 0);    /* Fully visible */
+  }
+  100% { 
+    clip-path: inset(0 0 0 100%); /* Left edge pushed all the way to the right */
+  }
+}
+
 /* Visually hidden utility class for accessibility */
 
 .visually-hidden-focusable:not(:focus):not(:focus-within) {

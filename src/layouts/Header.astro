@@ -131,35 +131,38 @@
     transition: color 0.2s var(--ease-out-3);
   }
 
-  /* FONT SWAP (REVERSED) */
+/* FONT SWAP (TEXT -> DISPLAY) */
 .nav-list .f-text,
 .nav-list .f-disp {
-  /* Animate both the wipe and the color change */
-  transition: clip-path 0.3s var(--ease-step-2), color 0.2s var(--ease-out-3);
   text-transform: uppercase;
+  /* Remove clip-path from transition, handle color only */
+  transition: color 0.2s var(--ease-out-3);
 }
 
-/* 1. Initial States */
+/* 1. Base States (Leaving / Un-hovered) */
 .nav-list .f-text {
   font-family: var(--font-text);
-  clip-path: inset(0 0 0 0); /* Fully visible */
+  /* Reveals L to R on mouse leave */
+  animation: wipe-in 0.3s var(--ease-step-2) forwards;
 }
 
 .nav-list .f-disp {
   font-family: var(--font-display);
-  clip-path: inset(0 100% 0 0); /* Clipped to the right */
+  /* Hides L to R on mouse leave */
+  animation: wipe-out 0.3s var(--ease-step-2) forwards;
 }
 
-/* 2. Hover / Focus States */
+/* 2. Hover / Focus States (Entering) */
 .nav-list a:hover .f-text,
 .nav-list a:focus-visible .f-text {
-  clip-path: inset(0 0 0 100%); /* Wipes away to the right */
+  /* Hides L to R on hover */
+  animation: wipe-out 0.3s var(--ease-step-2) forwards;
 }
 
 .nav-list a:hover .f-disp,
 .nav-list a:focus-visible .f-disp {
-  clip-path: inset(0 0 0 0); /* Reveals from the left */
-
+  /* Reveals L to R on hover */
+  animation: wipe-in 0.3s var(--ease-step-2) forwards;
 }
 
 /* MOBILE TOGGLE BUTTON */
