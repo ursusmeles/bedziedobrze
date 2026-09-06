@@ -305,7 +305,6 @@
   max-width: 40rem;
   z-index: 0;
   pointer-events: none;
-  /* Set origin to bottom right so the scale effect grows outward, not downward */
   transform-origin: bottom left;
 }
   & .card {
@@ -317,6 +316,57 @@
     --gutter: var(--space-xl-2xl);
     --sidebar-fluid-min: 40%;
   }
+}
+@media (max-width: 43.99rem) {
+  .kontakt-banner {
+    align-items: start;
+    
+    & img {
+      position: static;
+      width: 80%;       
+      max-width: 24rem;
+      justify-self: start;
+    }
+
+    & .card {
+      width: 80%;
+      min-width: min(100%, 28rem);
+      max-width: 100%;
+      justify-self: start;
+    }
+  }
+}
+
+.email-box {
+  display: inline-flex;
+  background-color: var(--c-black);
+  
+  /* Fixed dimensions to form the rectangle before text is injected */
+  width: 16rem;
+  height: clamp(2.5rem, 2.5vw, 3rem); 
+  
+  pointer-events: none; /* Prevents clicking before reveal */
+  text-decoration: none;
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  align-items: center;
+  
+  /* Smoothly fades out the black box when revealed */
+  transition: background-color 0.4s var(--ease-out-3), width 0.4s var(--ease-out-3);
+}
+
+.email-box.is-revealed {
+  background-color: transparent;
+  width: auto;
+  pointer-events: auto;
+  
+  /* Inherit your global anchor color */
+  color: currentColor; 
+}
+
+/* Optional: hide the button gracefully */
+.reveal-btn.is-hidden {
+  display: none;
 }
 
 /* --- CARDS --- */

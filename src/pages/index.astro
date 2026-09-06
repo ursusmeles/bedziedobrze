@@ -12,59 +12,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <p>Wspieramy Cię w&nbsp;biznesie: pomagamy skalować sprzedaż, rozwijamy Twoją obecność online i&nbsp;budujemy wizerunek.</p>
     </div>
   </div>
-  <img src="/img/heading.svg" alt="" aria-hidden="true" class="hero-svg" draggable="false"/>
+  <img src="/img/heading.svg" alt="" aria-hidden="true" class="hero-svg" draggable="false" loading="eager" fetchpriority="high"/>
 </section>
 <!-- BANNER -->
 <section id="studio" class="full-bleed-wrapper studio-banner" aria-label="Studio">
-  <img src="/img/studio.svg" alt="Studio" class="studio-text" data-parallax data-speed="-0.15" data-anchor="2" draggable="false" />
-<script>
-  document.addEventListener('astro:page-load', () => {
-    // Select all elements that should have the parallax effect
-    const parallaxElements = document.querySelectorAll<HTMLElement>('[data-parallax]');
-    if (parallaxElements.length === 0) return;
-
-    let ticking = false;
-
-  const updateParallax = () => {
-    const windowCenter = window.innerHeight / 2;
-    
-    parallaxElements.forEach(el => {
-      // Read the datasets or fall back to defaults
-      const speed = parseFloat(el.dataset.speed) || -0.15;
-      const anchorDivisor = parseFloat(el.dataset.anchor) || 2;
-
-      const anchor = el.closest('section') || el.parentElement || el;
-      const rect = anchor.getBoundingClientRect();
-      
-      // Apply the custom anchor divisor
-      const anchorCenter = rect.top + (rect.height / anchorDivisor);
-      const scrollEquivalent = windowCenter - anchorCenter;
-      
-      // Apply the custom speed
-      el.style.transform = `translate3d(0, ${scrollEquivalent * speed}px, 0) scale(${1 + (scrollEquivalent * 0.0001)})`;
-    });
-    
-    ticking = false;
-  };
-
-    const onScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(updateParallax);
-        ticking = true;
-      }
-    };
-
-    // Run once immediately to set correct initial positions before the user scrolls
-    updateParallax();
-    
-    window.addEventListener('scroll', onScroll, { passive: true });
-
-    // Cleanup for Astro view transitions
-    document.addEventListener('astro:before-preparation', () => {
-      window.removeEventListener('scroll', onScroll);
-    }, { once: true });
-  });
-</script>
+  <img src="/img/studio.svg" alt="Studio" class="studio-text" data-parallax data-speed="-0.15" data-anchor="2" draggable="false" loading="eager" fetchpriority="high" />
 </section>
 <!-- MANIFEST -->
 <section id="manifest" class="repel manifest" aria-labelledby="h-manifest">
@@ -99,87 +51,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <img src="/img/moldilus.svg" alt="Moldilus" loading="lazy" width="300" height="100" draggable="false" />
       </li>
     </ul>
-<script>
-  document.addEventListener('astro:page-load', () => {
-    const slider = document.querySelector('.klienci-list.reel');
-    
-    if (!slider) return;
-
-    let isDown = false;
-    let startX = 0;
-    let initialScrollLeft = 0;
-
-    let animationId = null;
-    let scrollSpeed = 0.5; 
-    let direction = 1; 
-    let isHovered = false;
-    
-    /* Decoupled scroll state to bypass Safari integer truncation */
-    let exactScroll = slider.scrollLeft;
-
-    const autoScroll = () => {
-      if (!isDown && !isHovered) {
-        exactScroll += (scrollSpeed * direction);
-        slider.scrollLeft = exactScroll;
-        
-        if (Math.ceil(exactScroll) >= slider.scrollWidth - slider.clientWidth) {
-          direction = -1;
-        } else if (Math.floor(exactScroll) <= 0) {
-          direction = 1;
-        }
-      }
-      animationId = requestAnimationFrame(autoScroll);
-    };
-
-    autoScroll();
-
-    slider.addEventListener('mousedown', (e) => {
-      isDown = true;
-      slider.classList.add('is-dragging');
-      startX = e.pageX - slider.offsetLeft;
-      initialScrollLeft = slider.scrollLeft;
-      
-      /* Optional: Temporarily disable scroll-snap during drag/auto in Safari */
-      slider.style.scrollSnapType = 'none';
-    });
-
-    slider.addEventListener('mouseenter', () => {
-      isHovered = true; 
-    });
-
-    slider.addEventListener('mouseleave', () => {
-      isDown = false;
-      isHovered = false; 
-      slider.classList.remove('is-dragging');
-      
-      /* Resync the decoupled variable after manual interaction */
-      exactScroll = slider.scrollLeft;
-      slider.style.scrollSnapType = '';
-    });
-
-    slider.addEventListener('mouseup', () => {
-      isDown = false;
-      slider.classList.remove('is-dragging');
-      
-      /* Resync the decoupled variable after drag */
-      exactScroll = slider.scrollLeft;
-      slider.style.scrollSnapType = '';
-    });
-
-    slider.addEventListener('mousemove', (e) => {
-      if (!isDown) return;
-      e.preventDefault(); 
-      const x = e.pageX - slider.offsetLeft;
-      const walk = (x - startX) * 1.5; 
-      slider.scrollLeft = initialScrollLeft - walk;
-    });
-
-    document.addEventListener('astro:before-preparation', () => {
-      cancelAnimationFrame(animationId);
-    }, { once: true });
-    
-  });
-</script>
 </section>
 <!-- USŁUGI -->
 <section id="uslugi" class="features" aria-labelledby="h-uslugi">
@@ -344,53 +215,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
     </li>
   </ol>
-<script>
-  document.addEventListener('astro:page-load', () => {
-    const tabWrappers = document.querySelectorAll('.stack'); 
-
-    tabWrappers.forEach(wrapper => {
-      const tabs = wrapper.querySelectorAll('[role="tab"]');
-      const panels = wrapper.querySelectorAll('[role="tabpanel"]');
-      let transitionTimeout: any;
-
-      tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-          const isSelected = tab.getAttribute('aria-selected') === 'true';
-          const anyOpen = Array.from(tabs).some(t => t.getAttribute('aria-selected') === 'true');
-
-          // 1. Immediately reset button states and close all panels
-          tabs.forEach(t => t.setAttribute('aria-selected', 'false'));
-          panels.forEach(p => p.setAttribute('aria-hidden', 'true'));
-          
-          // Clear any rapid-fire click timeouts
-          clearTimeout(transitionTimeout);
-
-          // 2. If we are opening a new tab
-          if (!isSelected) {
-            tab.setAttribute('aria-selected', 'true'); // Highlight button immediately
-            const targetPanel = wrapper.querySelector(`#${tab.getAttribute('aria-controls')}`);
-            
-            if (targetPanel) {
-              if (anyOpen) {
-                // If something was open, wait for it to close (400ms) before opening the new one
-                transitionTimeout = setTimeout(() => {
-                  targetPanel.setAttribute('aria-hidden', 'false');
-                }, 400); 
-              } else {
-                // If nothing was open, open instantly
-                targetPanel.setAttribute('aria-hidden', 'false');
-              }
-            }
-          }
-        });
-      });
-    });
-  });
-</script>
 </section>
 <!-- LICZBY -->
 <section id="liczby" class="full-bleed-wrapper liczby-banner" aria-label="Liczby">
-<img src="/img/glyph-rp8.svg" alt="" aria-hidden="true" class="liczby-rp8" data-parallax data-speed="-0.15" data-anchor="1" draggable="false" />
+<img src="/img/glyph-rp8.svg" alt="" aria-hidden="true" class="liczby-rp8" loading="lazy" width="320" data-parallax data-speed="-0.15" data-anchor="1" draggable="false" />
 <div class="stack">
   <div class="card sidebar" data-variant="titled">
     <span class="fixed">50+</span>
@@ -452,25 +280,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 </section>
 <!-- KONTAKT -->
 <section id="kontakt" class="super full-bleed-wrapper kontakt-banner" aria-labelledby="h-kontakt">
-  <img src="/img/dobrze.svg" alt="będzie dobrze" data-parallax data-speed="-0.12" data-anchor="1" loading="lazy" width="320" draggable="false" />
   <div class="card sidebar" data-variant="titled">
     <h2 id="h-kontakt" class="fixed">Poroz&shy;mawia&shy;jmy</h2>
     <div class="fluid stack">
       <p>Masz projekt? Problem do rozwiązania? Napisz do nas, my zajmiemy się resztą.</p>
-      <form class="contact-form" action="#" method="POST">
-        <div class="field-group">
-      <label for="name">Imię</label>
-      <input type="text" id="name" name="name" autocomplete="name" required>
-        </div>
-
-        <div class="field-group">
-      <label for="message">Wiadomość</label>
-      <textarea id="message" name="message" rows="5" required style="resize: none"></textarea>
-        </div>
-      
-        <button type="submit" class="button">Wyślij</button>
-      </form>
+      <a href="#" class="email-box" aria-hidden="true" tabindex="-1"></a>
+      <button type="button" class="button reveal-btn" data-u="biznes" data-d="bedziedobrze.space">
+        Pokaż e-mail
+      </button>
     </div>
   </div>
+  <img src="/img/dobrze.svg" alt="będzie dobrze" data-parallax data-speed="-0.12" data-anchor="1" loading="lazy" width="320" draggable="false" />
 </section>
 </BaseLayout>
