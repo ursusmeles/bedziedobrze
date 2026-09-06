@@ -9,6 +9,14 @@
   --card-padding-inline: var(--space-l);
 }
 
+.card[data-size="standalone"] {
+  justify-self: center;
+  width: 100%;
+  max-width: clamp(40rem, 85%, 70rem);
+  --repel-gap-y: var(--space-m);
+  --repel-gap-x: var(--space-l);
+}
+
 .features[data-variant="proces"] {
   & > h2 {
     max-width: 15ch;

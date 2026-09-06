@@ -263,31 +263,41 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 </section>
 <!-- O NAS -->
 <section id="onas" class="super full-bleed-wrapper" aria-labelledby="h-onas">
-    <img src="/img/glyph-m.svg" alt="" aria-hidden="true" loading="lazy" width="320" draggable="false" />
-    <h2 id="h-onas">Kim jesteśmy</h2>
-    <article>
-      <h3 class="hot decorative">Mikołaj</h3>
-      <p>Producent wideo i strateg wizualny. Ekspert przekładania założeń biznesowych na angażujący obraz i dźwięk. Odpowiada za produkcje filmowe, fotografię oraz nasze studio. Miłośnik sportów walki i szybkich samochodów (w simrigu — jeździ skodą).</p>
-    </article>
-    <article>
-      <h3 class="hot decorative">Mateusz</h3>
-      <p>Ekspert od skalowania biznesu, strategii wizerunkowych i projektowania. Ex-CEO z doświadczeniem w optymalizacji procesów. Zwolennik otwartego oprogramowania oraz długodystansowych wypraw gravelowych.</p>
-    </article>
-    <article class="card repel" data-color="darker" data-variant="titled">
+    <div class="features">
+      <img src="/img/glyph-m.svg" alt="" aria-hidden="true" loading="lazy" width="320" draggable="false" />
+      <h2 id="h-onas">Kim jesteśmy</h2>
+    </div>
+    <div class="founders">
+      <article>
+        <img src="/img/mikolaj.webp" alt="Mikołaj, co-founder będzie\dobrze" loading="lazy" />
+        <h3 class="hot decorative">Mikołaj</h3>
+        <div class="stack">
+          <span><strong>Mikołaj</strong></span>
+          <p>Producent wideo i strateg wizualny. Ekspert przekładania założeń biznesowych na angażujący obraz i dźwięk. Odpowiada za produkcje filmowe, fotografię oraz nasze studio. Miłośnik sportów walki i szybkich samochodów (w simrigu — jeździ skodą).</p>
+        </div>
+      </article>
+      <article>
+        <img src="/img/mateusz.webp" alt="Mateusz, co-founder będzie\dobrze" loading="lazy" />
+        <h3 class="hot decorative">Mateusz</h3>
+        <div class="stack">
+          <span><strong>Mateusz</strong></span>
+          <p>Ekspert od skalowania biznesu, strategii wizerunkowych i projektowania. Ex-CEO z doświadczeniem w optymalizacji procesów. Zwolennik otwartego oprogramowania oraz długodystansowych wypraw gravelowych.</p>
+        </div>
+      </article>
+    </div>
+    <article class="card repel" data-color="darker" data-variant="titled" data-size="standalone">
       <h3>Nasz zespół</h3>
       <p>Zaprzyjaźnieni filmowcy, oświetleniowcy, specjaliści od social media, designerzy i graficy. Najpierw diagnozujemy Twoje potrzeby, a potem dobieramy optymalny zespół do ich realizacji. Ty zawsze rozmawiasz z nami.</p>
     </article>
 </section>
 <!-- KONTAKT -->
 <section id="kontakt" class="super full-bleed-wrapper kontakt-banner" aria-labelledby="h-kontakt">
-  <div class="card sidebar" data-variant="titled">
-    <h2 id="h-kontakt" class="fixed">Poroz&shy;mawia&shy;jmy</h2>
-    <div class="fluid stack">
-      <p>Masz projekt? Problem do rozwiązania? Napisz do nas, my zajmiemy się resztą.</p>
-      <a href="#" class="email-box" aria-hidden="true" tabindex="-1"></a>
-      <button type="button" class="button reveal-btn" data-u="biznes" data-d="bedziedobrze.space">
-        Pokaż e-mail
-      </button>
+  <div class="card stack" data-variant="titled">
+    <h2 id="h-kontakt">Porozma&shy;wiajmy</h2>
+    <p>Masz projekt? Problem do rozwiązania? Napisz do nas, my zajmiemy się resztą.</p>
+    <div class="stack">
+      <a href="#" class="email-box" aria-hidden="true" tabindex="-1">&nbsp;</a>
+      <button type="button" class="button reveal-btn" data-u="biznes" data-d="bedziedobrze.space">Pokaż e-mail</button>
     </div>
   </div>
   <img src="/img/dobrze.svg" alt="będzie dobrze" data-parallax data-speed="-0.12" data-anchor="1" loading="lazy" width="320" draggable="false" />

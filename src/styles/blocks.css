@@ -237,19 +237,140 @@
 
 
 /* --- O NAS --- */
-.onas {
+[aria-labelledby="h-onas"] {
+  row-gap: calc(var(--space-2xl-3xl) * 2);
+  --section-bottom: calc(var(--space-2xl-3xl) * 2);
+}
+
+.founders {
   display: grid;
-  grid-template-columns: 1fr auto auto;
-  column-gap: var(--space-l-xl);
   row-gap: var(--space-3xl);
-  align-items: start;
-  & img {
-    grid-column: 1;
-    grid-row: 1 / -1;
+  
+  /* 1. Shared Article Layout */
+  & > article {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: var(--space-3xl);
+    align-items: start;
+
+    & > img {
+      width: 100%;
+      max-width: 25rem; 
+      height: auto;
+      aspect-ratio: 9 / 16;
+      object-fit: cover;
+      grid-row: 1;
+    }
+
+    & > h3.decorative {
+      grid-row: 1;
+      margin: 0;
+      z-index: 2;
+    }
+
+    & > .stack {
+      grid-row: 1;
+      align-self: center;
+    }
   }
-  & h2,
-  & p {
-    grid-column: 3;
+
+  /* 2. Mikołaj (Image Left) */
+  & > article:nth-of-type(1) {
+    & > img, 
+    & > h3.decorative {
+      grid-column: 1;
+    }
+    
+    & > h3.decorative {
+      justify-self: end;
+      align-self: start;
+      /* Spills up and right */
+      transform: translate(-30%, 60%);
+    }
+
+    & > .stack {
+      grid-column: 2;
+      justify-self: start;
+    }
+  }
+
+  /* 3. Mateusz (Image Right & Negative Overlap) */
+  & > article:nth-of-type(2) {
+    /* Pulls the article up into Mikołaj's row space */
+    margin-top: calc(var(--space-3xl) * -1.62); 
+    position: relative;
+    z-index: 1; 
+
+    & > img, 
+    & > h3.decorative {
+      grid-column: 2;
+      justify-self: end;
+    }
+    
+    & > h3.decorative {
+      justify-self: start;
+      align-self: start;
+      /* Spills up and left */
+      transform: translate(30%, 60%);
+    }
+
+    & > .stack {
+      grid-column: 1;
+      justify-self: end;
+    }
+  }
+}
+
+/* Responsive adjustment for smaller viewports */
+@media (max-width: 44rem) {
+  [aria-labelledby="h-onas"] {
+    row-gap: var(--space-3xl);
+  }
+  .founders {
+    row-gap: var(--space-3xl);
+    
+    & > article {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto;
+      row-gap: var(--space-m);
+      margin-top: 0 !important; /* Removes negative space */
+      
+      & > img, 
+      & > h3.decorative,
+      & > .stack {
+        grid-column: 1 !important;
+      }
+      
+      & > img { 
+        grid-row: 1;
+        max-width: 20rem; 
+        justify-self: start;
+        aspect-ratio: 2 / 3;
+      }
+      
+      & > h3.decorative {
+        grid-row: 1;
+        justify-self: end;
+        align-self: end;
+        transform: translate(30%, 60%); 
+      }
+
+      & > .stack { 
+        grid-row: 2; 
+        justify-self: center; 
+        max-width: 100%;
+      }
+    }
+    & > article:nth-of-type(1) {
+      & > h3.decorative {
+        transform: translate(-30vw, 60%);
+      }
+    }
+    & > article:nth-of-type(2) {
+      & > h3.decorative {
+        transform: translate(30vw, 60%);
+      }
+    }
   }
 }
 
@@ -312,9 +433,16 @@
     z-index: 1;
     position: relative;
     width: 100%;
-    max-width: clamp(20rem, 60%, 60rem);
-    --gutter: var(--space-xl-2xl);
+    max-width: clamp(20rem, 60%, 50rem);
+    --gutter: var(--space-m);
     --sidebar-fluid-min: 40%;
+    & h2 {
+      font-size: var(--step-3);
+      max-width: 45ch;
+    }
+    & .stack {
+      --gutter: var(--space-2xs);
+    }
   }
 }
 @media (max-width: 43.99rem) {
@@ -337,36 +465,87 @@
   }
 }
 
+/* --- EMAIL REVEAL COMPONENT --- */
 .email-box {
   display: inline-flex;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+  padding: var(--space-xs) var(--space-xs); /* Padded */
+
   background-color: var(--c-black);
   
-  /* Fixed dimensions to form the rectangle before text is injected */
-  width: 16rem;
-  height: clamp(2.5rem, 2.5vw, 3rem); 
+  /* Hides text until the wave passes */
+  color: transparent; 
   
-  pointer-events: none; /* Prevents clicking before reveal */
+  /* Use min-width so it expands instantly if the email string is long */
+  max-width: min(32rem, 100%);
+  height: auto;
+  min-height: calc(var(--step-1) + var(--space-xs));
+  
   text-decoration: none;
-  font-family: var(--font-display);
+  font-family: var(--font-text);
   font-size: var(--step-1);
-  align-items: center;
-  
-  /* Smoothly fades out the black box when revealed */
-  transition: background-color 0.4s var(--ease-out-3), width 0.4s var(--ease-out-3);
+  overflow: hidden;
+  pointer-events: none;
+  word-break: break-all;
+  line-height: var(--lh-small);
 }
 
+/* First Wave: Hot */
+.email-box::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background-color: var(--c-hot);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+/* Second Wave: Super (Final Background) */
+.email-box::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-color: var(--c-superd);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+/* --- REVEALED ANIMATION STATES --- */
 .email-box.is-revealed {
-  background-color: transparent;
-  width: auto;
   pointer-events: auto;
-  
-  /* Inherit your global anchor color */
-  color: currentColor; 
+  color: var(--c-black);
+  /* Snaps the text to visible exactly after 0.25s */
+  transition: color 0s 0.25s; 
 }
 
-/* Optional: hide the button gracefully */
-.reveal-btn.is-hidden {
-  display: none;
+.email-box.is-revealed::before {
+  transform: scaleX(1);
+  transition: transform 0.45s var(--ease-step-4);
+}
+
+.email-box.is-revealed::after {
+  transform: scaleX(1);
+  /* 0.18s delay so it chases the Hot wave */
+  transition: transform 0.25s var(--ease-step-4) 0.18s; 
+}
+
+/* --- BUTTON STATE UPDATE --- */
+.reveal-btn {
+  transition: background-color 0.2s ease-out, color 0.2s;
+  min-width: 15ch;
+}
+
+.reveal-btn.is-clicked {
+  background-color: var(--c-superd);
+  color: var(--c-black);
+}
+
+.reveal-btn.is-copied {
+  color: color-mix(in srgb, var(--c-black) 50%, transparent);
 }
 
 /* --- CARDS --- */
@@ -493,11 +672,12 @@
   grid-area: 1 / 1; /* Forces all panels to overlap in the same grid cell */
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 0.18s var(--ease-elastic-in-2);
+  transition: grid-template-rows .18s var(--ease-circ-in);
 }
 
 .details-wrapper[aria-hidden="false"] {
   grid-template-rows: 1fr;
+  transition: grid-template-rows .18s var(--ease-circ-out);
 }
 
 .details-content {
@@ -506,9 +686,10 @@
   margin: 0;
   padding-inline: var(--space-m);
   padding-block: 0;
-  transition: padding-block 0.25s var(--ease-out-3);
+  transition: padding-block 0.18s var(--ease-out-3);
 }
 
 .details-wrapper[aria-hidden="false"] .details-content {
   padding-block: var(--space-m);
+  transition: padding-block 0.18s var(--ease-out-3);
 }
