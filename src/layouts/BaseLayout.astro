@@ -63,6 +63,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <!-- Font Preloading -->
   <link rel="preload" href="/fonts/space-grotesk.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="/fonts/ferro-iv.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" as="image" href="/img/blok.webp" fetchpriority="high" 
+/>
 
   <!-- Astro View Transitions (Smooth page routing) -->
   <ClientRouter />
