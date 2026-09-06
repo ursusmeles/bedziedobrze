@@ -238,7 +238,7 @@
 
 /* --- O NAS --- */
 [aria-labelledby="h-onas"] {
-  row-gap: calc(var(--space-2xl-3xl) * 2);
+  row-gap: calc(var(--space-2xl-3xl) * 1.5);
   --section-bottom: calc(var(--space-2xl-3xl) * 2);
 }
 
