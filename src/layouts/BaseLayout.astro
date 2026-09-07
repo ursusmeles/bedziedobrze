@@ -70,22 +70,92 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <ClientRouter />
 
   <!-- Local Business Schema -->
-  <script type="application/ld+json">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
     {
-      "@context": "https://schema.org",
-      "@type": "Cooperative",
-      "name": "Będzie Dobrze",
+      "@type": "ProfessionalService",
+      "@id": "https://bedziedobrze.space/#organisation",
+      "name": "będzie\dobrze",
       "url": "https://bedziedobrze.space",
-      "telephone": "698673078",
+      "logo": "https://bedziedobrze.space/favicon-96x96.png",
+      "image": "https://bedziedobrze.space/og-image.jpg",
+      "description": "Wspieramy Cię w biznesie: pomagamy skalować sprzedaż, rozwijamy Twoją obecność online i budujemy wizerunek.",
+      "telephone": "+48698673078",
+      "priceRange": "$$",
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "Rzeczpospolitej 8/215",
         "addressLocality": "Gdańsk",
         "postalCode": "80-369",
         "addressCountry": "PL"
-      }
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 54.4004146,
+        "longitude": 18.5919910
+      },
+      "knowsAbout": [
+        "Business Strategy",
+        "Web Design",
+        "Performance Marketing",
+        "Video Production",
+        "Brand Identity"
+      ],
+"founder": [
+        {
+          "@type": "Person",
+          "name": "Mateusz Nowak",
+          "jobTitle": "Co-founder & Strateg",
+          "description": "Ekspert od skalowania biznesu, strategii wizerunkowych i projektowania webowego. Doświadczony manager i szkoleniowiec.",
+          "url": "https://h62.pl",
+          "sameAs": [
+            "https://www.linkedin.com/in/mateuszdnowak/",
+            "https://github.com/ursusmeles/",
+            "https://rpg.h62.pl/"
+          ],
+          "knowsAbout": [
+            "Business Strategy",
+            "Web Design & Development",
+            "Performance Marketing",
+            "Brand Culture",
+            "TTRPG Design"
+          ]
+        },
+        {
+          "@type": "Person",
+          "name": "Mikołaj Zbrzeźniak",
+          "jobTitle": "Co-founder & Video Producer",
+          "description": "Producent wideo i strateg wizualny. Ekspert przekładania założeń biznesowych na angażujący obraz i dźwięk.",
+          "url": "https://mikthecreator.pl",
+          "sameAs": [
+            "https://www.linkedin.com/in/miko%C5%82aj-zbrze%C5%BAniak-2b7294215/",
+            "https://www.instagram.com/mik.thecreator/"
+          ],
+          "knowsAbout": [
+            "Video Production",
+            "Visual Strategy",
+            "Photography",
+            "Studio Recording"
+          ]
+        }
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://bedziedobrze.space/#website",
+      "url": "https://bedziedobrze.space",
+      "name": "będzie\\dobrze",
+      "publisher": {
+        "@id": "https://bedziedobrze.space/#organization"
+      },
+      "inLanguage": "pl-PL"
     }
-  </script>
+  ]
+}
+</script>
+<!-- Main script -->
   <script src="../scripts/main.ts"></script>
 </head>
 <body>

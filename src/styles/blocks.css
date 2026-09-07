@@ -7,6 +7,7 @@
   position: relative;
   min-height: 60vh;
   padding-block: var(--section-top) var(--section-bottom); 
+  text-wrap: balance;
   
   /* Pack content to the bottom edge */
   align-content: end;

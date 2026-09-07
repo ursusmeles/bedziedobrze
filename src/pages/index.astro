@@ -1,6 +1,10 @@
 ---
 // src/pages/index.astro
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { Image } from 'astro:assets';
+
+import mikolajImg from '../imgs/mikolaj.webp';
+import mateuszImg from '../imgs/mateusz.webp';
 ---
 <BaseLayout>
 <!-- HERO -->
@@ -269,15 +273,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </div>
     <div class="founders">
       <article>
-        <img src="/img/mikolaj.webp" alt="Mikołaj, co-founder będzie\dobrze" width="400" height="711" loading="lazy" />
-        <h3 class="hot decorative">Mikołaj</h3>
+      <Image src={mikolajImg} alt="Mikołaj, co-founder będzie\dobrze" width={400} widths={[200, 400, 800]} sizes="(max-width: 768px) 200px, 400px" loading="lazy" />        <h3 class="hot decorative">Mikołaj</h3>
         <div class="stack">
           <span><strong>Mikołaj</strong></span>
           <p>Producent wideo i strateg wizualny. Ekspert przekładania założeń biznesowych na angażujący obraz i dźwięk. Odpowiada za produkcje filmowe, fotografię oraz nasze studio. Miłośnik sportów walki i szybkich samochodów (w simrigu — jeździ skodą).</p>
         </div>
       </article>
       <article>
-        <img src="/img/mateusz.webp" alt="Mateusz, co-founder będzie\dobrze" width="400" height="711" loading="lazy" />
+      <Image src={mateuszImg} alt="Mateusz, co-founder będzie\dobrze" width={400} widths={[200, 400, 800]} sizes="(max-width: 768px) 200px, 400px" loading="lazy" />
         <h3 class="hot decorative">Mateusz</h3>
         <div class="stack">
           <span><strong>Mateusz</strong></span>
@@ -296,7 +299,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <h2 id="h-kontakt">Porozma&shy;wiajmy</h2>
     <p>Masz projekt? Problem do rozwiązania? Napisz do nas, my zajmiemy się resztą.</p>
     <div class="stack">
-      <a href="#" class="email-box" aria-hidden="true" tabindex="-1">&nbsp;</a>
+      <a class="email-box" aria-hidden="true" tabindex="-1">&nbsp;</a>
       <button type="button" class="button reveal-btn" data-u="biznes" data-d="bedziedobrze.space">Pokaż e-mail</button>
     </div>
   </div>
