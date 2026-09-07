@@ -5,6 +5,7 @@ import { Image } from 'astro:assets';
 
 import mikolajImg from '../imgs/mikolaj.webp';
 import mateuszImg from '../imgs/mateusz.webp';
+import sbgblokImg from '../imgs/blok.webp';
 ---
 <BaseLayout>
 <!-- HERO -->
@@ -20,7 +21,19 @@ import mateuszImg from '../imgs/mateusz.webp';
 </section>
 <!-- BANNER -->
 <section id="studio" class="full-bleed-wrapper studio-banner" aria-label="Studio">
-  <img src="/img/studio.svg" width="1000" height="175" alt="Studio" class="studio-text" data-parallax data-speed="-0.15" data-anchor="2" draggable="false" loading="eager" fetchpriority="high" />
+<Image 
+    src={sbgblokImg} 
+    alt="" 
+    aria-hidden="true"
+    draggable="false"
+    class="studio-bg"
+    fetchpriority="high"
+    loading="eager"
+    decoding="sync"
+    widths={[400, 800, 1200, 1920]}
+    sizes="100vw"
+  />
+  <img src="/img/studio.svg" width="1000" height="175" alt="Studio" class="studio-text" data-parallax="" data-speed="-0.15" data-anchor="2" draggable="false" loading="eager" fetchpriority="high" />
 </section>
 <!-- MANIFEST -->
 <section id="manifest" class="repel manifest" aria-labelledby="h-manifest">

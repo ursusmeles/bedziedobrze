@@ -98,13 +98,23 @@
 }
 
 /* STUDIO BANNER BLOCK */
+
 .studio-banner {
-  background: url('/img/blok.webp') no-repeat center center;
-  background-size: cover;
+  position: relative;
+  overflow: hidden;
   display: grid;
   place-items: center;
   padding-block: calc(var(--space-2xl) * 2);
-  overflow: hidden;
+}
+
+.studio-bg {
+  grid-column: full;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
 }
 
 .studio-text {
