@@ -8,6 +8,7 @@ export default defineConfig({
   adapter: vercel(),
     build: {
     format: 'directory',
+    inlineStylesheets: 'always',
   },
 
   prefetch: {
