@@ -234,6 +234,7 @@
 }
 
 .founders {
+  --name-anchor-max: calc((92.5rem - 2 * var(--fluid-margin) - var(--space-3xl)) / 2);
   display: grid;
   row-gap: var(--space-3xl);
   
@@ -275,6 +276,8 @@
     & > h3.decorative {
       justify-self: end;
       align-self: start;
+      /* Hold the 1480px overlap as the grid column grows past the photo. */
+      margin-inline-end: max(0px, calc(100% - var(--name-anchor-max)));
       /* Spills up and right */
       transform: translate(-30%, 60%);
     }
@@ -301,6 +304,7 @@
     & > h3.decorative {
       justify-self: start;
       align-self: start;
+      margin-inline-start: max(0px, calc(100% - var(--name-anchor-max)));
       /* Spills up and left */
       transform: translate(30%, 60%);
     }
@@ -592,21 +596,7 @@
   transition-duration: 0.1s;
 }
   
-  /* SUMMARY */
-
-/* 1. TAB BUTTONS & FONT SWAP */
-.tab-btn {
-  cursor: pointer;
-  background: transparent;
-  color: inherit;
-  font-size: var(--step-1);
-  line-height: var(--lh-small);
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-  border: 2px solid transparent;
-  padding: 0;
-  transition: color 0.2s var(--ease-out-3), border-color 0.2s var(--ease-out-3);
-}
+/* --- FONT SWAP --- */
 
 .grid-overlap {
   display: grid;
@@ -633,54 +623,4 @@
   font-family: var(--font-text);
   font-weight: var(--font-medium);
   clip-path: inset(0 100% 0 0);
-}
-
-.tab-btn:hover .f-disp,
-.tab-btn[aria-selected="true"] .f-disp {
-  clip-path: inset(0 0 0 100%);
-}
-
-.tab-btn:hover .f-text,
-.tab-btn[aria-selected="true"] .f-text {
-  clip-path: inset(0 0 0 0);
-}
-
-.tab-btn:hover {
-  border-color: var(--c-super);
-}
-
-.tab-btn[aria-selected="true"] {
-  color: var(--c-hot);
-  border-color: var(--c-super);
-}
-
-/* 2. PANELS CONTAINER & DRAWER ANIMATION */
-.panels-container {
-  display: grid;
-}
-
-.details-wrapper {
-  grid-area: 1 / 1; /* Forces all panels to overlap in the same grid cell */
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows .18s var(--ease-circ-in);
-}
-
-.details-wrapper[aria-hidden="false"] {
-  grid-template-rows: 1fr;
-  transition: grid-template-rows .18s var(--ease-circ-out);
-}
-
-.details-content {
-  overflow: hidden;
-  background-color: var(--c-super);
-  margin: 0;
-  padding-inline: var(--space-m);
-  padding-block: 0;
-  transition: padding-block 0.18s var(--ease-out-3);
-}
-
-.details-wrapper[aria-hidden="false"] .details-content {
-  padding-block: var(--space-m);
-  transition: padding-block 0.18s var(--ease-out-3);
 }

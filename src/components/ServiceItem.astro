@@ -1,0 +1,153 @@
+---
+import type { Service } from '../data/services';
+
+interface Props {
+  service: Service;
+  number: number;
+}
+
+const { service, number } = Astro.props;
+const tools = service.tools.map(tool => ({
+  ...tool,
+  tabId: `tab-${service.id}-${tool.id}`,
+  panelId: `panel-${service.id}-${tool.id}`,
+}));
+---
+
+<li>
+  <span class="hot decorative" aria-hidden="true">{number}</span>
+  <div class="stack">
+    <h3>{service.title}</h3>
+    {service.paragraphs.map(paragraph => <p>{paragraph}</p>)}
+  </div>
+  <div class="stack" data-service-tools style="--gutter: var(--space-m);">
+    <span class="eyebrow">Nasze narzędzia</span>
+    <div class="cluster" role="tablist">
+      {tools.map(tool => (
+        <button type="button" role="tab" aria-selected="false" aria-controls={tool.panelId} id={tool.tabId} class="tab-btn">
+          <span class="grid-overlap">
+            <span class="f-disp">{tool.label}</span>
+            <span class="f-text" aria-hidden="true">{tool.label}</span>
+          </span>
+        </button>
+      ))}
+    </div>
+    <div class="panels-container">
+      {tools.map(tool => (
+        <div id={tool.panelId} role="tabpanel" aria-labelledby={tool.tabId} class="details-wrapper" aria-hidden="true">
+          <div class="details-content"><p>{tool.description}</p></div>
+        </div>
+      ))}
+    </div>
+  </div>
+</li>
+
+<script>
+  const initServiceTools = () => {
+    const tabWrappers = document.querySelectorAll('[data-service-tools]'); 
+
+    tabWrappers.forEach(wrapper => {
+      const tabs = wrapper.querySelectorAll('[role="tab"]');
+      const panels = wrapper.querySelectorAll('[role="tabpanel"]');
+      if (tabs.length === 0 || panels.length === 0) return;
+
+      let transitionTimeout: ReturnType<typeof setTimeout> | undefined;
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          const isSelected = tab.getAttribute('aria-selected') === 'true';
+          const anyOpen = Array.from(tabs).some(t => t.getAttribute('aria-selected') === 'true');
+
+          tabs.forEach(t => t.setAttribute('aria-selected', 'false'));
+          panels.forEach(p => p.setAttribute('aria-hidden', 'true'));
+          clearTimeout(transitionTimeout);
+
+          if (!isSelected) {
+            tab.setAttribute('aria-selected', 'true');
+            const targetPanel = wrapper.querySelector(`#${tab.getAttribute('aria-controls')}`);
+          
+            if (targetPanel) {
+              if (anyOpen) {
+                transitionTimeout = setTimeout(() => {
+                  targetPanel.setAttribute('aria-hidden', 'false');
+                }, 400); 
+              } else {
+                targetPanel.setAttribute('aria-hidden', 'false');
+              }
+            }
+          }
+        });
+      });
+    });
+  };
+
+  document.addEventListener('astro:page-load', initServiceTools);
+</script>
+
+<style>
+  @layer blocks {
+    /* TAB BUTTONS */
+    .tab-btn {
+      cursor: pointer;
+      background: transparent;
+      color: inherit;
+      font-size: var(--step-1);
+      line-height: var(--lh-small);
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      border: 2px solid transparent;
+      padding: 0;
+      transition: color 0.2s var(--ease-out-3), border-color 0.2s var(--ease-out-3);
+    }
+
+    .tab-btn:hover .f-disp,
+    .tab-btn[aria-selected="true"] .f-disp {
+      clip-path: inset(0 0 0 100%);
+    }
+
+    .tab-btn:hover .f-text,
+    .tab-btn[aria-selected="true"] .f-text {
+      clip-path: inset(0 0 0 0);
+    }
+
+    .tab-btn:hover {
+      border-color: var(--c-super);
+    }
+
+    .tab-btn[aria-selected="true"] {
+      color: var(--c-hot);
+      border-color: var(--c-super);
+    }
+
+    /* 2. PANELS CONTAINER & DRAWER ANIMATION */
+    .panels-container {
+      display: grid;
+    }
+
+    .details-wrapper {
+      grid-area: 1 / 1; /* Forces all panels to overlap in the same grid cell */
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows .18s var(--ease-circ-in);
+    }
+
+    .details-wrapper[aria-hidden="false"] {
+      grid-template-rows: 1fr;
+      transition: grid-template-rows .18s var(--ease-circ-out);
+    }
+
+    .details-content {
+      overflow: hidden;
+      background-color: var(--c-super);
+      margin: 0;
+      padding-inline: var(--space-m);
+      padding-block: 0;
+      transition: padding-block 0.18s var(--ease-out-3);
+    }
+
+    .details-wrapper[aria-hidden="false"] .details-content {
+      padding-block: var(--space-m);
+      transition: padding-block 0.18s var(--ease-out-3);
+    }
+  }
+</style>

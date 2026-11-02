@@ -72,44 +72,6 @@ const initParallax = () => {
   }, { once: true });
 };
 
-const initTabs = () => {
-  const tabWrappers = document.querySelectorAll('.stack'); 
-
-  tabWrappers.forEach(wrapper => {
-    const tabs = wrapper.querySelectorAll('[role="tab"]');
-    const panels = wrapper.querySelectorAll('[role="tabpanel"]');
-    if (tabs.length === 0 || panels.length === 0) return;
-
-    let transitionTimeout: any;
-
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        const isSelected = tab.getAttribute('aria-selected') === 'true';
-        const anyOpen = Array.from(tabs).some(t => t.getAttribute('aria-selected') === 'true');
-
-        tabs.forEach(t => t.setAttribute('aria-selected', 'false'));
-        panels.forEach(p => p.setAttribute('aria-hidden', 'true'));
-        clearTimeout(transitionTimeout);
-
-        if (!isSelected) {
-          tab.setAttribute('aria-selected', 'true');
-          const targetPanel = wrapper.querySelector(`#${tab.getAttribute('aria-controls')}`);
-          
-          if (targetPanel) {
-            if (anyOpen) {
-              transitionTimeout = setTimeout(() => {
-                targetPanel.setAttribute('aria-hidden', 'false');
-              }, 400); 
-            } else {
-              targetPanel.setAttribute('aria-hidden', 'false');
-            }
-          }
-        }
-      });
-    });
-  });
-};
-
 const initEmailReveal = () => {
   const revealBtn = document.querySelector('.reveal-btn') as HTMLButtonElement;
   const emailBox = document.querySelector('.email-box') as HTMLAnchorElement;
@@ -172,6 +134,5 @@ document.addEventListener('astro:page-load', () => {
   initHeaderScroll();
   initMobileNav();
   initParallax();
-  initTabs();
   initEmailReveal();
 });
