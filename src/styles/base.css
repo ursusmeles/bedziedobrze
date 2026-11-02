@@ -92,7 +92,7 @@ strong, b {
 
 mark {
   color: var(--c-black);
-  background: var(--c-hot);
+  background: var(--c-super);
   font-weight: inherit;
 }
 
