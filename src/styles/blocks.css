@@ -482,17 +482,20 @@
   /* Hides text until the wave passes */
   color: transparent; 
   
-  /* Use min-width so it expands instantly if the email string is long */
-  max-width: min(32rem, 100%);
+  /* Let the revealed address size the box without wrapping. */
+  inline-size: max-content;
+  max-inline-size: none;
+  align-self: flex-start;
   height: auto;
   min-height: calc(var(--step-1) + var(--space-xs));
   
   text-decoration: none;
   font-family: var(--font-text);
-  font-size: var(--step-1);
+  font-size: var(--step-0);
   overflow: hidden;
   pointer-events: none;
-  word-break: break-all;
+  white-space: nowrap;
+  word-break: normal;
   line-height: var(--lh-small);
 }
 
