@@ -70,6 +70,7 @@
     :root {
         --b-black: 1px solid var(--c-black);
         --b-super: 2px solid var(--c-super);
+        --b-super-thin: 1px solid var(--c-super);
         --b-hot: 1px solid var(--c-hot);
     }
 

@@ -1,0 +1,201 @@
+---
+const clients = [
+  { file: 'red-bull', name: 'Red Bull', width: 1000, height: 612.583, size: 9.5, tags: ['wideo'] },
+  { file: 'atm-klima', name: 'ATM Klima', width: 1561, height: 184, size: 14.5, tags: ['B2C ads', 'automatyzacje & AI'] },
+  { file: 'ikea', name: 'IKEA', width: 98.36, height: 40, size: 10, tags: ['wideo'] },
+  { file: 'moldilus', name: 'Moldilus', width: 404.156, height: 96.663, size: 12.5, tags: ['strategia', 'wideo', 'branding', 'B2B ads'] },
+  { file: 'wilderness-almanac', name: 'The Wilderness Almanac', width: 960.956, height: 297, size: 13.5, tags: ['branding', 'web design', 'product design'] },
+  { file: 'ostmedic', name: 'OstMedic', width: 1714.57, height: 277, size: 13, tags: ['web design', 'B2C ads'] },
+  { file: 'moja-apteczka', name: 'Moja Apteczka', width: 890.258, height: 322.629, size: 12, tags: ['e-commerce', 'web design', 'strategia', 'B2C ads'] },
+  { file: 'porsche', name: 'Porsche', width: 4500, height: 300, size: 16.5, tags: ['wideo'] },
+  { file: 'trefl-gdansk', name: 'Energa Trefl Gdańsk', width: 159.724, height: 206.523, size: 4.75, tags: ['wideo'] },
+  { file: 'poszukiwacze-przygod', name: 'Poszukiwacze Przygód', width: 1237.198, height: 401.3, size: 13.5, tags: ['wideo', 'strategia', 'design', 'B2C ads'] },
+  { file: 'jwpm', name: 'JW.PM', width: 917.618, height: 270.617, size: 11.5, tags: ['strategia', 'wideo', 'B2B & B2C ads'] },
+];
+
+const clientWaves = [
+  { duration: 140, delay: 0 },
+  { duration: 200, delay: 24 },
+  { duration: 160, delay: 10 },
+  { duration: 240, delay: 36 },
+  { duration: 180, delay: 18 },
+];
+---
+
+<section id="klienci" class="klienci" aria-labelledby="h-klienci">
+  <h2 id="h-klienci" class="hot decorative">Zaufali nam</h2>
+  <ul class="klienci-list" role="list">
+    {clients.map(client => (
+      <li style={`--logo-width: ${client.size}rem; --logo-ratio: ${client.size / 17}`}>
+        <button type="button" class="client-card" aria-pressed="false" aria-label={`${client.name}: ${client.tags.join(', ')}`}>
+          <img src={`/img/clients/${client.file}.svg`} alt="" loading="lazy" width={Math.round(client.width)} height={Math.round(client.height)} draggable="false" />
+          <span class="client-waves" aria-hidden="true">
+            {clientWaves.map(wave => <span style={`--wave-duration: ${wave.duration}ms; --wave-delay: ${wave.delay}ms`}></span>)}
+          </span>
+          <span class="client-tags cluster" aria-hidden="true">
+            {client.tags.map(tag => <span>{tag}</span>)}
+          </span>
+        </button>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<script>
+  const initClientCards = () => {
+    const cards = document.querySelectorAll<HTMLButtonElement>('.client-card');
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        const wasPressed = card.getAttribute('aria-pressed') === 'true';
+        cards.forEach(item => item.setAttribute('aria-pressed', 'false'));
+        card.setAttribute('aria-pressed', String(!wasPressed));
+      });
+    });
+  };
+
+  document.addEventListener('astro:page-load', initClientCards);
+</script>
+
+<style>
+  @layer blocks {
+    .klienci {
+      container-type: inline-size;
+      grid-column: content;
+      min-width: 0;
+      --section-top: var(--space-2xl-3xl);
+      & h2 {
+        font-size: var(--step-3);
+        max-width: 45ch;
+      }
+    }
+    .klienci-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      padding-block-start: 1px;
+      padding-inline-start: 1px;
+
+      & > li {
+        min-inline-size: 0;
+        margin-block-start: -1px;
+        margin-inline-start: -1px;
+        border: var(--b-super-thin);
+      }
+
+      & img {
+        inline-size: min(var(--logo-width), calc(100% * var(--logo-ratio)));
+        block-size: auto;
+        max-block-size: 6.5rem;
+        object-fit: contain;
+        pointer-events: none;
+      }
+    }
+
+    @container (min-width: 48rem) {
+      .klienci-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+
+    @container (min-width: 72rem) {
+      .klienci-list { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+    }
+
+    .client-card {
+      --reveal: 0;
+      --reveal-delay: 0ms;
+      --tags-delay: 0ms;
+      display: grid;
+      place-items: center;
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      inline-size: 100%;
+      min-block-size: clamp(7.5rem, 14cqi, 11rem);
+      padding: var(--space-xs-s);
+      border: 0;
+      background: transparent;
+      color: var(--c-black);
+      font: inherit;
+
+      &:focus-visible {
+        outline-offset: -3px;
+      }
+
+      &:is(:focus-visible, [aria-pressed="true"]) {
+        --reveal: 1;
+        --tags-delay: 320ms;
+      }
+    }
+
+    @media (hover: hover) {
+      .client-card:hover {
+        --reveal: 1;
+        --reveal-delay: 100ms;
+        --tags-delay: 420ms;
+      }
+    }
+
+    .client-waves {
+      display: grid;
+      grid-template-rows: repeat(5, 1fr);
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+
+      & > span {
+        position: relative;
+      }
+
+      & > span::before,
+      & > span::after {
+        content: '';
+        position: absolute;
+        inset: -0.5px 0;
+        transform: scaleX(var(--reveal));
+        transform-origin: left;
+        transition: transform var(--wave-duration) var(--ease-step-1) calc(var(--reveal-delay) + var(--wave-delay));
+      }
+
+      & > span::before {
+        background: var(--c-hotl);
+      }
+
+      & > span::after {
+        background: var(--c-hot);
+        transition-duration: calc(var(--wave-duration) * 0.8);
+        transition-delay: calc(var(--reveal-delay) + var(--wave-delay) + 80ms);
+      }
+    }
+
+    .client-tags {
+      --cluster-gap-y: var(--space-3xs);
+      --cluster-gap-x: var(--space-3xs);
+      --cluster-justify: center;
+      position: absolute;
+      inset: 0;
+      align-content: center;
+      padding: var(--space-xs-s);
+      opacity: var(--reveal);
+      font-size: clamp(0.75rem, 0.7rem + 0.2vw, 0.9375rem);
+      font-weight: var(--font-medium);
+      line-height: 1.65;
+      text-align: center;
+      pointer-events: none;
+      transition: opacity 70ms var(--ease-out-2) var(--tags-delay);
+
+      & > span {
+        max-inline-size: 100%;
+        padding: 0.1em 0.35em;
+        background: var(--c-hotl);
+        color: var(--c-black);
+        line-height: 1.4;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .client-waves > span::before,
+      .client-waves > span::after,
+      .client-tags {
+        transition: none;
+      }
+    }
+  }
+</style>

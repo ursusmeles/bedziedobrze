@@ -138,26 +138,6 @@
   & h2 {width: min-content;}
 }
 
-/* --- KLIENCI --- */
-.klienci {
-  grid-column: content;
-  min-width: 0;
-  --section-top: var(--space-2xl-3xl);
-  & h2 {
-  font-size: var(--step-3);
-  max-width: 45ch;
-}
-}
-.klienci-list {
-  --reel-size: max-content;
-  --gutter: var(--space-2xl); 
-  grid-column: full;
-  align-items: center;
-  & img {
-    pointer-events: none;
-  }
-}
-
 /* --- FEATURES --- */
 .features {
   /* variables for spacing */

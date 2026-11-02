@@ -72,73 +72,6 @@ const initParallax = () => {
   }, { once: true });
 };
 
-const initSlider = () => {
-  const slider = document.querySelector('.klienci-list.reel') as HTMLElement;
-  if (!slider) return;
-
-  let isDown = false;
-  let startX = 0;
-  let initialScrollLeft = 0;
-  let animationId: number;
-  let scrollSpeed = 0.5; 
-  let direction = 1; 
-  let isHovered = false;
-  let exactScroll = slider.scrollLeft;
-
-  const autoScroll = () => {
-    if (!isDown && !isHovered) {
-      exactScroll += (scrollSpeed * direction);
-      slider.scrollLeft = exactScroll;
-      
-      if (Math.ceil(exactScroll) >= slider.scrollWidth - slider.clientWidth) {
-        direction = -1;
-      } else if (Math.floor(exactScroll) <= 0) {
-        direction = 1;
-      }
-    }
-    animationId = requestAnimationFrame(autoScroll);
-  };
-
-  autoScroll();
-
-  slider.addEventListener('mousedown', (e) => {
-    isDown = true;
-    slider.classList.add('is-dragging');
-    startX = e.pageX - slider.offsetLeft;
-    initialScrollLeft = slider.scrollLeft;
-    slider.style.scrollSnapType = 'none';
-  });
-
-  slider.addEventListener('mouseenter', () => { isHovered = true; });
-
-  slider.addEventListener('mouseleave', () => {
-    isDown = false;
-    isHovered = false; 
-    slider.classList.remove('is-dragging');
-    exactScroll = slider.scrollLeft;
-    slider.style.scrollSnapType = '';
-  });
-
-  slider.addEventListener('mouseup', () => {
-    isDown = false;
-    slider.classList.remove('is-dragging');
-    exactScroll = slider.scrollLeft;
-    slider.style.scrollSnapType = '';
-  });
-
-  slider.addEventListener('mousemove', (e) => {
-    if (!isDown) return;
-    e.preventDefault(); 
-    const x = e.pageX - slider.offsetLeft;
-    const walk = (x - startX) * 1.5; 
-    slider.scrollLeft = initialScrollLeft - walk;
-  });
-
-  document.addEventListener('astro:before-preparation', () => {
-    cancelAnimationFrame(animationId);
-  }, { once: true });
-};
-
 const initTabs = () => {
   const tabWrappers = document.querySelectorAll('.stack'); 
 
@@ -239,7 +172,6 @@ document.addEventListener('astro:page-load', () => {
   initHeaderScroll();
   initMobileNav();
   initParallax();
-  initSlider();
   initTabs();
   initEmailReveal();
 });

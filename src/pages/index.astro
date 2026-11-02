@@ -1,6 +1,7 @@
 ---
 // src/pages/index.astro
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Clients from '../components/Clients.astro';
 import { Image } from 'astro:assets';
 
 import mikolajImg from '../imgs/mikolaj.webp';
@@ -46,29 +47,7 @@ import sbgblokImg from '../imgs/blok.webp';
   </div>
 </section>
 <!-- KLIENCI -->
- <section id="klienci" class="klienci" aria-labelledby="h-klienci">
-  <h2 id="h-klienci" class="hot decorative">Zaufali nam</h2>
-    <ul class="klienci-list reel" role="list">
-      <li>
-        <img src="/img/moldilus.svg" alt="Moldilus" loading="lazy" width="300" height="100" draggable="false" />
-      </li>
-      <li>
-        <img src="/img/moldilus.svg" alt="Moldilus" loading="lazy" width="300" height="100" draggable="false" />
-      </li>
-      <li>
-        <img src="/img/moldilus.svg" alt="Moldilus" loading="lazy" width="300" height="100" draggable="false" />
-      </li>
-      <li>
-        <img src="/img/moldilus.svg" alt="Moldilus" loading="lazy" width="300" height="100" draggable="false" />
-      </li>
-      <li>
-        <img src="/img/moldilus.svg" alt="Moldilus" loading="lazy" width="300" height="100" draggable="false" />
-      </li>
-      <li>
-        <img src="/img/moldilus.svg" alt="Moldilus" loading="lazy" width="300" height="100" draggable="false" />
-      </li>
-    </ul>
-</section>
+<Clients />
 <!-- USŁUGI -->
 <section id="uslugi" class="features" aria-labelledby="h-uslugi">
   <img src="/img/glyph-d.svg" alt="" aria-hidden="true" loading="lazy" width="500" height="523" draggable="false" />
