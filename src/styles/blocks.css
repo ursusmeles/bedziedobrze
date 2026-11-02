@@ -214,10 +214,19 @@
     --_section-gap: var(--space-3xl);
     --_list-gap: var(--space-3xl);
     --_inner-gap: var(--space-l);
+    row-gap: 0;
     
     & > img,
     & > h2 {
       grid-column: 1;
+    }
+
+    & > img + h2 {
+      margin-block-start: var(--space-m);
+    }
+
+    & > h2 + .features-list {
+      margin-block-start: var(--_section-gap);
     }
     
     & .features-list > li > .hot.decorative {
