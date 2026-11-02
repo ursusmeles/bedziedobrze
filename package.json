@@ -9,11 +9,13 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "test:typography": "node --test tests/polish-typography.test.mjs"
   },
   "dependencies": {
     "@astrojs/vercel": "^11.0.9",
-    "astro": "^7.2.10"
+    "astro": "^7.2.10",
+    "parse5": "^8.1.0"
   },
   "allowScripts": {
     "esbuild": true
