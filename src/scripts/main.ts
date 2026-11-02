@@ -72,62 +72,57 @@ const initParallax = () => {
   }, { once: true });
 };
 
+const initializedEmailButtons = new WeakSet<HTMLButtonElement>();
+
 const initEmailReveal = () => {
-  const revealBtn = document.querySelector('.reveal-btn') as HTMLButtonElement;
-  const emailBox = document.querySelector('.email-box') as HTMLAnchorElement;
+  const revealBtn = document.querySelector<HTMLButtonElement>('.reveal-btn');
+  const emailBox = document.querySelector<HTMLAnchorElement>('.email-box');
+  if (!revealBtn || !emailBox || initializedEmailButtons.has(revealBtn)) return;
 
-  if (revealBtn && emailBox) {
-    let isRevealed = false;
-    let realEmail = '';
+  const { u: user, d: domain } = revealBtn.dataset;
+  if (!user || !domain) return;
+  initializedEmailButtons.add(revealBtn);
 
-    revealBtn.addEventListener('click', async () => {
-      // STATE 0 -> 1: Reveal the email
-      if (!isRevealed) {
-        const user = revealBtn.dataset.u;
-        const domain = revealBtn.dataset.d;
-        realEmail = `${user}@${domain}`;
+  // Hidden text reserves the final dimensions without exposing a mailto link.
+  const realEmail = `${user}@${domain}`;
+  emailBox.textContent = realEmail;
 
-        // Inject data
-        emailBox.textContent = realEmail;
-        emailBox.href = `mailto:${realEmail}`;
-        
-        // Trigger animations & accessibility
-        emailBox.removeAttribute('aria-hidden');
-        emailBox.removeAttribute('tabindex');
-        emailBox.classList.add('is-revealed');
-        
-        // Transform button into a Copy action
-        revealBtn.textContent = 'Skopiuj adres';
-        revealBtn.classList.add('is-clicked');
-        
-        isRevealed = true;
-      } 
-      // STATE 1 -> 2: Copy to clipboard
-else {
-        try {
-          await navigator.clipboard.writeText(realEmail);
-          
-          // Visual feedback
-          const originalText = revealBtn.textContent;
-          revealBtn.textContent = 'Skopiowano!';
-          revealBtn.classList.add('is-copied');
-          revealBtn.style.pointerEvents = 'none'; // Prevent spam clicking
-          
-          // Reset back to State 1
-          setTimeout(() => { 
-            revealBtn.textContent = originalText;
-            revealBtn.classList.remove('is-copied'); 
-            revealBtn.style.pointerEvents = 'auto';
-          }, 2000);
-          
-        } catch (err) {
-          console.error('Clipboard copy failed', err);
-          revealBtn.textContent = 'Błąd kopiowania';
-        }
-      }
-    });
-  }
+  revealBtn.addEventListener('click', async () => {
+    if (!emailBox.classList.contains('is-revealed')) {
+      emailBox.href = `mailto:${realEmail}`;
+      emailBox.removeAttribute('aria-hidden');
+      emailBox.removeAttribute('tabindex');
+      emailBox.classList.add('is-revealed');
+      revealBtn.textContent = 'Skopiuj adres';
+      revealBtn.classList.add('is-clicked');
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(realEmail);
+      const originalText = revealBtn.textContent;
+      revealBtn.textContent = 'Skopiowano!';
+      revealBtn.classList.add('is-copied');
+      revealBtn.style.pointerEvents = 'none';
+
+      setTimeout(() => {
+        revealBtn.textContent = originalText;
+        revealBtn.classList.remove('is-copied');
+        revealBtn.style.pointerEvents = 'auto';
+      }, 2000);
+    } catch (err) {
+      console.error('Clipboard copy failed', err);
+      revealBtn.textContent = 'Błąd kopiowania';
+    }
+  });
 };
+
+// Initial visits must not wait for every image before the button works.
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initEmailReveal, { once: true });
+} else {
+  initEmailReveal();
+}
 
 // Master Initializer
 document.addEventListener('astro:page-load', () => {

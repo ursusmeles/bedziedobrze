@@ -482,8 +482,9 @@
   /* Hides text until the wave passes */
   color: transparent; 
   
-  /* Reserve the full placeholder width before revealing the address. */
-  inline-size: min(32rem, 100%);
+  /* Reserve the hidden address and placeholder width before the first tap. */
+  inline-size: max-content;
+  min-inline-size: min(32rem, 100%);
   max-inline-size: none;
   align-self: flex-start;
   height: auto;
@@ -523,7 +524,6 @@
 
 /* --- REVEALED ANIMATION STATES --- */
 .email-box.is-revealed {
-  inline-size: max-content;
   pointer-events: auto;
   color: var(--c-black);
   /* Snaps the text to visible exactly after 0.25s */
