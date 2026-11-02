@@ -482,21 +482,17 @@
   /* Hides text until the wave passes */
   color: transparent; 
   
-  /* Reserve the hidden address and placeholder width before the first tap. */
-  inline-size: max-content;
-  min-inline-size: min(32rem, 100%);
-  max-inline-size: none;
-  align-self: flex-start;
+  /* Use min-width so it expands instantly if the email string is long */
+  max-width: min(32rem, 100%);
   height: auto;
   min-height: calc(var(--step-1) + var(--space-xs));
   
   text-decoration: none;
   font-family: var(--font-text);
-  font-size: var(--step-0);
+  font-size: var(--step-1);
   overflow: hidden;
   pointer-events: none;
-  white-space: nowrap;
-  word-break: normal;
+  word-break: break-all;
   line-height: var(--lh-small);
 }
 
