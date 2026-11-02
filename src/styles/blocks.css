@@ -489,10 +489,12 @@
   
   text-decoration: none;
   font-family: var(--font-text);
-  font-size: var(--step-1);
-  overflow: hidden;
+  font-size: min(var(--step-0), 5vw);
+  /* Keep the address on one line and let it use the card padding if needed. */
+  overflow: visible;
   pointer-events: none;
-  word-break: break-all;
+  white-space: nowrap;
+  word-break: normal;
   line-height: var(--lh-small);
 }
 
