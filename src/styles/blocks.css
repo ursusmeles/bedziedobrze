@@ -140,10 +140,12 @@
 
 /* --- FEATURES --- */
 .features {
+  --section-top: var(--vertical-rhythm);
+  --section-bottom: var(--vertical-rhythm);
   /* variables for spacing */
   --_column-gap: var(--space-3xl);  /* Gap between columns in the master grid */
-  --_section-gap: calc(var(--space-2xl-3xl) * 2); /* Gap between IMG, H2, and OL */
-  --_list-gap: calc(var(--space-xl-2xl) * 2);    /* Gap between individual LI elements */
+  --_section-gap: var(--vertical-rhythm); /* Gap between heading and content */
+  --_list-gap: var(--vertical-rhythm);  /* Gap between individual LI elements */
   --_inner-gap: 0px;                /* Gap inside LI (0 on desktop, items are in columns) */
 
   /* master grid definition */
@@ -152,6 +154,10 @@
   column-gap: var(--_column-gap);
   row-gap: var(--_section-gap);
   align-items: start;
+
+  &[hidden] {
+    display: none;
+  }
 
   & > img {
     grid-column: 1;
@@ -211,8 +217,6 @@
   .features {
     /* Collapse to a single column on smaller viewports */
     grid-template-columns: minmax(0, 1fr);
-    --_section-gap: var(--space-3xl);
-    --_list-gap: var(--space-3xl);
     --_inner-gap: var(--space-l);
     row-gap: 0;
     
@@ -225,8 +229,8 @@
       margin-block-start: var(--space-m);
     }
 
-    & > h2 + .features-list {
-      margin-block-start: var(--_section-gap);
+    & > h2:has(+ .features-list) {
+      margin-block-end: var(--_section-gap);
     }
     
     & .features-list > li > .hot.decorative {
@@ -238,8 +242,17 @@
 
 /* --- O NAS --- */
 [aria-labelledby="h-onas"] {
-  row-gap: calc(var(--space-2xl-3xl) * 1.5);
-  --section-bottom: calc(var(--space-2xl-3xl) * 2);
+  row-gap: 0;
+  --section-top: var(--space-2xl-3xl);
+  --section-bottom: var(--vertical-rhythm);
+
+  & > .founders {
+    margin-block-start: var(--space-2xl-3xl);
+  }
+
+  & > .card {
+    margin-block-start: var(--space-2xl-3xl);
+  }
 }
 
 .founders {
@@ -327,9 +340,6 @@
 
 /* Responsive adjustment for smaller viewports */
 @media (max-width: 44rem) {
-  [aria-labelledby="h-onas"] {
-    row-gap: var(--space-3xl);
-  }
   .founders {
     row-gap: var(--space-3xl);
     
@@ -387,6 +397,11 @@
   overflow: hidden;
   min-height: clamp(30rem, 60vh, 50rem);
   position: relative;
+
+  & .card {
+    align-items: flex-end;
+  }
+
   & .stack {
     z-index: 1;
     position: relative;

@@ -28,6 +28,9 @@
     --space-xs-m: clamp(0.75rem, 0.4375rem + 1.3889vw, 1.6875rem);
     --space-s-l: clamp(1rem, 0.5833rem + 1.8519vw, 2.25rem);
     --space-xl-3xl: clamp(3rem, 1.75rem + 5.5556vw, 6.75rem);
+
+    /* Section boundaries and repeated feature rows. */
+    --vertical-rhythm: calc(var(--space-xl-3xl) * 2);
     }
 
     /* Typography tokens — UTOPIA */

@@ -68,7 +68,11 @@ const clientRevealEnd = `max(${clientWaves.flatMap(wave => [
       container-type: inline-size;
       grid-column: content;
       min-width: 0;
+      display: grid;
+      row-gap: var(--space-s);
       --section-top: var(--space-s-m);
+      /* The following services section owns the full boundary gap. */
+      --section-bottom: 0;
       & h2 {
         font-size: var(--step-3);
         max-width: 45ch;
