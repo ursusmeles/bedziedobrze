@@ -524,24 +524,21 @@
 .email-box.is-revealed {
   pointer-events: auto;
   color: var(--c-black);
-  /* Snaps the text to visible exactly after 0.25s */
-  transition: color 0s 0.25s; 
+  transition: color var(--duration-instant) var(--ease-out-3) calc(var(--delay-layer) * 2);
 }
 
 .email-box.is-revealed::before {
   transform: scaleX(1);
-  transition: transform 0.45s var(--ease-step-4);
+  transition: transform var(--duration-wipe) var(--ease-step-4);
 }
 
 .email-box.is-revealed::after {
   transform: scaleX(1);
-  /* 0.18s delay so it chases the Hot wave */
-  transition: transform 0.25s var(--ease-step-4) 0.18s; 
+  transition: transform var(--duration-short) var(--ease-step-4) var(--delay-layer);
 }
 
 /* --- BUTTON STATE UPDATE --- */
 .reveal-btn {
-  transition: background-color 0.2s ease-out, color 0.2s;
   min-width: 15ch;
 }
 
@@ -586,7 +583,10 @@
   /* Baseline transform to prevent visual snapping */
   transform: translateY(0) scale(1);
   will-change: transform;
-  transition: all 0.1s var(--ease-3);
+  transition:
+    transform var(--duration-press) var(--ease-out-3),
+    background-color var(--duration-short) var(--ease-out-3),
+    color var(--duration-short) var(--ease-out-3);
   
   /* Default: Navy */
   background-color: var(--c-black);
@@ -597,14 +597,11 @@
 .button:focus-visible {
   /* Elevate */
   transform: translateY(-2px) scale(1);
-  transition-timing-function: var(--ease-out-3); 
 }
 
 .button:active {
   /* Maintain elevation AND scale down */
-  transform: translateY(-2px) scale(0.75);
-  transition-timing-function: var(--ease-spring-3);
-  transition-duration: 0.1s;
+  transform: translateY(-2px) scale(0.96);
 }
   
 /* --- FONT SWAP --- */
@@ -622,7 +619,7 @@
 .f-disp, 
 .f-text {
   /* Animate the clip-path */
-  transition: clip-path 0.3s var(--ease-step-2);
+  transition: clip-path var(--duration-wipe) var(--ease-step-2);
 }
 
 .f-disp {

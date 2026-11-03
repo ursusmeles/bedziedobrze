@@ -17,6 +17,14 @@
   --repel-gap-x: var(--space-l);
 }
 
+.features[data-variant="solutions"] {
+  --_list-gap: calc(var(--space-2xl-3xl) * 2);
+
+  @media (max-width: 80rem) {
+    --_list-gap: calc(var(--space-3xl) + var(--space-l));
+  }
+}
+
 .features[data-variant="proces"] {
   & > h2 {
     max-width: 15ch;

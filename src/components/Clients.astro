@@ -14,15 +14,21 @@ const clients = [
 ];
 
 const clientWaves = [
-  { duration: 140, delay: 0 },
-  { duration: 200, delay: 24 },
-  { duration: 160, delay: 10 },
-  { duration: 240, delay: 36 },
-  { duration: 180, delay: 18 },
+  { durationScale: 0.7, delaySteps: 0 },
+  { durationScale: 1, delaySteps: 1.2 },
+  { durationScale: 0.8, delaySteps: 0.5 },
+  { durationScale: 1.2, delaySteps: 1.8 },
+  { durationScale: 0.9, delaySteps: 0.9 },
 ];
+
+// Keep tags behind both covering layers, including when shared timings change.
+const clientRevealEnd = `max(${clientWaves.flatMap(wave => [
+  `calc(var(--duration-short) * ${wave.durationScale} + var(--delay-step) * ${wave.delaySteps})`,
+  `calc(var(--duration-short) * ${wave.durationScale} * 0.8 + var(--delay-step) * ${wave.delaySteps} + var(--delay-layer))`,
+]).join(', ')})`;
 ---
 
-<section id="klienci" class="klienci" aria-labelledby="h-klienci">
+<section id="klienci" class="klienci" aria-labelledby="h-klienci" style={`--client-reveal-end: ${clientRevealEnd}`}>
   <h2 id="h-klienci" class="hot decorative">Zaufali nam</h2>
   <ul class="klienci-list" role="list">
     {clients.map(client => (
@@ -30,7 +36,7 @@ const clientWaves = [
         <button type="button" class="client-card" aria-pressed="false" aria-label={`${client.name}: ${client.tags.join(', ')}`}>
           <img src={`/img/clients/${client.file}.svg`} alt="" loading="lazy" width={Math.round(client.width)} height={Math.round(client.height)} draggable="false" />
           <span class="client-waves" aria-hidden="true">
-            {clientWaves.map(wave => <span style={`--wave-duration: ${wave.duration}ms; --wave-delay: ${wave.delay}ms`}></span>)}
+            {clientWaves.map(wave => <span style={`--wave-duration: calc(var(--duration-short) * ${wave.durationScale}); --wave-delay: calc(var(--delay-step) * ${wave.delaySteps})`}></span>)}
           </span>
           <span class="client-tags cluster" aria-hidden="true">
             {client.tags.map(tag => <span>{tag}</span>)}
@@ -100,8 +106,7 @@ const clientWaves = [
 
     .client-card {
       --reveal: 0;
-      --reveal-delay: 0ms;
-      --tags-delay: 0ms;
+      --tags-delay: var(--duration-instant);
       display: grid;
       place-items: center;
       position: relative;
@@ -121,15 +126,14 @@ const clientWaves = [
 
       &:is(:focus-visible, [aria-pressed="true"]) {
         --reveal: 1;
-        --tags-delay: 320ms;
+        --tags-delay: var(--client-reveal-end);
       }
     }
 
     @media (hover: hover) {
       .client-card:hover {
         --reveal: 1;
-        --reveal-delay: 100ms;
-        --tags-delay: 420ms;
+        --tags-delay: var(--client-reveal-end);
       }
     }
 
@@ -151,7 +155,7 @@ const clientWaves = [
         inset: -0.5px 0;
         transform: scaleX(var(--reveal));
         transform-origin: left;
-        transition: transform var(--wave-duration) var(--ease-step-1) calc(var(--reveal-delay) + var(--wave-delay));
+        transition: transform var(--wave-duration) var(--ease-step-1) var(--wave-delay);
       }
 
       & > span::before {
@@ -161,7 +165,7 @@ const clientWaves = [
       & > span::after {
         background: var(--c-hot);
         transition-duration: calc(var(--wave-duration) * 0.8);
-        transition-delay: calc(var(--reveal-delay) + var(--wave-delay) + 80ms);
+        transition-delay: calc(var(--wave-delay) + var(--delay-layer));
       }
     }
 
@@ -179,7 +183,7 @@ const clientWaves = [
       line-height: 1.65;
       text-align: center;
       pointer-events: none;
-      transition: opacity 70ms var(--ease-out-2) var(--tags-delay);
+      transition: opacity var(--duration-press) var(--ease-out-3) var(--tags-delay);
 
       & > span {
         max-inline-size: 100%;

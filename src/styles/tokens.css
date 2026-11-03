@@ -82,11 +82,26 @@
         --lh-large: 2.05;
     }
 
-    /* Transition tokens */
+    /* Motion tokens — use existing Open Props easing variables directly. */
     :root {
-        --transition-default: all 0.18s ease-out;
-        --transition-move: transform 0.3s linear;
-        --transition-fade: all 0.3s ease-in-out;
+        --duration-instant: 0ms;
+        --duration-press: 140ms;
+        --duration-short: 210ms;
+        --duration-wipe: 300ms;
+        --duration-panel: 400ms;
+        --delay-step: 20ms;
+        --delay-layer: 100ms;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        :root {
+            --duration-press: var(--duration-instant);
+            --duration-short: var(--duration-instant);
+            --duration-wipe: var(--duration-instant);
+            --duration-panel: var(--duration-instant);
+            --delay-step: var(--duration-instant);
+            --delay-layer: var(--duration-instant);
+        }
     }
 
     /* Layout grid sizing */

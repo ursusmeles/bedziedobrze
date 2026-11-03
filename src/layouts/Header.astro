@@ -79,7 +79,7 @@
   
   /* Start hidden, transition smoothly */
   opacity: 0;
-  transition: opacity 0.4s var(--ease-out-3);
+  transition: opacity var(--duration-short) var(--ease-out-3);
 
   
 }
@@ -128,7 +128,7 @@
     text-decoration: none;
     color: inherit;
     /* Add transition for hover states using your tokens */
-    transition: color 0.2s var(--ease-out-3);
+    transition: color var(--duration-short) var(--ease-out-3);
   }
 
 /* FONT SWAP (TEXT -> DISPLAY) */
@@ -136,33 +136,33 @@
 .nav-list .f-disp {
   text-transform: uppercase;
   /* Remove clip-path from transition, handle color only */
-  transition: color 0.2s var(--ease-out-3);
+  transition: color var(--duration-short) var(--ease-out-3);
 }
 
 /* 1. Base States (Leaving / Un-hovered) */
 .nav-list .f-text {
   font-family: var(--font-text);
   /* Reveals L to R on mouse leave */
-  animation: wipe-in 0.3s var(--ease-step-2) forwards;
+  animation: wipe-in var(--duration-wipe) var(--ease-step-2) forwards;
 }
 
 .nav-list .f-disp {
   font-family: var(--font-display);
   /* Hides L to R on mouse leave */
-  animation: wipe-out 0.3s var(--ease-step-2) forwards;
+  animation: wipe-out var(--duration-wipe) var(--ease-step-2) forwards;
 }
 
 /* 2. Hover / Focus States (Entering) */
 .nav-list a:hover .f-text,
 .nav-list a:focus-visible .f-text {
   /* Hides L to R on hover */
-  animation: wipe-out 0.3s var(--ease-step-2) forwards;
+  animation: wipe-out var(--duration-wipe) var(--ease-step-2) forwards;
 }
 
 .nav-list a:hover .f-disp,
 .nav-list a:focus-visible .f-disp {
   /* Reveals L to R on hover */
-  animation: wipe-in 0.3s var(--ease-step-2) forwards;
+  animation: wipe-in var(--duration-wipe) var(--ease-step-2) forwards;
 }
 
 /* MOBILE TOGGLE BUTTON */
@@ -183,13 +183,11 @@
   /* Baseline transform to prevent visual snapping */
   transform: translateY(0) scale(1);
   will-change: transform;
-  transition: all 0.1s var(--ease-3);
+  transition: transform var(--duration-press) var(--ease-out-3);
 }
 
 .menu-toggle:active {
-  transform: scale(0.75);
-  transition-timing-function: var(--ease-spring-3);
-  transition-duration: 0.1s;
+  transform: scale(0.96);
 }
 
 .menu-toggle img {
@@ -211,12 +209,11 @@
     
     /* Hardware-accelerated drawer slide */
     transform: translateX(100%);
-    transition: transform 0.3s var(--ease-circ-in);
+    transition: transform var(--duration-panel) var(--ease-circ-in-out);
   }
 
   .site-nav[data-state="open"] {
     transform: translateX(0);
-    transition: transform 0.3s var(--ease-circ-out);
   }
 
 .nav-list {

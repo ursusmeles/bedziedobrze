@@ -18,13 +18,19 @@ const tools = service.tools.map(tool => ({
   <span class="hot decorative" aria-hidden="true">{number}</span>
   <div class="stack">
     <h3>{service.title}</h3>
-    {service.paragraphs.map(paragraph => <p>{paragraph}</p>)}
+    {service.paragraphs.map(paragraph => (
+      <p>{service.highlight
+        ? paragraph.split(service.highlight).map((part, index) => (
+          <>{index > 0 && <mark>{service.highlight}</mark>}{part}</>
+        ))
+        : paragraph}</p>
+    ))}
   </div>
   <div class="stack" data-service-tools style="--gutter: var(--space-m);">
-    <span class="eyebrow">Nasze narzędzia</span>
+    <span class="eyebrow">{service.toolsLabel ?? 'Nasze narzędzia'}</span>
     <div class="cluster" role="tablist">
-      {tools.map(tool => (
-        <button type="button" role="tab" aria-selected="false" aria-controls={tool.panelId} id={tool.tabId} class="tab-btn">
+      {tools.map((tool, index) => (
+        <button type="button" role="tab" aria-selected={index === 0 ? 'true' : 'false'} tabindex={index === 0 ? 0 : -1} aria-controls={tool.panelId} id={tool.tabId} class="tab-btn">
           <span class="grid-overlap">
             <span class="f-disp">{tool.label}</span>
             <span class="f-text" aria-hidden="true">{tool.label}</span>
@@ -33,9 +39,12 @@ const tools = service.tools.map(tool => ({
       ))}
     </div>
     <div class="panels-container">
-      {tools.map(tool => (
-        <div id={tool.panelId} role="tabpanel" aria-labelledby={tool.tabId} class="details-wrapper" aria-hidden="true">
-          <div class="details-content"><p>{tool.description}</p></div>
+      {tools.map((tool, index) => (
+        <div id={tool.panelId} role="tabpanel" aria-labelledby={tool.tabId} class="details-wrapper" aria-hidden={index === 0 ? 'false' : 'true'}>
+          <div class="details-content">
+            <span class="eyebrow">{tool.label}</span>
+            <p>{tool.description}</p>
+          </div>
         </div>
       ))}
     </div>
@@ -44,38 +53,74 @@ const tools = service.tools.map(tool => ({
 
 <script>
   const initServiceTools = () => {
-    const tabWrappers = document.querySelectorAll('[data-service-tools]'); 
+    const tabWrappers = document.querySelectorAll<HTMLElement>('[data-service-tools]');
 
     tabWrappers.forEach(wrapper => {
-      const tabs = wrapper.querySelectorAll('[role="tab"]');
-      const panels = wrapper.querySelectorAll('[role="tabpanel"]');
+      if (wrapper.dataset.serviceToolsInitialized) return;
+
+      const tabs = wrapper.querySelectorAll<HTMLButtonElement>('[role="tab"]');
+      const panels = wrapper.querySelectorAll<HTMLElement>('[role="tabpanel"]');
       if (tabs.length === 0 || panels.length === 0) return;
+      wrapper.dataset.serviceToolsInitialized = 'true';
 
-      let transitionTimeout: ReturnType<typeof setTimeout> | undefined;
+      let selectedIndex = 0;
+      let visibleIndex = 0;
+      let switching = false;
+      let disposed = false;
 
-      tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-          const isSelected = tab.getAttribute('aria-selected') === 'true';
-          const anyOpen = Array.from(tabs).some(t => t.getAttribute('aria-selected') === 'true');
+      const finishTransition = (panel: HTMLElement) => Promise.allSettled(
+        panel.getAnimations().map(animation => animation.finished)
+      );
 
-          tabs.forEach(t => t.setAttribute('aria-selected', 'false'));
-          panels.forEach(p => p.setAttribute('aria-hidden', 'true'));
-          clearTimeout(transitionTimeout);
+      const switchPanel = async () => {
+        if (switching) return;
+        switching = true;
 
-          if (!isSelected) {
-            tab.setAttribute('aria-selected', 'true');
-            const targetPanel = wrapper.querySelector(`#${tab.getAttribute('aria-controls')}`);
-          
-            if (targetPanel) {
-              if (anyOpen) {
-                transitionTimeout = setTimeout(() => {
-                  targetPanel.setAttribute('aria-hidden', 'false');
-                }, 400); 
-              } else {
-                targetPanel.setAttribute('aria-hidden', 'false');
-              }
-            }
+        try {
+          while (!disposed && visibleIndex !== selectedIndex) {
+            const outgoing = panels[visibleIndex];
+            outgoing.setAttribute('aria-hidden', 'true');
+            await finishTransition(outgoing);
+            if (disposed) return;
+
+            visibleIndex = selectedIndex;
+            const incoming = panels[visibleIndex];
+            incoming.setAttribute('aria-hidden', 'false');
+            await finishTransition(incoming);
           }
+        } finally {
+          switching = false;
+        }
+      };
+
+      const activateTab = (index: number) => {
+        if (index === selectedIndex) return;
+        selectedIndex = index;
+
+        tabs.forEach((tab, tabIndex) => {
+          const selected = tabIndex === index;
+          tab.setAttribute('aria-selected', String(selected));
+          tab.tabIndex = selected ? 0 : -1;
+        });
+        void switchPanel();
+      };
+
+      document.addEventListener('astro:before-swap', () => { disposed = true; }, { once: true });
+
+      tabs.forEach((tab, index) => {
+        tab.addEventListener('click', () => activateTab(index));
+        tab.addEventListener('keydown', event => {
+          let nextIndex: number;
+          switch (event.key) {
+            case 'ArrowRight': nextIndex = (index + 1) % tabs.length; break;
+            case 'ArrowLeft': nextIndex = (index - 1 + tabs.length) % tabs.length; break;
+            case 'Home': nextIndex = 0; break;
+            case 'End': nextIndex = tabs.length - 1; break;
+            default: return;
+          }
+          event.preventDefault();
+          activateTab(nextIndex);
+          tabs[nextIndex].focus();
         });
       });
     });
@@ -87,7 +132,18 @@ const tools = service.tools.map(tool => ({
 <style>
   @layer blocks {
     /* TAB BUTTONS */
+    [role="tablist"] {
+      --cluster-gap-y: var(--space-xs);
+      --cluster-gap-x: var(--space-xs);
+      --cluster-justify: flex-start;
+    }
+
     .tab-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-start;
+      flex: 0 0 auto;
+      gap: var(--space-xs);
       cursor: pointer;
       background: transparent;
       color: inherit;
@@ -95,45 +151,63 @@ const tools = service.tools.map(tool => ({
       line-height: var(--lh-small);
       letter-spacing: -0.02em;
       text-transform: uppercase;
-      border: 2px solid transparent;
+      text-align: start;
+      white-space: nowrap;
+      border: 0;
       padding: 0;
-      transition: color 0.2s var(--ease-out-3), border-color 0.2s var(--ease-out-3);
+      transition: color var(--duration-short) var(--ease-out-3);
     }
 
-    .tab-btn:hover .f-disp,
-    .tab-btn[aria-selected="true"] .f-disp {
-      clip-path: inset(0 0 0 100%);
+    .tab-btn .grid-overlap {
+      justify-items: start;
     }
 
-    .tab-btn:hover .f-text,
-    .tab-btn[aria-selected="true"] .f-text {
+    .tab-btn:not(:last-child)::after {
+      content: '\005C' / '';
+      color: var(--c-superd);
+      font-family: var(--font-text);
+      font-weight: var(--font-medium);
+      pointer-events: none;
+    }
+
+    .tab-btn .f-text {
       clip-path: inset(0 0 0 0);
     }
 
-    .tab-btn:hover {
-      border-color: var(--c-super);
+    .tab-btn .f-disp {
+      clip-path: inset(0 100% 0 0);
+    }
+
+    .tab-btn:is(:hover, :focus-visible, [aria-selected="true"]) .f-text {
+      clip-path: inset(0 0 0 100%);
+    }
+
+    .tab-btn:is(:hover, :focus-visible, [aria-selected="true"]) .f-disp {
+      clip-path: inset(0 0 0 0);
     }
 
     .tab-btn[aria-selected="true"] {
       color: var(--c-hot);
-      border-color: var(--c-super);
     }
 
     /* 2. PANELS CONTAINER & DRAWER ANIMATION */
     .panels-container {
       display: grid;
+      align-items: start;
     }
 
     .details-wrapper {
-      grid-area: 1 / 1; /* Forces all panels to overlap in the same grid cell */
-      display: grid;
-      grid-template-rows: 0fr;
-      transition: grid-template-rows .18s var(--ease-circ-in);
+      /* All cards reserve their full height; only their visible area animates. */
+      grid-area: 1 / 1;
+      min-inline-size: 0;
+      clip-path: inset(0 0 100% 0);
+      pointer-events: none;
+      transition: clip-path var(--duration-panel) var(--ease-circ-in-out);
     }
 
     .details-wrapper[aria-hidden="false"] {
-      grid-template-rows: 1fr;
-      transition: grid-template-rows .18s var(--ease-circ-out);
+      clip-path: inset(0);
+      pointer-events: auto;
     }
 
     .details-content {
@@ -141,13 +215,18 @@ const tools = service.tools.map(tool => ({
       background-color: var(--c-super);
       margin: 0;
       padding-inline: var(--space-m);
-      padding-block: 0;
-      transition: padding-block 0.18s var(--ease-out-3);
+      padding-block: var(--space-m);
     }
 
-    .details-wrapper[aria-hidden="false"] .details-content {
-      padding-block: var(--space-m);
-      transition: padding-block 0.18s var(--ease-out-3);
+    .details-content > .eyebrow {
+      display: block;
+      margin-block-end: var(--space-xs);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .tab-btn :is(.f-text, .f-disp) {
+        transition: none;
+      }
     }
   }
 </style>

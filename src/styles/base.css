@@ -75,7 +75,7 @@ a::before {
   transform-origin: right;
   
   /* Apply your custom easing tokens */
-  transition: transform 0.3s var(--ease-step-2);
+  transition: transform var(--duration-wipe) var(--ease-step-2);
 }
 
 /* Trigger the slide on hover/focus */
