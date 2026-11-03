@@ -2,97 +2,41 @@
 import { ClientRouter, slide } from 'astro:transitions';
 import '../styles/global.css';
 import Header from '../layouts/Header.astro';
-import Footer from '../layouts/Footer.astro'
+import Footer from '../layouts/Footer.astro';
 
 interface Props {
   title?: string;
   description?: string;
   image?: string;
+  imageAlt?: string;
+  imageWidth?: number;
+  imageHeight?: number;
   type?: 'website' | 'article';
 }
 
 const {
-  title = "będzie\\dobrze",
-  description = "Wspieramy Cię w biznesie: pomagamy skalować sprzedaż, rozwijamy Twoją obecność online i budujemy wizerunek.",
+  title = "będzie/dobrze — gdańskie studio kreatywne",
+  description = "Wspieramy Cię w skalowaniu Twojego biznesu. Tworzymy strony i sklepy internetowe, produkujemy wideo i fotografię, prowadzimy kampanie reklamowe.",
   image = "/og-image.jpg",
+  imageAlt = "będzie/dobrze — gdańskie studio kreatywne",
+  imageWidth = 1200,
+  imageHeight = 630,
   type = "website"
 } = Astro.props;
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const siteName = "będzie\\dobrze";
+const siteURL = Astro.site!;
+const canonicalURL = new URL(Astro.url.pathname, siteURL);
+const imageURL = new URL(image, siteURL);
+const organizationID = new URL('/#organization', siteURL).href;
+const websiteID = new URL('/#website', siteURL).href;
+const webpageID = `${canonicalURL.href}#webpage`;
 
-const pageTransition = slide();
-for (const direction of Object.values(pageTransition)) {
-  for (const state of ['old', 'new'] as const) {
-    const animations = direction[state];
-    direction[state] = (Array.isArray(animations) ? animations : [animations]).map(animation => ({
-      ...animation,
-      duration: animation.name.includes('Fade') ? 'var(--duration-short)' : 'var(--duration-wipe)',
-      easing: 'var(--ease-out-3)',
-      delay: 'var(--duration-instant)',
-    }));
-  }
-}
----
-
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- Basic SEO -->
-  <title>{title === "będzie\\dobrze" ? title : `${title} | będzie\\dobrze`}</title>
-  <meta name="description" content={description} />
-  <link rel="canonical" href={canonicalURL} />
-
-  <!-- GEO & Local SEO -->
-  <meta name="geo.region" content="PL-PM" />
-  <meta name="geo.placename" content="Gdańsk" />
-  <meta name="geo.position" content="54.400414649565285;18.591991085026432">
-  <meta name="ICBM" content="54.400414649565285 18.591991085026432">
-
-  <!-- Open Graph -->
-  <meta property="og:type" content={type} />
-  <meta property="og:url" content={canonicalURL} />
-  <meta property="og:title" content={title} />
-  <meta property="og:description" content={description} />
-  <meta property="og:image" content={new URL(image, Astro.site)} />
-  <meta property="og:locale" content="pl_PL" />
-
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content={title} />
-  <meta name="twitter:description" content={description} />
-  <meta name="twitter:image" content={new URL(image, Astro.site)} />
-
-  <!-- Favicons -->
-  <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="shortcut icon" href="/favicon.ico" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-  <meta name="apple-mobile-web-app-title" content="będzie" />
-  <link rel="manifest" href="/site.webmanifest" />
-
-  <!-- Font Preloading -->
-  <link rel="preload" href="/fonts/space-grotesk.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="preload" href="/fonts/ferro-iv.woff2" as="font" type="font/woff2" crossorigin />
-
-  <!-- Astro View Transitions (Smooth page routing) -->
-  <ClientRouter />
-
-  <!-- Local Business Schema -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@graph': [
     {
       "@type": "ProfessionalService",
-      "@id": "https://bedziedobrze.space/#organisation",
-      "name": "będzie\\dobrze",
-      "url": "https://bedziedobrze.space",
-      "logo": "https://bedziedobrze.space/favicon-96x96.png",
-      "image": "https://bedziedobrze.space/og-image.jpg",
-      "description": "Wspieramy Cię w biznesie: pomagamy skalować sprzedaż, rozwijamy Twoją obecność online i budujemy wizerunek.",
       "telephone": "+48698673078",
       "priceRange": "$$",
       "address": {
@@ -105,7 +49,7 @@ for (const direction of Object.values(pageTransition)) {
       "geo": {
         "@type": "GeoCoordinates",
         "latitude": 54.4004146,
-        "longitude": 18.5919910
+        "longitude": 18.591991
       },
       "knowsAbout": [
         "Business Strategy",
@@ -114,7 +58,7 @@ for (const direction of Object.values(pageTransition)) {
         "Video Production",
         "Brand Identity"
       ],
-"founder": [
+      "founder": [
         {
           "@type": "Person",
           "name": "Mateusz Nowak",
@@ -151,22 +95,110 @@ for (const direction of Object.values(pageTransition)) {
             "Studio Recording"
           ]
         }
-      ]
+      ],
+      '@id': organizationID,
+      name: siteName,
+      url: siteURL.href,
+      logo: new URL('/web-app-manifest-512x512.png', siteURL).href,
+      image: imageURL.href,
+      description,
     },
     {
-      "@type": "WebSite",
-      "@id": "https://bedziedobrze.space/#website",
-      "url": "https://bedziedobrze.space",
-      "name": "będzie\\dobrze",
-      "publisher": {
-        "@id": "https://bedziedobrze.space/#organization"
+      '@type': 'WebSite',
+      '@id': websiteID,
+      url: siteURL.href,
+      name: siteName,
+      publisher: { '@id': organizationID },
+      inLanguage: 'pl-PL',
+    },
+    {
+      '@type': 'WebPage',
+      '@id': webpageID,
+      url: canonicalURL.href,
+      name: title,
+      description,
+      isPartOf: { '@id': websiteID },
+      about: { '@id': organizationID },
+      primaryImageOfPage: {
+        '@type': 'ImageObject',
+        url: imageURL.href,
+        width: imageWidth,
+        height: imageHeight,
+        caption: imageAlt,
       },
-      "inLanguage": "pl-PL"
-    }
-  ]
+      inLanguage: 'pl-PL',
+    },
+  ],
+};
+
+const pageTransition = slide();
+for (const direction of Object.values(pageTransition)) {
+  for (const state of ['old', 'new'] as const) {
+    const animations = direction[state];
+    direction[state] = (Array.isArray(animations) ? animations : [animations]).map(animation => ({
+      ...animation,
+      duration: animation.name.includes('Fade') ? 'var(--duration-short)' : 'var(--duration-wipe)',
+      easing: 'var(--ease-out-3)',
+      delay: 'var(--duration-instant)',
+    }));
+  }
 }
-</script>
-<!-- Main script -->
+---
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Basic SEO -->
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonicalURL} />
+
+  <!-- GEO & Local SEO -->
+  <meta name="geo.region" content="PL-PM" />
+  <meta name="geo.placename" content="Gdańsk" />
+  <meta name="geo.position" content="54.400414649565285;18.591991085026432">
+  <meta name="ICBM" content="54.400414649565285, 18.591991085026432">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content={type} />
+  <meta property="og:url" content={canonicalURL} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={imageURL} />
+  <meta property="og:image:width" content={imageWidth} />
+  <meta property="og:image:height" content={imageHeight} />
+  <meta property="og:image:alt" content={imageAlt} />
+  <meta property="og:site_name" content={siteName} />
+  <meta property="og:locale" content="pl_PL" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={imageURL} />
+  <meta name="twitter:image:alt" content={imageAlt} />
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="będzie" />
+  <link rel="manifest" href="/site.webmanifest" />
+
+  <!-- Font Preloading -->
+  <link rel="preload" href="/fonts/space-grotesk.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/ferro-iv.woff2" as="font" type="font/woff2" crossorigin />
+
+  <!-- Astro View Transitions (Smooth page routing) -->
+  <ClientRouter />
+
+  <!-- Local Business Schema -->
+  <script type="application/ld+json" set:html={JSON.stringify(structuredData).replace(/</g, '\\u003c')} />
+  <!-- Main script -->
   <script src="../scripts/main.ts"></script>
 </head>
 <body>

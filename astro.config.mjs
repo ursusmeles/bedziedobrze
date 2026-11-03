@@ -4,7 +4,7 @@ import { defineConfig } from 'astro/config';
 import vercel from '@astrojs/vercel';
 
 export default defineConfig({
-  site: 'https://bedziedobrze.space', 
+  site: 'https://www.bedziedobrze.space',
   adapter: vercel(),
     build: {
     format: 'directory',
