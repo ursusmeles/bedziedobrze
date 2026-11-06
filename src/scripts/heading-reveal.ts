@@ -1,7 +1,9 @@
 // Keep the text untouched: Range measurements let masks follow native kerning,
-// balanced wrapping and discretionary hyphens without splitting the heading.
+// balanced wrapping and discretionary hyphens without splitting the text.
 type GlyphMask = { left: number; top: number; width: number; height: number };
 
+const revealTimeScale = 1.2;
+const maxRevealDuration = 700 * revealTimeScale;
 const completed = new WeakSet<HTMLElement>();
 let currentBody: HTMLElement | null = null;
 let generation = 0;
@@ -51,8 +53,8 @@ const measureGlyphs = (heading: HTMLElement, segmenter: Intl.Segmenter): GlyphMa
 };
 
 const letterKeyframes = (masks: GlyphMask[], duration: number, stagger: number, steps: number) => {
-  // Longer headings accelerate the stagger rather than exceeding 700ms.
-  const delay = Math.min(stagger, Math.max(0, 700 - duration) / Math.max(1, masks.length - 1));
+  // Longer text accelerates the stagger rather than exceeding the sequence cap.
+  const delay = Math.min(stagger, Math.max(0, maxRevealDuration - duration) / Math.max(1, masks.length - 1));
   const total = duration + delay * (masks.length - 1);
   const frames = Math.ceil(total / (1000 / 60));
   const keyframes: Keyframe[] = [];
@@ -86,8 +88,8 @@ const initHeadingReveals = async () => {
   if (generation !== version || motion.matches) return;
 
   const styles = getComputedStyle(document.documentElement);
-  const duration = Math.min(700, readMilliseconds(styles, '--duration-short', 210));
-  const stagger = readMilliseconds(styles, '--delay-step', 20);
+  const duration = Math.min(maxRevealDuration, readMilliseconds(styles, '--duration-short', 210) * revealTimeScale);
+  const stagger = readMilliseconds(styles, '--delay-step', 20) * revealTimeScale;
   if (duration <= 0) return;
   const easing = styles.getPropertyValue('--ease-step-4').trim() || 'steps(7)';
   const steps = Number(easing.match(/steps\(\s*(\d+)/)?.[1]) || 7;
@@ -160,7 +162,7 @@ const initHeadingReveals = async () => {
   motion.addEventListener('change', onMotionChange);
 
   try {
-    for (const heading of document.querySelectorAll<HTMLElement>('main h2')) {
+    for (const heading of document.querySelectorAll<HTMLElement>('main h2, main h3, #liczby .card > .fixed')) {
       const rect = heading.getBoundingClientRect();
       // Leave already visible headings alone, including direct section links.
       if (completed.has(heading) || rect.top < window.innerHeight || !rect.width || !rect.height

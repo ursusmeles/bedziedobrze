@@ -65,15 +65,15 @@
   color: var(--c-super);
 }
 
-/* Added only after the heading reveal enhancement is ready. */
+/* Added only after the text reveal enhancement is ready. */
 @media (prefers-reduced-motion: no-preference) {
-  h2.heading-reveal-pending {
+  .heading-reveal-pending {
     clip-path: inset(0 100% 0 0);
   }
 }
 
 @media print, (prefers-reduced-motion: reduce) {
-  h2.heading-reveal-pending {
+  .heading-reveal-pending {
     clip-path: none !important;
   }
 }
