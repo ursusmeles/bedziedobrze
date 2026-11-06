@@ -18,6 +18,11 @@
 }
 
 .features[data-variant="proces"] {
+  @media screen {
+    /* Let the last card clear the lower third before the section pins. */
+    --section-bottom: max(var(--vertical-rhythm), 35svh);
+  }
+
   & > h2 {
     max-width: 15ch;
   }

@@ -16,11 +16,11 @@
   }
 
   .process-overlap > [data-scroll-pin="bottom"][data-pin-ready] {
-    /* Negative for tall sections: pin only after the last content is visible. */
-    top: calc(100dvh - var(--overlap-height));
+    /* Stable while mobile browser chrome changes; negative for tall sections. */
+    top: calc(100svh - var(--overlap-height));
   }
 
-  @supports (animation-timeline: view()) and (view-timeline-name: --image-zoom) and (animation-duration: auto) and (animation-range: entry 0% exit 100%) {
+  @supports (animation-timeline: view()) and (view-timeline-name: --image-zoom) and (animation-duration: auto) and (animation-range: entry 75% exit 100%) {
     /* The unpinned studio group keeps zoom progressing during the overlap. */
     .studio-overlap,
     .liczby-banner,
@@ -36,7 +36,8 @@
       animation-timing-function: var(--ease-circ-out);
       animation-fill-mode: both;
       animation-timeline: --image-zoom;
-      animation-range: entry 0% exit 100%;
+      /* Put the fast circ-out phase where most of the image is visible. */
+      animation-range: entry 75% exit 100%;
     }
   }
 }
