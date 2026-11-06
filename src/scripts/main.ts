@@ -1,7 +1,8 @@
 // src/scripts/main.ts
 
-import './heading-reveal';
-import './scroll-overlap';
+import { mountMotion } from './motion';
+
+mountMotion();
 
 const initHeaderScroll = () => {
   const header = document.querySelector('.site-header');
@@ -33,46 +34,6 @@ const initMobileNav = () => {
       nav.setAttribute('data-state', 'closed');
     });
   });
-};
-
-const initParallax = () => {
-  const parallaxElements = document.querySelectorAll<HTMLElement>('[data-parallax]');
-  if (parallaxElements.length === 0) return;
-
-  let ticking = false;
-
-  const updateParallax = () => {
-    const windowCenter = window.innerHeight / 2;
-    
-    parallaxElements.forEach(el => {
-      const speed = parseFloat(el.dataset.speed || '-0.15');
-      const anchorDivisor = parseFloat(el.dataset.anchor || '2');
-
-      const anchor = el.closest('section') || el.parentElement || el;
-      const rect = anchor.getBoundingClientRect();
-      
-      const anchorCenter = rect.top + (rect.height / anchorDivisor);
-      const scrollEquivalent = windowCenter - anchorCenter;
-      
-      el.style.transform = `translate3d(0, ${scrollEquivalent * speed}px, 0) scale(${1 + (scrollEquivalent * 0.0001)})`;
-    });
-    
-    ticking = false;
-  };
-
-  const onScroll = () => {
-    if (!ticking) {
-      requestAnimationFrame(updateParallax);
-      ticking = true;
-    }
-  };
-
-  updateParallax();
-  window.addEventListener('scroll', onScroll, { passive: true });
-
-  document.addEventListener('astro:before-preparation', () => {
-    window.removeEventListener('scroll', onScroll);
-  }, { once: true });
 };
 
 const initEmailReveal = () => {
@@ -136,6 +97,5 @@ else {
 document.addEventListener('astro:page-load', () => {
   initHeaderScroll();
   initMobileNav();
-  initParallax();
   initEmailReveal();
 });

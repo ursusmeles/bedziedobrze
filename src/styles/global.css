@@ -9,6 +9,7 @@
 @import './base.css' layer(base); /* Base styles for HTML elements */
 @import './composition.css' layer(composition); /* Heavily based on Andy Bell's Every Layout */
 @import './blocks.css' layer(blocks); /* Block-level components and patterns */
+@import './motion.css' layer(blocks); /* Scroll effects and motion fallbacks */
 @import './utilities.css' layer(utilities); /* Single-purpose utility classes */
 @import './exceptions.css' layer(exceptions); /* [data-] attributes and other exceptions to the rules */
 

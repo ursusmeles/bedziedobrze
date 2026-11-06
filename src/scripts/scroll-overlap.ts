@@ -1,56 +1,36 @@
-export {};
-
-// A bottom pin needs the actual section height, including responsive text.
-// CSS owns the viewport offset and disables pinning for reduced motion.
-let currentBody: HTMLElement | null = null;
-let dispose = () => {};
-
-const resetScrollOverlaps = () => {
-  dispose();
-  dispose = () => {};
-  currentBody = null;
-};
-
-const initScrollOverlaps = () => {
-  if (currentBody === document.body) return;
-  resetScrollOverlaps();
-  currentBody = document.body;
-  if (!('ResizeObserver' in window)) return;
-
+// Measure the border box so padding and responsive text count toward the pin.
+export const initScrollOverlaps = (signal: AbortSignal) => {
+  if (signal.aborted || !('ResizeObserver' in window)) return;
   const sections = [...document.querySelectorAll<HTMLElement>('[data-scroll-pin="bottom"]')];
-  const measure = (section: HTMLElement) => {
-    const height = section.getBoundingClientRect().height;
-    if (height <= 0) return;
+  if (!sections.length) return;
+
+  const applyHeight = (element: HTMLElement, height: number) => {
+    if (!Number.isFinite(height) || height <= 0) return;
     const value = `${height}px`;
-    if (section.style.getPropertyValue('--overlap-height') !== value) {
-      section.style.setProperty('--overlap-height', value);
-    }
-    section.setAttribute('data-pin-ready', '');
+    if (element.style.getPropertyValue('--overlap-height') === value) return;
+    element.style.setProperty('--overlap-height', value);
+    element.setAttribute('data-pin-ready', '');
   };
-  let active = true;
   const observer = new ResizeObserver(entries => {
-    if (!active) return;
-    for (const entry of entries) measure(entry.target as HTMLElement);
+    if (signal.aborted) return;
+    const measurements = entries.map(entry => ({
+      element: entry.target as HTMLElement,
+      height: entry.borderBoxSize?.[0]?.blockSize ?? entry.target.getBoundingClientRect().height,
+    }));
+    measurements.forEach(({ element, height }) => applyHeight(element, height));
   });
-  dispose = () => {
-    active = false;
+  signal.addEventListener('abort', () => {
     observer.disconnect();
     for (const section of sections) {
       section.style.removeProperty('--overlap-height');
       section.removeAttribute('data-pin-ready');
     }
-  };
+  }, { once: true });
 
-  for (const section of sections) {
-    measure(section);
+  // Batch layout reads before writes; later updates use ResizeObserver sizes.
+  const heights = sections.map(section => section.getBoundingClientRect().height);
+  sections.forEach((section, index) => {
+    applyHeight(section, heights[index]);
     observer.observe(section, { box: 'border-box' });
-  }
+  });
 };
-
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initScrollOverlaps, { once: true });
-} else {
-  initScrollOverlaps();
-}
-document.addEventListener('astro:page-load', initScrollOverlaps);
-document.addEventListener('astro:before-swap', resetScrollOverlaps);

@@ -10,7 +10,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "test:typography": "node --test tests/polish-typography.test.mjs"
+    "test:typography": "node --test tests/polish-typography.test.mjs",
+    "test:motion": "node --experimental-strip-types --test tests/motion.test.mjs"
   },
   "dependencies": {
     "@astrojs/vercel": "^11.0.9",

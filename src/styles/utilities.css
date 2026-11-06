@@ -64,16 +64,3 @@
   border-radius: var(--r-medium);
   color: var(--c-super);
 }
-
-/* Added only after the text reveal enhancement is ready. */
-@media (prefers-reduced-motion: no-preference) {
-  .heading-reveal-pending {
-    clip-path: inset(0 100% 0 0);
-  }
-}
-
-@media print, (prefers-reduced-motion: reduce) {
-  .heading-reveal-pending {
-    clip-path: none !important;
-  }
-}

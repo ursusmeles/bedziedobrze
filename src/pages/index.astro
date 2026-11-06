@@ -10,130 +10,130 @@ import mateuszImg from '../imgs/mateusz.webp';
 import sbgblokImg from '../imgs/blok.webp';
 ---
 <BaseLayout>
-<!-- HERO -->
-<section id="hero" class="super full-bleed-wrapper hero" aria-labelledby="hero-heading">
-  <div class="hero-top-row">
-    <div class="hero-content stack">
-      <h1 id="hero-heading" class="hero-text decorative">będzie dobrze</h1>
-      <p><strong>będzie&bsol;dobrze to gdańskie studio kreatywne.</strong></p>
-      <p>Wspieramy Cię w skalowaniu Twojego biznesu. Tworzymy strony i sklepy internetowe, produkujemy wideo i fotografię, prowadzimy kampanie reklamowe.</p>
-    </div>
-  </div>
-  <img src="/img/heading.svg" alt="" aria-hidden="true" class="hero-svg" draggable="false" loading="eager" width="2000" height="216" fetchpriority="high"/>
-</section>
-<!-- BANNER -->
-<div class="layout-grid full-bleed overlap-group studio-overlap">
-<section id="studio" class="full-bleed-wrapper studio-banner" aria-label="Studio">
-<Image 
-    src={sbgblokImg} 
-    alt="" 
-    aria-hidden="true"
-    draggable="false"
-    class="studio-bg"
-    fetchpriority="high"
-    loading="eager"
-    decoding="sync"
-    widths={[400, 800, 1200, 1920]}
-    sizes="100vw"
-  />
-  <img src="/img/studio.svg" width="1000" height="175" alt="Studio" class="studio-text" data-parallax="" data-speed="-0.15" data-anchor="2" draggable="false" loading="eager" fetchpriority="high" />
-</section>
-<!-- MANIFEST -->
-<div class="full-bleed-wrapper overlap-cover">
-<section id="manifest" class="repel manifest" aria-labelledby="h-manifest">
-  <h2 id="h-manifest">Dlaczego będzie dobrze</h2>
-  <div class="stack">
-    <p>Pracujesz bezpośrednio z nami — Mateuszem i Mikołajem. Masz bezpośredni dostęp do naszej wiedzy i umiejętności — <mark>founder to founder</mark>.</p>
-    <p>Pomagamy ustalić, czego potrzebuje Twój biznes. Dopasowujemy działania i zajmujemy się realizacją.</p>
-    <p>A kiedy projekt wymaga większego zespołu, zapraszamy do niego sprawdzonych współpracowników i koordynujemy ich pracę.</p>
-  </div>
-</section>
-</div>
-</div>
-<!-- KLIENCI -->
-<Clients />
-<!-- USŁUGI -->
-<Services />
-<!-- LICZBY -->
-<section id="liczby" class="full-bleed-wrapper liczby-banner" aria-label="Liczby">
-<img src="/img/glyph-rp8.svg" alt="" aria-hidden="true" class="liczby-rp8" loading="lazy" width="1088" height="421" data-parallax data-speed="-0.15" data-anchor="1" draggable="false" />
-<div class="stack">
-  <div class="card sidebar" data-variant="titled">
-    <span class="fixed">1 mln</span>
-    <p class="fluid">Zasięg organiczny wideo marki Komodo w ciągu 30 dni od otwarcia.</p>
-  </div>
-  <div class="card sidebar" data-variant="titled">
-    <span class="fixed">250%</span>
-    <p class="fluid">Wzrost przychodów w sklepie Moja Apteczka w ciągu 90 dni od rozpoczęcia współpracy.</p>
-  </div>
-</div>
-</section>
-<!-- PROCES -->
-<div class="layout-grid full-bleed overlap-group process-overlap">
-<section id="proces" class="features" aria-labelledby="h-proces" data-variant="proces" data-scroll-pin="bottom">
-  <img src="/img/glyph-b.svg" alt="" aria-hidden="true" loading="lazy" width="500" height="661" draggable="false" />
-  <h2 id="h-proces">Prosty proces</h2>
-  <ol class="features-list" role="list">
-    <li>
-      <span class="hot decorative" aria-hidden="true">1</span>
-      <h3>Diagnoza</h3>
-      <div class="card stack">
-        <p>Rozmawiamy o tym, co chcesz osiągnąć. Przeglądamy Twoje materiały i dotychczasowe działania. Ustalamy priorytety. Na koniec otrzymujesz propozycję konkretnych działań wraz z wyceną, harmonogramem i listą potrzebnych materiałów.</p>
+  <!-- HERO -->
+  <section id="hero" class="super full-bleed-wrapper hero" aria-labelledby="hero-heading">
+    <div class="hero-top-row">
+      <div class="hero-content stack">
+        <h1 id="hero-heading" class="hero-text decorative">będzie dobrze</h1>
+        <p><strong>będzie&bsol;dobrze to gdańskie studio kreatywne.</strong></p>
+        <p>Wspieramy Cię w skalowaniu Twojego biznesu. Tworzymy strony i sklepy internetowe, produkujemy wideo i fotografię, prowadzimy kampanie reklamowe.</p>
       </div>
-    </li>
-    <li>
-      <span class="hot decorative" aria-hidden="true">2</span>
-      <h3>Realizacja</h3>
-      <div class="card stack">
-        <p>Organizujemy pracę i koordynujemy współpracowników. Z Tobą omawiamy materiały i decyzje wymagające Twojej akceptacji. Przy stałej współpracy raportujemy wyniki i proponujemy kolejne działania na ich podstawie.</p>
-      </div>
-    </li>
-  </ol>
-</section>
-<!-- O NAS -->
-<section id="onas" class="super full-bleed-wrapper overlap-cover" aria-labelledby="h-onas">
-    <div class="features">
-      <img src="/img/glyph-m.svg" alt="" aria-hidden="true" loading="lazy" width="600" height="500" draggable="false" />
-      <h2 id="h-onas">Kim jesteśmy</h2>
     </div>
-    <div class="founders">
-      <article>
-        <div class="founder-photo">
-          <Image src={mikolajImg} alt="Mikołaj, co-founder będzie\dobrze" width={400} widths={[200, 400, 800]} sizes="(max-width: 768px) 200px, 400px" loading="lazy" />
-        </div>
-        <h3 class="hot decorative">Mikołaj</h3>
+    <img src="/img/heading.svg" alt="" aria-hidden="true" class="hero-svg" draggable="false" loading="eager" width="2000" height="216" fetchpriority="high"/>
+  </section>
+  <!-- BANNER -->
+  <div class="layout-grid full-bleed overlap-group studio-overlap">
+    <section id="studio" class="full-bleed-wrapper studio-banner" aria-label="Studio">
+      <Image
+        src={sbgblokImg}
+        alt=""
+        aria-hidden="true"
+        draggable="false"
+        class="studio-bg"
+        fetchpriority="high"
+        loading="eager"
+        decoding="sync"
+        widths={[400, 800, 1200, 1920]}
+        sizes="100vw"
+      />
+      <img src="/img/studio.svg" width="1000" height="175" alt="Studio" class="studio-text" data-parallax="" data-speed="-0.15" data-anchor="2" draggable="false" loading="eager" fetchpriority="high" />
+    </section>
+    <!-- MANIFEST -->
+    <div class="full-bleed-wrapper overlap-cover">
+      <section id="manifest" class="repel manifest" aria-labelledby="h-manifest">
+        <h2 id="h-manifest">Dlaczego będzie dobrze</h2>
         <div class="stack">
-          <span><strong>Mikołaj</strong></span>
-          <p>Producent wideo i strateg wizualny. Ekspert przekładania założeń biznesowych na angażujący obraz i dźwięk. Odpowiada za produkcje filmowe, fotografię oraz nasze studio. Miłośnik sportów walki i szybkich samochodów (w simrigu — jeździ skodą).</p>
+          <p>Pracujesz bezpośrednio z nami — Mateuszem i Mikołajem. Masz bezpośredni dostęp do naszej wiedzy i umiejętności — <mark>founder to founder</mark>.</p>
+          <p>Pomagamy ustalić, czego potrzebuje Twój biznes. Dopasowujemy działania i zajmujemy się realizacją.</p>
+          <p>A kiedy projekt wymaga większego zespołu, zapraszamy do niego sprawdzonych współpracowników i koordynujemy ich pracę.</p>
         </div>
-      </article>
-      <article>
-        <div class="founder-photo">
-          <Image src={mateuszImg} alt="Mateusz, co-founder będzie\dobrze" width={400} widths={[200, 400, 800]} sizes="(max-width: 768px) 200px, 400px" loading="lazy" />
-        </div>
-        <h3 class="hot decorative">Mateusz</h3>
-        <div class="stack">
-          <span><strong>Mateusz</strong></span>
-          <p>Ekspert od skalowania biznesu, strategii wizerunkowych i projektowania. Ex-CEO z doświadczeniem w optymalizacji procesów. Zwolennik otwartego oprogramowania oraz długodystansowych wypraw gravelowych.</p>
-        </div>
-      </article>
+      </section>
     </div>
-    <article class="card repel" data-color="darker" data-variant="titled" data-size="standalone">
-      <h3>Nasz zespół</h3>
-      <p>Zaprzyjaźnieni filmowcy, oświetleniowcy, specjaliści od social media, designerzy i graficy. Najpierw diagnozujemy Twoje potrzeby, a potem dobieramy optymalny zespół do ich realizacji. Ty zawsze rozmawiasz z nami.</p>
-    </article>
-</section>
-</div>
-<!-- KONTAKT -->
-<section id="kontakt" class="super full-bleed-wrapper kontakt-banner" aria-labelledby="h-kontakt">
-  <div class="card stack" data-variant="titled">
-    <h2 id="h-kontakt">Porozma&shy;wiajmy</h2>
-    <p>Masz projekt? Problem do rozwiązania? Napisz do nas, my zajmiemy się resztą.</p>
+  </div>
+  <!-- KLIENCI -->
+  <Clients />
+  <!-- USŁUGI -->
+  <Services />
+  <!-- LICZBY -->
+  <section id="liczby" class="full-bleed-wrapper liczby-banner" aria-label="Liczby">
+    <img src="/img/glyph-rp8.svg" alt="" aria-hidden="true" class="liczby-rp8" loading="lazy" width="1088" height="421" data-parallax data-speed="-0.15" data-anchor="1" draggable="false" />
     <div class="stack">
-      <a class="email-box" aria-hidden="true" tabindex="-1">&nbsp;</a>
-      <button type="button" class="button reveal-btn" data-u="biznes" data-d="bedziedobrze.space">Pokaż e-mail</button>
+      <div class="card sidebar" data-variant="titled">
+        <span class="fixed">1 mln</span>
+        <p class="fluid">Zasięg organiczny wideo marki Komodo w ciągu 30 dni od otwarcia.</p>
+      </div>
+      <div class="card sidebar" data-variant="titled">
+        <span class="fixed">250%</span>
+        <p class="fluid">Wzrost przychodów w sklepie Moja Apteczka w ciągu 90 dni od rozpoczęcia współpracy.</p>
+      </div>
     </div>
+  </section>
+  <!-- PROCES -->
+  <div class="layout-grid full-bleed overlap-group process-overlap">
+    <section id="proces" class="features" aria-labelledby="h-proces" data-variant="proces" data-scroll-pin="bottom">
+      <img src="/img/glyph-b.svg" alt="" aria-hidden="true" loading="lazy" width="500" height="661" draggable="false" />
+      <h2 id="h-proces">Prosty proces</h2>
+      <ol class="features-list" role="list">
+        <li>
+          <span class="hot decorative" aria-hidden="true">1</span>
+          <h3>Diagnoza</h3>
+          <div class="card stack">
+            <p>Rozmawiamy o tym, co chcesz osiągnąć. Przeglądamy Twoje materiały i dotychczasowe działania. Ustalamy priorytety. Na koniec otrzymujesz propozycję konkretnych działań wraz z wyceną, harmonogramem i listą potrzebnych materiałów.</p>
+          </div>
+        </li>
+        <li>
+          <span class="hot decorative" aria-hidden="true">2</span>
+          <h3>Realizacja</h3>
+          <div class="card stack">
+            <p>Organizujemy pracę i koordynujemy współpracowników. Z Tobą omawiamy materiały i decyzje wymagające Twojej akceptacji. Przy stałej współpracy raportujemy wyniki i proponujemy kolejne działania na ich podstawie.</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+    <!-- O NAS -->
+    <section id="onas" class="super full-bleed-wrapper overlap-cover" aria-labelledby="h-onas">
+      <div class="features">
+        <img src="/img/glyph-m.svg" alt="" aria-hidden="true" loading="lazy" width="600" height="500" draggable="false" />
+        <h2 id="h-onas">Kim jesteśmy</h2>
+      </div>
+      <div class="founders">
+        <article>
+          <div class="founder-photo">
+            <Image src={mikolajImg} alt="Mikołaj, co-founder będzie\dobrze" width={400} widths={[200, 400, 800]} sizes="(max-width: 768px) 200px, 400px" loading="lazy" />
+          </div>
+          <h3 class="hot decorative">Mikołaj</h3>
+          <div class="stack">
+            <span><strong>Mikołaj</strong></span>
+            <p>Producent wideo i strateg wizualny. Ekspert przekładania założeń biznesowych na angażujący obraz i dźwięk. Odpowiada za produkcje filmowe, fotografię oraz nasze studio. Miłośnik sportów walki i szybkich samochodów (w simrigu — jeździ skodą).</p>
+          </div>
+        </article>
+        <article>
+          <div class="founder-photo">
+            <Image src={mateuszImg} alt="Mateusz, co-founder będzie\dobrze" width={400} widths={[200, 400, 800]} sizes="(max-width: 768px) 200px, 400px" loading="lazy" />
+          </div>
+          <h3 class="hot decorative">Mateusz</h3>
+          <div class="stack">
+            <span><strong>Mateusz</strong></span>
+            <p>Ekspert od skalowania biznesu, strategii wizerunkowych i projektowania. Ex-CEO z doświadczeniem w optymalizacji procesów. Zwolennik otwartego oprogramowania oraz długodystansowych wypraw gravelowych.</p>
+          </div>
+        </article>
+      </div>
+      <article class="card repel" data-color="darker" data-variant="titled" data-size="standalone">
+        <h3>Nasz zespół</h3>
+        <p>Zaprzyjaźnieni filmowcy, oświetleniowcy, specjaliści od social media, designerzy i graficy. Najpierw diagnozujemy Twoje potrzeby, a potem dobieramy optymalny zespół do ich realizacji. Ty zawsze rozmawiasz z nami.</p>
+      </article>
+    </section>
   </div>
-  <img src="/img/dobrze.svg" alt="będzie dobrze" data-parallax data-speed="-0.12" data-anchor="1" loading="lazy" width="479" height="166" draggable="false" />
-</section>
+  <!-- KONTAKT -->
+  <section id="kontakt" class="super full-bleed-wrapper kontakt-banner" aria-labelledby="h-kontakt">
+    <div class="card stack" data-variant="titled">
+      <h2 id="h-kontakt">Porozma&shy;wiajmy</h2>
+      <p>Masz projekt? Problem do rozwiązania? Napisz do nas, my zajmiemy się resztą.</p>
+      <div class="stack">
+        <a class="email-box" aria-hidden="true" tabindex="-1">&nbsp;</a>
+        <button type="button" class="button reveal-btn" data-u="biznes" data-d="bedziedobrze.space">Pokaż e-mail</button>
+      </div>
+    </div>
+    <img src="/img/dobrze.svg" alt="będzie dobrze" data-parallax data-speed="-0.12" data-anchor="1" loading="lazy" width="479" height="166" draggable="false" />
+  </section>
 </BaseLayout>
