@@ -351,7 +351,7 @@ test('footer normalizes wheel effort, caps peaks, ignores other gestures and lea
   assert.deepEqual(waves[0], waves[2]);
 });
 
-test('bars pulse on independent clocks with changing peaks and circ attack and release', async () => {
+test('bars keep independent circ pulses with longer moves and a narrower height range', async () => {
   await withBrowser(({ window, root, bars, frames, advance, controller }) => {
     initFooterEqualizer(controller().signal);
     root.scrollTop = root.scrollHeight - window.innerHeight;
@@ -359,30 +359,36 @@ test('bars pulse on independent clocks with changing peaks and circ attack and r
     advance(0);
     assert.ok(new Set(levels(bars)).size > 6);
     assert.ok(new Set(bars.map(bar => bar.style.getPropertyValue('--bar-duration'))).size > 6);
+    assert.ok(Math.max(...levels(bars)) / Math.min(...levels(bars)) < 1.22);
     const leaders = new Set();
     let mixedDirections = false;
-    for (let index = 0; index < 35; index += 1) {
+    for (let index = 0; index < 80; index += 1) {
       wheel(window, { deltaY: 20 });
       advance(20);
       const heights = levels(bars);
+      if (index > 40) assert.ok(heights.every(height => height >= 0.7 && height <= 1), 'steady pulses stay close in height');
+      assert.ok(bars.every(bar => {
+        const duration = parseFloat(bar.style.getPropertyValue('--bar-duration'));
+        return duration >= 210 && duration <= 340;
+      }), 'rise and fall both last at least 210 ms');
       leaders.add(heights.indexOf(Math.max(...heights)));
       const directions = new Set(bars.map(bar => bar.style.getPropertyValue('--bar-ease')));
       mixedDirections ||= directions.has('var(--ease-circ-in)') && directions.has('var(--ease-circ-out)');
     }
     assert.ok(mixedDirections, 'some bars drop while others rise');
     assert.ok(leaders.size > 3, 'the tallest bar changes over time');
-    advance(121);
+    advance(211);
     assert.ok(levels(bars).every(height => height === 0));
     assert.ok(bars.every(bar => bar.style.getPropertyValue('--bar-ease') === 'var(--ease-circ-in)'));
     assert.ok(bars.every(bar => {
       const duration = parseFloat(bar.style.getPropertyValue('--bar-duration'));
-      return duration >= 90 && duration <= 190;
+      return duration >= 280 && duration <= 380;
     }));
     assert.equal(frames.size, 0, 'the clock stops as soon as the release begins');
-  });
+  }, { desktop: true });
 });
 
-test('footer touch effort builds across swipes and releases promptly when input stops', async () => {
+test('footer touch effort builds across swipes and holds for 210 ms before settling', async () => {
   const peaks = [];
   for (const swipes of [1, 2]) {
     await withBrowser(({ window, root, bars, equalizer, frames, advance, controller }) => {
@@ -401,7 +407,10 @@ test('footer touch effort builds across swipes and releases promptly when input 
       dispatch(window, 'touchmove', { touches: touches(300, 490) });
       dispatch(window, 'touchmove', { touches: [...touches(300, 300), ...touches(100, 200)] });
       dispatch(window, 'touchmove', { touches: touches(100, 100) });
-      advance(121);
+      advance(200);
+      assert.ok(levels(bars).every(height => height > 0));
+      assert.equal(equalizer.attributes.has('data-equalizer-active'), true);
+      advance(11);
       assert.ok(levels(bars).every(height => height === 0));
       assert.equal(equalizer.attributes.has('data-equalizer-active'), false);
       assert.equal(frames.size, 0);
@@ -410,7 +419,7 @@ test('footer touch effort builds across swipes and releases promptly when input 
   peaks[0].forEach((height, index) => assert.equal(peaks[1][index], height * 2));
 });
 
-test('separate swipes can reach full height despite the quick visual release; long pauses shed effort', async () => {
+test('separate swipes can reach full height between releases; long pauses shed effort', async () => {
   await withBrowser(({ window, root, bars, advance, controller }) => {
     initFooterEqualizer(controller().signal);
     root.scrollTop = root.scrollHeight - window.innerHeight;
@@ -432,6 +441,25 @@ test('separate swipes can reach full height despite the quick visual release; lo
     advance(0);
     assert.ok(Math.max(...levels(bars)) < 0.35, 'a fresh gesture after a long pause starts small');
   });
+});
+
+test('maximum mobile effort fills every bar until release; desktop keeps independent peaks', async () => {
+  for (const desktop of [false, true]) {
+    await withBrowser(({ window, root, equalizer, advance, controller }) => {
+      initFooterEqualizer(controller().signal);
+      root.scrollTop = root.scrollHeight - window.innerHeight;
+      wheel(window);
+      advance(0);
+      assert.equal(equalizer.attributes.has('data-equalizer-full'), false);
+      for (let index = 0; index < 10; index += 1) wheel(window);
+      advance(0);
+      assert.equal(equalizer.attributes.has('data-equalizer-full'), !desktop);
+      advance(200);
+      assert.equal(equalizer.attributes.has('data-equalizer-full'), !desktop);
+      advance(11);
+      assert.equal(equalizer.attributes.has('data-equalizer-full'), false);
+    }, { desktop });
+  }
 });
 
 test('footer resets on leaving the bottom, width changes and hidden tabs, and abort clears all bar state', async () => {

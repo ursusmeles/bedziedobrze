@@ -7,6 +7,8 @@ export const initFooterEqualizer = (signal: AbortSignal) => {
   }));
   if (!bars.length) return;
   const root = document.scrollingElement ?? document.documentElement;
+  const idleDelay = 210;
+  const desktop = window.matchMedia('(min-width: 44rem)');
   const random = (min: number, max: number) => min + Math.random() * (max - min);
   let energy = 0;
   let frame = 0;
@@ -23,9 +25,10 @@ export const initFooterEqualizer = (signal: AbortSignal) => {
   const release = () => {
     window.cancelAnimationFrame(frame);
     frame = 0;
+    equalizer.removeAttribute('data-equalizer-full');
     if (!energy) return;
     for (const bar of bars) {
-      move(bar, 0, random(90, 190), false);
+      move(bar, 0, random(280, 380), false);
       bar.nextBeat = 0;
       bar.rising = false;
     }
@@ -35,17 +38,17 @@ export const initFooterEqualizer = (signal: AbortSignal) => {
   const render = (time: number) => {
     frame = 0;
     if (signal.aborted) return;
-    // Start the short release promptly after the last input.
-    if (time - lastInput >= 120) {
+    // Keep the bars active briefly after the last input, then let them settle.
+    if (time - lastInput >= idleDelay) {
       release();
       return;
     }
     for (const bar of bars) {
       if (time < bar.nextBeat) continue;
       bar.rising = !bar.rising;
-      if (bar.rising) bar.peak = energy * Math.min(1, random(0.3, 1.2));
-      const height = bar.rising ? bar.peak : bar.peak * random(0.08, 0.4);
-      const duration = bar.rising ? random(55, 125) : random(70, 160);
+      if (bar.rising) bar.peak = energy * Math.min(1, random(0.82, 1.06));
+      const height = bar.rising ? bar.peak : bar.peak * random(0.86, 0.94);
+      const duration = bar.rising ? random(210, 310) : random(240, 340);
       move(bar, height, duration, bar.rising);
       bar.nextBeat = time + duration + random(0, 25);
     }
@@ -61,15 +64,16 @@ export const initFooterEqualizer = (signal: AbortSignal) => {
     if (!atBottom() || document.hidden) return;
     const now = performance.now();
     const pause = now - lastInput;
-    if (pause >= 120) {
+    if (pause >= idleDelay) {
       release();
       // Let successive swipes build higher peaks even after the bars have dropped.
-      energy *= Math.exp(-(pause - 120) / 1200);
+      energy *= Math.exp(-(pause - idleDelay) / 1200);
     }
     lastInput = now;
     const viewport = Math.max(1, window.innerHeight);
     energy = Math.min(1, energy + Math.min(distance, viewport * 0.3) / (viewport * 0.5));
     equalizer.setAttribute('data-equalizer-active', '');
+    if (!desktop.matches && energy === 1) equalizer.setAttribute('data-equalizer-full', '');
     if (!frame) frame = window.requestAnimationFrame(render);
   };
 

@@ -4,7 +4,7 @@
     <!-- LEFT COLUMN -->
     <div class="stack">
       <p><strong>będzie&bsol;dobrze</strong></p>
-      <p><a href="https://maps.app.goo.gl/3LoamXqxcLuBNAwv7" target="_blank" rel="noopener noreferrer">RZECZYPOSPOLITEJ 8, GDAŃSK</a></p>
+      <p><a class="footer-address" href="https://maps.app.goo.gl/3LoamXqxcLuBNAwv7" target="_blank" rel="noopener noreferrer">RZECZYPOSPOLITEJ 8, GDAŃSK</a></p>
     </div>
 
     <!-- RIGHT COLUMN -->
@@ -42,6 +42,19 @@
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 25rem), 1fr));
     gap: var(--fluid-margin);
   }
+  .footer-address {
+    background-color: transparent;
+  }
+
+  .footer-address::before {
+    content: none;
+  }
+
+  .footer-address:hover,
+  .footer-address:focus-visible {
+    color: var(--c-hot);
+  }
+
   a[href="https://h62.pl"]::before {
     transition-duration: var(--duration-press);
   }

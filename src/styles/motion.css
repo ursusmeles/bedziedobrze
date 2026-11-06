@@ -49,6 +49,12 @@
       height: 100vh;
       height: 100dvh;
     }
+
+    .footer-equalizer[data-equalizer-full] > span {
+      transform: scaleY(1);
+      transition-duration: var(--duration-short);
+      transition-timing-function: var(--ease-circ-out);
+    }
   }
 
   @supports (animation-timeline: view()) and (view-timeline-name: --image-zoom) and (animation-duration: auto) and (animation-range: entry 75% exit 100%) {
