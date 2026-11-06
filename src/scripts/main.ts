@@ -1,6 +1,7 @@
 // src/scripts/main.ts
 
 import './heading-reveal';
+import './scroll-overlap';
 
 const initHeaderScroll = () => {
   const header = document.querySelector('.site-header');

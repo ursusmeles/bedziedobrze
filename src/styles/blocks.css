@@ -97,6 +97,39 @@
   }
 }
 
+/* Each pair bounds the pin to the section that covers it. */
+.overlap-group {
+  grid-template-columns: subgrid;
+  isolation: isolate;
+}
+
+.overlap-cover {
+  position: relative;
+  z-index: 1;
+}
+
+.studio-overlap > .overlap-cover {
+  background-color: var(--c-offwhite);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .studio-overlap > .studio-banner,
+  .process-overlap > [data-scroll-pin="bottom"][data-pin-ready] {
+    position: sticky;
+    align-self: start;
+    z-index: 0;
+  }
+
+  .studio-overlap > .studio-banner {
+    top: 0;
+  }
+
+  .process-overlap > [data-scroll-pin="bottom"][data-pin-ready] {
+    /* Negative for tall sections: pin only after the last content is visible. */
+    top: calc(100dvh - var(--overlap-height));
+  }
+}
+
 /* STUDIO BANNER BLOCK */
 
 .studio-banner {
@@ -268,12 +301,13 @@
     column-gap: var(--space-3xl);
     align-items: start;
 
-    & > img {
+    & > .founder-photo {
+      position: relative;
       width: 100%;
       max-width: 25rem; 
       height: auto;
       aspect-ratio: 9 / 16;
-      object-fit: cover;
+      overflow: clip;
       grid-row: 1;
     }
 
@@ -291,7 +325,7 @@
 
   /* 2. Mikołaj (Image Left) */
   & > article:nth-of-type(1) {
-    & > img, 
+    & > .founder-photo,
     & > h3.decorative {
       grid-column: 1;
     }
@@ -318,7 +352,7 @@
     position: relative;
     z-index: 1; 
 
-    & > img, 
+    & > .founder-photo,
     & > h3.decorative {
       grid-column: 2;
       justify-self: end;
@@ -350,13 +384,13 @@
       row-gap: var(--space-m);
       margin-top: 0 !important; /* Removes negative space */
       
-      & > img, 
+      & > .founder-photo,
       & > h3.decorative,
       & > .stack {
         grid-column: 1 !important;
       }
       
-      & > img { 
+      & > .founder-photo {
         grid-row: 1;
         max-width: 20rem; 
         justify-self: start;
@@ -387,6 +421,15 @@
       }
     }
   }
+}
+
+.founder-photo > img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* --- LICZBY --- */
@@ -426,19 +469,21 @@
   pointer-events: none;
 }
 
-/* Native scroll timelines keep both backgrounds in sync with their sections. */
+/* Use the unpinned studio group so its zoom continues during the overlap. */
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) and (view-timeline-name: --background-zoom) and (animation-duration: auto) {
-    .studio-banner,
-    .liczby-banner {
+    .studio-overlap,
+    .liczby-banner,
+    .founder-photo {
       view-timeline-name: --background-zoom;
     }
 
     .studio-bg,
-    .liczby-banner::before {
+    .liczby-banner::before,
+    .founder-photo > img {
       animation-name: background-zoom;
       animation-duration: auto;
-      animation-timing-function: var(--ease-circ-in-out);
+      animation-timing-function: var(--ease-circ-out);
       animation-fill-mode: both;
       animation-timeline: --background-zoom;
       animation-range: entry 0% exit 100%;

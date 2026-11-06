@@ -22,6 +22,7 @@ import sbgblokImg from '../imgs/blok.webp';
   <img src="/img/heading.svg" alt="" aria-hidden="true" class="hero-svg" draggable="false" loading="eager" width="2000" height="216" fetchpriority="high"/>
 </section>
 <!-- BANNER -->
+<div class="layout-grid full-bleed overlap-group studio-overlap">
 <section id="studio" class="full-bleed-wrapper studio-banner" aria-label="Studio">
 <Image 
     src={sbgblokImg} 
@@ -38,6 +39,7 @@ import sbgblokImg from '../imgs/blok.webp';
   <img src="/img/studio.svg" width="1000" height="175" alt="Studio" class="studio-text" data-parallax="" data-speed="-0.15" data-anchor="2" draggable="false" loading="eager" fetchpriority="high" />
 </section>
 <!-- MANIFEST -->
+<div class="full-bleed-wrapper overlap-cover">
 <section id="manifest" class="repel manifest" aria-labelledby="h-manifest">
   <h2 id="h-manifest">Dlaczego będzie dobrze</h2>
   <div class="stack">
@@ -46,6 +48,8 @@ import sbgblokImg from '../imgs/blok.webp';
     <p>A kiedy projekt wymaga większego zespołu, zapraszamy do niego sprawdzonych współpracowników i koordynujemy ich pracę.</p>
   </div>
 </section>
+</div>
+</div>
 <!-- KLIENCI -->
 <Clients />
 <!-- USŁUGI -->
@@ -65,7 +69,8 @@ import sbgblokImg from '../imgs/blok.webp';
 </div>
 </section>
 <!-- PROCES -->
-<section id="proces" class="features" aria-labelledby="h-proces" data-variant="proces">
+<div class="layout-grid full-bleed overlap-group process-overlap">
+<section id="proces" class="features" aria-labelledby="h-proces" data-variant="proces" data-scroll-pin="bottom">
   <img src="/img/glyph-b.svg" alt="" aria-hidden="true" loading="lazy" width="500" height="661" draggable="false" />
   <h2 id="h-proces">Prosty proces</h2>
   <ol class="features-list" role="list">
@@ -86,21 +91,26 @@ import sbgblokImg from '../imgs/blok.webp';
   </ol>
 </section>
 <!-- O NAS -->
-<section id="onas" class="super full-bleed-wrapper" aria-labelledby="h-onas">
+<section id="onas" class="super full-bleed-wrapper overlap-cover" aria-labelledby="h-onas">
     <div class="features">
       <img src="/img/glyph-m.svg" alt="" aria-hidden="true" loading="lazy" width="600" height="500" draggable="false" />
       <h2 id="h-onas">Kim jesteśmy</h2>
     </div>
     <div class="founders">
       <article>
-      <Image src={mikolajImg} alt="Mikołaj, co-founder będzie\dobrze" width={400} widths={[200, 400, 800]} sizes="(max-width: 768px) 200px, 400px" loading="lazy" />        <h3 class="hot decorative">Mikołaj</h3>
+        <div class="founder-photo">
+          <Image src={mikolajImg} alt="Mikołaj, co-founder będzie\dobrze" width={400} widths={[200, 400, 800]} sizes="(max-width: 768px) 200px, 400px" loading="lazy" />
+        </div>
+        <h3 class="hot decorative">Mikołaj</h3>
         <div class="stack">
           <span><strong>Mikołaj</strong></span>
           <p>Producent wideo i strateg wizualny. Ekspert przekładania założeń biznesowych na angażujący obraz i dźwięk. Odpowiada za produkcje filmowe, fotografię oraz nasze studio. Miłośnik sportów walki i szybkich samochodów (w simrigu — jeździ skodą).</p>
         </div>
       </article>
       <article>
-      <Image src={mateuszImg} alt="Mateusz, co-founder będzie\dobrze" width={400} widths={[200, 400, 800]} sizes="(max-width: 768px) 200px, 400px" loading="lazy" />
+        <div class="founder-photo">
+          <Image src={mateuszImg} alt="Mateusz, co-founder będzie\dobrze" width={400} widths={[200, 400, 800]} sizes="(max-width: 768px) 200px, 400px" loading="lazy" />
+        </div>
         <h3 class="hot decorative">Mateusz</h3>
         <div class="stack">
           <span><strong>Mateusz</strong></span>
@@ -113,6 +123,7 @@ import sbgblokImg from '../imgs/blok.webp';
       <p>Zaprzyjaźnieni filmowcy, oświetleniowcy, specjaliści od social media, designerzy i graficy. Najpierw diagnozujemy Twoje potrzeby, a potem dobieramy optymalny zespół do ich realizacji. Ty zawsze rozmawiasz z nami.</p>
     </article>
 </section>
+</div>
 <!-- KONTAKT -->
 <section id="kontakt" class="super full-bleed-wrapper kontakt-banner" aria-labelledby="h-kontakt">
   <div class="card stack" data-variant="titled">
