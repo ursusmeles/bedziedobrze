@@ -101,6 +101,7 @@
 
 .studio-banner {
   position: relative;
+  isolation: isolate;
   overflow: hidden;
   display: grid;
   place-items: center;
@@ -390,8 +391,7 @@
 
 /* --- LICZBY --- */
 .liczby-banner {
-  background: url('/img/wybrzeze.webp') no-repeat center center;
-  background-size: cover;
+  isolation: isolate;
   display: grid;
   align-items: center;
   overflow: hidden;
@@ -414,6 +414,41 @@
       line-height: var(--lh-small);
     }
   }
+}
+
+/* A separate layer lets the photo zoom without scaling the statistics. */
+.liczby-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('/img/wybrzeze.webp') no-repeat center center / cover;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Native scroll timelines keep both backgrounds in sync with their sections. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) and (view-timeline-name: --background-zoom) and (animation-duration: auto) {
+    .studio-banner,
+    .liczby-banner {
+      view-timeline-name: --background-zoom;
+    }
+
+    .studio-bg,
+    .liczby-banner::before {
+      animation-name: background-zoom;
+      animation-duration: auto;
+      animation-timing-function: var(--ease-circ-in-out);
+      animation-fill-mode: both;
+      animation-timeline: --background-zoom;
+      animation-range: entry 0% exit 100%;
+    }
+  }
+}
+
+@keyframes background-zoom {
+  from { transform: scale(1); }
+  to { transform: scale(1.06); }
 }
 
 .liczby-rp8 {
