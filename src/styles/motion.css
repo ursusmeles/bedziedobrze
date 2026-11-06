@@ -21,15 +21,10 @@
   }
 
   @supports (animation-timeline: view()) and (view-timeline-name: --image-zoom) and (animation-duration: auto) and (animation-range: entry 75% exit 100%) {
-    /* The unpinned studio group keeps zoom progressing during the overlap. */
-    .studio-overlap,
-    .liczby-banner,
     .founder-photo {
       view-timeline-name: --image-zoom;
     }
 
-    .studio-bg,
-    .liczby-banner::before,
     .founder-photo > img {
       animation-name: image-zoom;
       animation-duration: auto;
@@ -44,7 +39,7 @@
 
 @keyframes image-zoom {
   from { transform: scale(1); }
-  to { transform: scale(1.06); }
+  to { transform: scale(1.1); }
 }
 
 @media print, (prefers-reduced-motion: reduce) {

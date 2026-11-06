@@ -416,6 +416,7 @@
 
 /* --- LICZBY --- */
 .liczby-banner {
+  background: url('/img/wybrzeze.webp') no-repeat center center / cover;
   isolation: isolate;
   display: grid;
   align-items: center;
@@ -439,16 +440,6 @@
       line-height: var(--lh-small);
     }
   }
-}
-
-/* A separate layer lets the photo zoom without scaling the statistics. */
-.liczby-banner::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: url('/img/wybrzeze.webp') no-repeat center center / cover;
-  z-index: -1;
-  pointer-events: none;
 }
 
 .liczby-rp8 {
