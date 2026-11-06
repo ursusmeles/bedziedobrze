@@ -12,10 +12,10 @@ const dispatch = (target, type, fields = {}) => {
   target.dispatchEvent(event);
   return event;
 };
-const drain = callbacks => {
+const drain = (callbacks, time = 0) => {
   const pending = [...callbacks.values()];
   callbacks.clear();
-  pending.forEach(callback => callback(0));
+  pending.forEach(callback => callback(time));
 };
 
 const flush = async () => { for (let index = 0; index < 8; index += 1) await Promise.resolve(); };
@@ -27,10 +27,16 @@ const withBrowser = async (run, options = {}) => {
   const intersections = [];
   const resizes = [];
   const frames = new Map();
-  const timers = new Map();
   const cleanups = [];
   let frameId = 0;
-  let timerId = 0;
+  let now = 0;
+  let randomState = 123;
+  const originalRandom = Math.random;
+  Math.random = () => {
+    randomState = (1664525 * randomState + 1013904223) >>> 0;
+    return randomState / 2 ** 32;
+  };
+  const advance = milliseconds => { now += milliseconds; drain(frames, now); };
 
   class Style {
     values = new Map();
@@ -63,6 +69,7 @@ const withBrowser = async (run, options = {}) => {
     removeAttribute(name) { this.attributes.delete(name); }
     closest() { return this.anchor || null; }
     querySelector() { return this.keyboardFocus ? {} : null; }
+    querySelectorAll(selector) { assert.equal(selector, 'span'); return this.children || []; }
     animate(keyframes, timing) {
       if (options.animationError) throw new Error('Animation unavailable');
       let resolve, reject;
@@ -91,6 +98,8 @@ const withBrowser = async (run, options = {}) => {
   const parallax = [new Element(), new Element()];
   parallax.forEach(element => { element.anchor = new Element(500, 600); });
   const equalizer = new Element();
+  const bars = Array.from({ length: 12 }, () => new Element());
+  equalizer.children = bars;
   const header = new Element(0);
   const root = { lang: 'pl', scrollHeight: 8000, scrollTop: 0 };
   const desktop = new EventTarget();
@@ -104,8 +113,6 @@ const withBrowser = async (run, options = {}) => {
     matchMedia: query => query === '(min-width: 44rem)' ? desktop : motion,
     requestAnimationFrame: callback => { const id = ++frameId; frames.set(id, callback); return id; },
     cancelAnimationFrame: id => frames.delete(id),
-    setTimeout: callback => { const id = ++timerId; timers.set(id, callback); return id; },
-    clearTimeout: id => timers.delete(id),
     IntersectionObserver, ResizeObserver,
   });
   if (options.noObserver) delete window.IntersectionObserver;
@@ -141,7 +148,7 @@ const withBrowser = async (run, options = {}) => {
   });
   const tokens = { '--duration-short': '210ms', '--delay-step': '20ms', '--ease-step-4': 'steps(7)' };
   const globals = {
-    window, document, Element, IntersectionObserver, ResizeObserver, NodeFilter: { SHOW_TEXT: 4 },
+    window, document, performance: { now: () => now }, Element, IntersectionObserver, ResizeObserver, NodeFilter: { SHOW_TEXT: 4 },
     CSS: { supports: (property, value) => !value.startsWith('path') || options.path !== false },
     getComputedStyle: () => ({ fontSize: '20px', clipPath: 'none', getPropertyValue: name => tokens[name] || '' }),
   };
@@ -153,10 +160,11 @@ const withBrowser = async (run, options = {}) => {
     return value;
   };
   try {
-    await run({ window, document, headings, panel, parallax, animations, intersections, resizes, frames, timers, motion, trace, controller, cleanups, equalizer, header, root, desktop });
+    await run({ window, document, headings, panel, parallax, animations, intersections, resizes, frames, advance, motion, trace, controller, cleanups, equalizer, bars, header, root, desktop });
   } finally {
     cleanups.reverse().forEach(cleanup => cleanup());
     await flush();
+    Math.random = originalRandom;
     originals.forEach((descriptor, name) => descriptor ? Object.defineProperty(globalThis, name, descriptor) : delete globalThis[name]);
   }
 };
@@ -309,92 +317,157 @@ test('a reduced-motion page creates no observers or animation frames', async () 
 });
 
 
-test('footer input builds only at the bottom, normalizes wheel units, caps effort and leaves scrolling native', async () => {
-  await withBrowser(({ window, root, equalizer, frames, timers, controller }) => {
+const levels = bars => bars.map(bar => Number(bar.style.getPropertyValue('--bar-level')));
+const wheel = (window, fields = {}) => dispatch(window, 'wheel', { deltaX: 0, deltaY: 120, deltaMode: 0, ...fields });
+
+test('footer normalizes wheel effort, caps peaks, ignores other gestures and leaves scrolling native', async () => {
+  const waves = [];
+  for (const fields of [{ deltaY: 120 }, { deltaY: 7.5, deltaMode: 1 }, { deltaY: 0.15, deltaMode: 2 }]) {
+    await withBrowser(({ window, root, bars, equalizer, frames, advance, controller }) => {
+      initFooterEqualizer(controller().signal);
+      wheel(window);
+      assert.equal(frames.size, 0);
+      root.scrollTop = root.scrollHeight - window.innerHeight;
+      const scrollTop = root.scrollTop;
+      for (const ignored of [{ ctrlKey: true }, { metaKey: true }, { deltaX: 200 }, { deltaZ: 1 }, { deltaY: NaN }]) wheel(window, ignored);
+      assert.equal(frames.size, 0);
+      assert.equal(wheel(window, fields).defaultPrevented, false);
+      advance(0);
+      waves.push(levels(bars));
+      assert.ok(levels(bars).every(height => height > 0 && height <= 0.3));
+      assert.equal(root.scrollTop, scrollTop);
+      wheel(window, { deltaY: -120 });
+      assert.ok(levels(bars).every(height => height === 0));
+      assert.equal(frames.size, 0);
+      assert.equal(equalizer.attributes.has('data-equalizer-active'), false);
+      for (let index = 0; index < 20; index += 1) wheel(window, { deltaY: 500 });
+      assert.equal(frames.size, 1, 'multiple inputs use one shared clock');
+      advance(0);
+      assert.ok(levels(bars).every(height => height >= 0 && height <= 1));
+      assert.ok(levels(bars).includes(1), 'full effort can reach the viewport cap');
+    });
+  }
+  assert.deepEqual(waves[0], waves[1]);
+  assert.deepEqual(waves[0], waves[2]);
+});
+
+test('bars pulse on independent clocks with changing peaks and circ attack and release', async () => {
+  await withBrowser(({ window, root, bars, frames, advance, controller }) => {
     initFooterEqualizer(controller().signal);
-    const wheel = fields => dispatch(window, 'wheel', { deltaX: 0, deltaY: 120, deltaMode: 0, ...fields });
-    wheel();
-    assert.equal(frames.size, 0);
     root.scrollTop = root.scrollHeight - window.innerHeight;
-    const scrollTop = root.scrollTop;
-    assert.equal(wheel().defaultPrevented, false);
-    drain(frames);
-    assert.equal(Number(equalizer.style.getPropertyValue('--equalizer-level')), 0.2);
-    wheel({ deltaY: 3, deltaMode: 1 });
-    drain(frames);
-    assert.equal(Number(equalizer.style.getPropertyValue('--equalizer-level')), 0.28);
-    for (let index = 0; index < 4; index += 1) wheel({ deltaY: 1, deltaMode: 2 });
-    assert.equal(frames.size, 1, 'input writes coalesce into one frame');
-    drain(frames);
-    assert.equal(equalizer.style.getPropertyValue('--equalizer-level'), '1');
-    assert.equal(timers.size, 1);
-    assert.equal(root.scrollTop, scrollTop);
-    wheel({ deltaY: -120 });
-    assert.equal(equalizer.style.getPropertyValue('--equalizer-level'), '0');
-    for (const fields of [{ ctrlKey: true }, { metaKey: true }, { deltaX: 200 }, { deltaZ: 1 }, { deltaY: NaN }]) wheel(fields);
-    assert.equal(frames.size, 0);
-    assert.equal(timers.size, 0);
+    wheel(window);
+    advance(0);
+    assert.ok(new Set(levels(bars)).size > 6);
+    assert.ok(new Set(bars.map(bar => bar.style.getPropertyValue('--bar-duration'))).size > 6);
+    const leaders = new Set();
+    let mixedDirections = false;
+    for (let index = 0; index < 35; index += 1) {
+      wheel(window, { deltaY: 20 });
+      advance(20);
+      const heights = levels(bars);
+      leaders.add(heights.indexOf(Math.max(...heights)));
+      const directions = new Set(bars.map(bar => bar.style.getPropertyValue('--bar-ease')));
+      mixedDirections ||= directions.has('var(--ease-circ-in)') && directions.has('var(--ease-circ-out)');
+    }
+    assert.ok(mixedDirections, 'some bars drop while others rise');
+    assert.ok(leaders.size > 3, 'the tallest bar changes over time');
+    advance(121);
+    assert.ok(levels(bars).every(height => height === 0));
+    assert.ok(bars.every(bar => bar.style.getPropertyValue('--bar-ease') === 'var(--ease-circ-in)'));
+    assert.ok(bars.every(bar => {
+      const duration = parseFloat(bar.style.getPropertyValue('--bar-duration'));
+      return duration >= 90 && duration <= 190;
+    }));
+    assert.equal(frames.size, 0, 'the clock stops as soon as the release begins');
   });
 });
 
-test('footer touch effort accumulates across swipes, ignores other gestures and settles after inactivity', async () => {
-  await withBrowser(({ window, root, equalizer, frames, timers, controller }) => {
-    initFooterEqualizer(controller().signal);
-    root.scrollTop = root.scrollHeight - window.innerHeight;
-    const touches = (x, y) => [{ clientX: x, clientY: y }];
-    const swipe = () => {
+test('footer touch effort builds across swipes and releases promptly when input stops', async () => {
+  const peaks = [];
+  for (const swipes of [1, 2]) {
+    await withBrowser(({ window, root, bars, equalizer, frames, advance, controller }) => {
+      initFooterEqualizer(controller().signal);
+      root.scrollTop = root.scrollHeight - window.innerHeight;
+      const touches = (x, y) => [{ clientX: x, clientY: y }];
+      for (let index = 0; index < swipes; index += 1) {
+        dispatch(window, 'touchstart', { touches: touches(100, 500) });
+        const event = dispatch(window, 'touchmove', { touches: touches(100, 380) });
+        assert.equal(event.defaultPrevented, false);
+        dispatch(window, 'touchend');
+      }
+      advance(0);
+      peaks.push(levels(bars));
       dispatch(window, 'touchstart', { touches: touches(100, 500) });
-      const event = dispatch(window, 'touchmove', { touches: touches(100, 380) });
-      assert.equal(event.defaultPrevented, false);
+      dispatch(window, 'touchmove', { touches: touches(300, 490) });
+      dispatch(window, 'touchmove', { touches: [...touches(300, 300), ...touches(100, 200)] });
+      dispatch(window, 'touchmove', { touches: touches(100, 100) });
+      advance(121);
+      assert.ok(levels(bars).every(height => height === 0));
+      assert.equal(equalizer.attributes.has('data-equalizer-active'), false);
+      assert.equal(frames.size, 0);
+    });
+  }
+  peaks[0].forEach((height, index) => assert.equal(peaks[1][index], height * 2));
+});
+
+test('separate swipes can reach full height despite the quick visual release; long pauses shed effort', async () => {
+  await withBrowser(({ window, root, bars, advance, controller }) => {
+    initFooterEqualizer(controller().signal);
+    root.scrollTop = root.scrollHeight - window.innerHeight;
+    const touches = y => [{ clientX: 100, clientY: y }];
+    let reachedCap = false;
+    for (let index = 0; index < 10; index += 1) {
+      dispatch(window, 'touchstart', { touches: touches(500) });
+      dispatch(window, 'touchmove', { touches: touches(380) });
       dispatch(window, 'touchend');
-      drain(frames);
-    };
-    swipe();
-    swipe();
-    assert.equal(Number(equalizer.style.getPropertyValue('--equalizer-level')), 0.4);
-    dispatch(window, 'touchstart', { touches: touches(100, 500) });
-    dispatch(window, 'touchmove', { touches: touches(300, 490) });
-    dispatch(window, 'touchmove', { touches: [...touches(300, 300), ...touches(100, 200)] });
-    dispatch(window, 'touchmove', { touches: touches(100, 100) });
-    assert.equal(frames.size, 0);
-    drain(timers);
-    assert.equal(equalizer.style.getPropertyValue('--equalizer-level'), '0');
-    assert.equal(equalizer.attributes.has('data-equalizer-active'), false);
+      advance(0);
+      reachedCap ||= levels(bars).includes(1);
+      advance(300);
+      assert.ok(levels(bars).every(height => height === 0));
+    }
+    assert.ok(reachedCap, 'repeated swipes accumulate enough effort for full-height peaks');
+    advance(5000);
+    dispatch(window, 'touchstart', { touches: touches(500) });
+    dispatch(window, 'touchmove', { touches: touches(380) });
+    advance(0);
+    assert.ok(Math.max(...levels(bars)) < 0.35, 'a fresh gesture after a long pause starts small');
   });
 });
 
-test('footer resets on leaving the bottom, width changes and hidden tabs, and abort cancels pending work', async () => {
-  await withBrowser(({ window, document, root, equalizer, frames, timers, controller }) => {
+test('footer resets on leaving the bottom, width changes and hidden tabs, and abort clears all bar state', async () => {
+  await withBrowser(({ window, document, root, equalizer, bars, frames, advance, controller }) => {
     const page = controller();
     initFooterEqualizer(page.signal);
     const push = () => {
       root.scrollTop = root.scrollHeight - window.innerHeight;
-      dispatch(window, 'wheel', { deltaX: 0, deltaY: 120, deltaMode: 0 });
-      drain(frames);
+      wheel(window);
+      advance(0);
     };
     push();
     window.innerHeight += 30;
     dispatch(window, 'resize');
-    assert.notEqual(equalizer.style.getPropertyValue('--equalizer-level'), '0');
+    assert.ok(levels(bars).some(height => height > 0));
     window.innerWidth += 100;
     dispatch(window, 'resize');
-    assert.equal(equalizer.style.getPropertyValue('--equalizer-level'), '0');
+    assert.ok(levels(bars).every(height => height === 0));
     push();
     root.scrollTop -= 100;
     dispatch(window, 'scroll');
-    assert.equal(equalizer.style.getPropertyValue('--equalizer-level'), '0');
+    assert.ok(levels(bars).every(height => height === 0));
     push();
     document.hidden = true;
     dispatch(document, 'visibilitychange');
-    assert.equal(equalizer.style.getPropertyValue('--equalizer-level'), '0');
-    dispatch(window, 'wheel', { deltaX: 0, deltaY: 120, deltaMode: 0 });
+    assert.ok(levels(bars).every(height => height === 0));
+    wheel(window);
+    assert.equal(frames.size, 0, 'a hidden page cannot restart the clock');
+    document.hidden = false;
+    wheel(window);
     assert.equal(frames.size, 1);
     page.abort();
     assert.equal(frames.size, 0);
-    assert.equal(timers.size, 0);
     assert.equal(equalizer.attributes.size, 0);
-    assert.equal(equalizer.style.getPropertyValue('--equalizer-level'), '');
-    dispatch(window, 'wheel', { deltaX: 0, deltaY: 120, deltaMode: 0 });
+    assert.ok(bars.every(bar => bar.style.values.size === 0));
+    wheel(window);
     assert.equal(frames.size, 0);
   });
 });

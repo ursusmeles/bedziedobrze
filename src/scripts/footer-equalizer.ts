@@ -2,28 +2,55 @@
 export const initFooterEqualizer = (signal: AbortSignal) => {
   const equalizer = document.querySelector<HTMLElement>('[data-footer-equalizer]');
   if (!equalizer || signal.aborted) return;
+  const bars = [...equalizer.querySelectorAll<HTMLElement>('span')].map(element => ({
+    element, peak: 0, nextBeat: 0, rising: false,
+  }));
+  if (!bars.length) return;
   const root = document.scrollingElement ?? document.documentElement;
-  let level = 0;
+  const random = (min: number, max: number) => min + Math.random() * (max - min);
+  let energy = 0;
   let frame = 0;
-  let settleTimer = 0;
+  let lastInput = -Infinity;
   let viewportWidth = window.innerWidth;
   let touch: { x: number; y: number } | undefined;
 
   const atBottom = () => root.scrollHeight - root.scrollTop - window.innerHeight <= 2;
-  const render = () => {
+  const move = (bar: typeof bars[number], height: number, duration: number, rising: boolean) => {
+    bar.element.style.setProperty('--bar-duration', `${duration}ms`);
+    bar.element.style.setProperty('--bar-ease', `var(--ease-circ-${rising ? 'out' : 'in'})`);
+    bar.element.style.setProperty('--bar-level', String(height));
+  };
+  const release = () => {
+    window.cancelAnimationFrame(frame);
+    frame = 0;
+    if (!energy) return;
+    for (const bar of bars) {
+      move(bar, 0, random(90, 190), false);
+      bar.nextBeat = 0;
+      bar.rising = false;
+    }
+    equalizer.removeAttribute('data-equalizer-active');
+  };
+  const reset = () => { release(); energy = 0; };
+  const render = (time: number) => {
     frame = 0;
     if (signal.aborted) return;
-    equalizer.style.setProperty('--equalizer-level', String(level));
-    if (level > 0) equalizer.setAttribute('data-equalizer-active', '');
-  };
-  const reset = () => {
-    window.cancelAnimationFrame(frame);
-    window.clearTimeout(settleTimer);
-    frame = 0;
-    settleTimer = 0;
-    level = 0;
-    equalizer.style.setProperty('--equalizer-level', '0');
-    equalizer.removeAttribute('data-equalizer-active');
+    // Start the short release promptly after the last input.
+    if (time - lastInput >= 120) {
+      release();
+      return;
+    }
+    for (const bar of bars) {
+      if (time < bar.nextBeat) continue;
+      bar.rising = !bar.rising;
+      if (bar.rising) bar.peak = energy * Math.min(1, random(0.3, 1.2));
+      const height = bar.rising ? bar.peak : bar.peak * random(0.08, 0.4);
+      const duration = bar.rising ? random(55, 125) : random(70, 160);
+      move(bar, height, duration, bar.rising);
+      bar.nextBeat = time + duration + random(0, 25);
+    }
+    // Only the clocks run here; CSS transitions interpolate each bar on its own.
+    frame = window.requestAnimationFrame(render);
   };
   const push = (distance: number) => {
     if (!Number.isFinite(distance) || distance === 0 || signal.aborted) return;
@@ -31,12 +58,19 @@ export const initFooterEqualizer = (signal: AbortSignal) => {
       reset();
       return;
     }
-    if (!atBottom()) return;
+    if (!atBottom() || document.hidden) return;
+    const now = performance.now();
+    const pause = now - lastInput;
+    if (pause >= 120) {
+      release();
+      // Let successive swipes build higher peaks even after the bars have dropped.
+      energy *= Math.exp(-(pause - 120) / 1200);
+    }
+    lastInput = now;
     const viewport = Math.max(1, window.innerHeight);
-    level = Math.min(1, level + Math.min(distance, viewport * 0.3) / (viewport * 0.75));
+    energy = Math.min(1, energy + Math.min(distance, viewport * 0.3) / (viewport * 0.5));
+    equalizer.setAttribute('data-equalizer-active', '');
     if (!frame) frame = window.requestAnimationFrame(render);
-    window.clearTimeout(settleTimer);
-    settleTimer = window.setTimeout(reset, 1400);
   };
 
   window.addEventListener('wheel', event => {
@@ -66,7 +100,7 @@ export const initFooterEqualizer = (signal: AbortSignal) => {
   window.addEventListener('touchend', endTouch, { passive: true, signal });
   window.addEventListener('touchcancel', endTouch, { passive: true, signal });
   window.addEventListener('scroll', () => {
-    if (level > 0 && !atBottom()) reset();
+    if (energy > 0 && !atBottom()) reset();
   }, { passive: true, signal });
   window.addEventListener('resize', () => {
     // Browser chrome changes mobile viewport height during a swipe.
@@ -79,7 +113,11 @@ export const initFooterEqualizer = (signal: AbortSignal) => {
   }, { signal });
   signal.addEventListener('abort', () => {
     reset();
-    equalizer.style.removeProperty('--equalizer-level');
+    for (const bar of bars) {
+      for (const property of ['--bar-level', '--bar-duration', '--bar-ease']) {
+        bar.element.style.removeProperty(property);
+      }
+    }
     equalizer.removeAttribute('data-equalizer-ready');
     touch = undefined;
   }, { once: true });

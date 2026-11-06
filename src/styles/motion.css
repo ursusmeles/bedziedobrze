@@ -31,7 +31,7 @@
     grid-column: full;
     display: grid;
     grid-template-columns: repeat(12, minmax(0, 1fr));
-    gap: var(--space-3xs);
+    gap: 0;
     height: 100%;
     pointer-events: none;
     z-index: 0;
@@ -39,18 +39,15 @@
 
   .footer-equalizer > span {
     background-color: var(--c-hot);
-    transform: scaleY(calc(var(--equalizer-level, 0) * var(--bar-height)));
+    transform: scaleY(var(--bar-level, 0));
     transform-origin: bottom;
-    transition: transform var(--duration-panel) var(--ease-circ-in-out);
-  }
-
-  .footer-equalizer[data-equalizer-active] > span {
-    transition-timing-function: var(--ease-circ-out);
+    transition: transform var(--bar-duration, 140ms) var(--bar-ease, var(--ease-circ-out));
   }
 
   @media (max-width: 43.99rem) {
     .footer-equalizer[data-equalizer-ready] {
-      height: 50svh;
+      height: 100vh;
+      height: 100dvh;
     }
   }
 
