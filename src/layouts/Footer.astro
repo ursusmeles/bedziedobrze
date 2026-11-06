@@ -1,3 +1,6 @@
+---
+const barHeights = [0.32, 0.68, 0.48, 0.85, 0.55, 1, 0.72, 0.42, 0.9, 0.58, 0.78, 0.37];
+---
 <footer class="layout-grid site-footer">
   <div class="footer-content">
     
@@ -21,15 +24,22 @@
     </div>
 
   </div>
+  <div class="footer-equalizer" data-footer-equalizer aria-hidden="true">
+    {barHeights.map(height => <span style={`--bar-height: ${height}`}></span>)}
+  </div>
 </footer>
 
 <style>
   .site-footer {
+    position: relative;
+    isolation: isolate;
     padding-block: var(--fluid-margin) var(--space-xl-2xl);
     background-color: var(--c-offwhite);
   }
 
   .footer-content {
+    position: relative;
+    z-index: 1;
     grid-column: content;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 25rem), 1fr));

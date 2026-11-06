@@ -4,18 +4,6 @@ import { mountMotion } from './motion';
 
 mountMotion();
 
-const initHeaderScroll = () => {
-  const header = document.querySelector('.site-header');
-  if (!header) return;
-
-  const toggleScrollClass = () => {
-    header.classList.toggle('is-scrolled', window.scrollY > 100);
-  };
-
-  window.addEventListener('scroll', toggleScrollClass, { passive: true });
-  toggleScrollClass(); 
-};
-
 const initMobileNav = () => {
   const toggle = document.querySelector('.menu-toggle');
   const nav = document.querySelector('#mobile-nav');
@@ -95,7 +83,6 @@ else {
 
 // Master Initializer
 document.addEventListener('astro:page-load', () => {
-  initHeaderScroll();
   initMobileNav();
   initEmailReveal();
 });

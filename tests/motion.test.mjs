@@ -1,9 +1,22 @@
+import { initFooterEqualizer } from '../src/scripts/footer-equalizer.ts';
+import { initHeaderScroll } from '../src/scripts/header-scroll.ts';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { mountMotion } from '../src/scripts/motion.ts';
 import { initParallax } from '../src/scripts/parallax.ts';
 import { initScrollOverlaps } from '../src/scripts/scroll-overlap.ts';
 import { initTextReveals } from '../src/scripts/text-reveal.ts';
+
+const dispatch = (target, type, fields = {}) => {
+  const event = Object.assign(new Event(type, { cancelable: true }), fields);
+  target.dispatchEvent(event);
+  return event;
+};
+const drain = callbacks => {
+  const pending = [...callbacks.values()];
+  callbacks.clear();
+  pending.forEach(callback => callback(0));
+};
 
 const flush = async () => { for (let index = 0; index < 8; index += 1) await Promise.resolve(); };
 
@@ -14,8 +27,10 @@ const withBrowser = async (run, options = {}) => {
   const intersections = [];
   const resizes = [];
   const frames = new Map();
+  const timers = new Map();
   const cleanups = [];
   let frameId = 0;
+  let timerId = 0;
 
   class Style {
     values = new Map();
@@ -27,8 +42,9 @@ const withBrowser = async (run, options = {}) => {
     get willChange() { return this.getPropertyValue('will-change'); }
     set willChange(value) { this.setProperty('will-change', value); }
   }
-  class Element {
+  class Element extends EventTarget {
     constructor(top = 1100, height = 30) {
+      super();
       this.top = top;
       this.height = height;
       this.textContent = 'A\u0301B\u00adC';
@@ -36,12 +52,17 @@ const withBrowser = async (run, options = {}) => {
       this.dataset = {};
       this.classes = new Set();
       this.attributes = new Map();
-      this.classList = { add: name => this.classes.add(name), remove: name => this.classes.delete(name) };
+      this.classList = {
+        add: (...names) => names.forEach(name => this.classes.add(name)),
+        remove: (...names) => names.forEach(name => this.classes.delete(name)),
+        toggle: (name, force) => force ? this.classes.add(name) : this.classes.delete(name),
+      };
     }
     getBoundingClientRect() { trace.push('read'); return { top: this.top, left: 0, width: 100, height: this.height }; }
     setAttribute(name, value) { this.attributes.set(name, value); }
     removeAttribute(name) { this.attributes.delete(name); }
     closest() { return this.anchor || null; }
+    querySelector() { return this.keyboardFocus ? {} : null; }
     animate(keyframes, timing) {
       if (options.animationError) throw new Error('Animation unavailable');
       let resolve, reject;
@@ -69,14 +90,22 @@ const withBrowser = async (run, options = {}) => {
   const panel = new Element(1500, 2200);
   const parallax = [new Element(), new Element()];
   parallax.forEach(element => { element.anchor = new Element(500, 600); });
+  const equalizer = new Element();
+  const header = new Element(0);
+  const root = { lang: 'pl', scrollHeight: 8000, scrollTop: 0 };
+  const desktop = new EventTarget();
+  desktop.matches = options.desktop ?? false;
   const motion = new EventTarget();
   motion.matches = options.reduced ?? false;
   motion.change = value => { motion.matches = value; motion.dispatchEvent(new Event('change')); };
   const window = new EventTarget();
   Object.assign(window, {
-    innerHeight: 800, innerWidth: 400, matchMedia: () => motion,
+    innerHeight: 800, innerWidth: 400, scrollY: 0,
+    matchMedia: query => query === '(min-width: 44rem)' ? desktop : motion,
     requestAnimationFrame: callback => { const id = ++frameId; frames.set(id, callback); return id; },
     cancelAnimationFrame: id => frames.delete(id),
+    setTimeout: callback => { const id = ++timerId; timers.set(id, callback); return id; },
+    clearTimeout: id => timers.delete(id),
     IntersectionObserver, ResizeObserver,
   });
   if (options.noObserver) delete window.IntersectionObserver;
@@ -85,7 +114,12 @@ const withBrowser = async (run, options = {}) => {
   fonts.ready = options.fonts ?? Promise.resolve();
   const document = new EventTarget();
   Object.assign(document, {
-    body: {}, documentElement: { lang: 'pl' }, readyState: 'complete', fonts,
+    body: {}, documentElement: root, scrollingElement: root, readyState: 'complete', fonts,
+    querySelector(selector) {
+      if (selector === '[data-footer-equalizer]') return options.noEqualizer ? null : equalizer;
+      if (selector === '.site-header') return header;
+      throw new Error(`Unexpected selector: ${selector}`);
+    },
     querySelectorAll(selector) {
       if (selector === '[data-parallax]') return parallax;
       if (selector === '[data-scroll-pin="bottom"]') return [panel];
@@ -119,7 +153,7 @@ const withBrowser = async (run, options = {}) => {
     return value;
   };
   try {
-    await run({ window, document, headings, panel, parallax, animations, intersections, resizes, frames, motion, trace, controller, cleanups });
+    await run({ window, document, headings, panel, parallax, animations, intersections, resizes, frames, timers, motion, trace, controller, cleanups, equalizer, header, root, desktop });
   } finally {
     cleanups.reverse().forEach(cleanup => cleanup());
     await flush();
@@ -262,12 +296,161 @@ test('one motion lifecycle handles Astro swaps and reduced-motion changes withou
 });
 
 test('a reduced-motion page creates no observers or animation frames', async () => {
-  await withBrowser(async ({ intersections, resizes, frames, headings, cleanups }) => {
+  await withBrowser(async ({ intersections, resizes, frames, headings, cleanups, equalizer, header }) => {
     cleanups.push(mountMotion());
     await flush();
     assert.equal(intersections.length, 0);
     assert.equal(resizes.length, 0);
     assert.equal(frames.size, 0);
+    assert.equal(equalizer.attributes.size, 0);
+    assert.equal(header.classes.has('is-hidden'), false);
     assert.ok(headings.every(element => element.classes.size === 0));
   }, { reduced: true });
+});
+
+
+test('footer input builds only at the bottom, normalizes wheel units, caps effort and leaves scrolling native', async () => {
+  await withBrowser(({ window, root, equalizer, frames, timers, controller }) => {
+    initFooterEqualizer(controller().signal);
+    const wheel = fields => dispatch(window, 'wheel', { deltaX: 0, deltaY: 120, deltaMode: 0, ...fields });
+    wheel();
+    assert.equal(frames.size, 0);
+    root.scrollTop = root.scrollHeight - window.innerHeight;
+    const scrollTop = root.scrollTop;
+    assert.equal(wheel().defaultPrevented, false);
+    drain(frames);
+    assert.equal(Number(equalizer.style.getPropertyValue('--equalizer-level')), 0.2);
+    wheel({ deltaY: 3, deltaMode: 1 });
+    drain(frames);
+    assert.equal(Number(equalizer.style.getPropertyValue('--equalizer-level')), 0.28);
+    for (let index = 0; index < 4; index += 1) wheel({ deltaY: 1, deltaMode: 2 });
+    assert.equal(frames.size, 1, 'input writes coalesce into one frame');
+    drain(frames);
+    assert.equal(equalizer.style.getPropertyValue('--equalizer-level'), '1');
+    assert.equal(timers.size, 1);
+    assert.equal(root.scrollTop, scrollTop);
+    wheel({ deltaY: -120 });
+    assert.equal(equalizer.style.getPropertyValue('--equalizer-level'), '0');
+    for (const fields of [{ ctrlKey: true }, { metaKey: true }, { deltaX: 200 }, { deltaZ: 1 }, { deltaY: NaN }]) wheel(fields);
+    assert.equal(frames.size, 0);
+    assert.equal(timers.size, 0);
+  });
+});
+
+test('footer touch effort accumulates across swipes, ignores other gestures and settles after inactivity', async () => {
+  await withBrowser(({ window, root, equalizer, frames, timers, controller }) => {
+    initFooterEqualizer(controller().signal);
+    root.scrollTop = root.scrollHeight - window.innerHeight;
+    const touches = (x, y) => [{ clientX: x, clientY: y }];
+    const swipe = () => {
+      dispatch(window, 'touchstart', { touches: touches(100, 500) });
+      const event = dispatch(window, 'touchmove', { touches: touches(100, 380) });
+      assert.equal(event.defaultPrevented, false);
+      dispatch(window, 'touchend');
+      drain(frames);
+    };
+    swipe();
+    swipe();
+    assert.equal(Number(equalizer.style.getPropertyValue('--equalizer-level')), 0.4);
+    dispatch(window, 'touchstart', { touches: touches(100, 500) });
+    dispatch(window, 'touchmove', { touches: touches(300, 490) });
+    dispatch(window, 'touchmove', { touches: [...touches(300, 300), ...touches(100, 200)] });
+    dispatch(window, 'touchmove', { touches: touches(100, 100) });
+    assert.equal(frames.size, 0);
+    drain(timers);
+    assert.equal(equalizer.style.getPropertyValue('--equalizer-level'), '0');
+    assert.equal(equalizer.attributes.has('data-equalizer-active'), false);
+  });
+});
+
+test('footer resets on leaving the bottom, width changes and hidden tabs, and abort cancels pending work', async () => {
+  await withBrowser(({ window, document, root, equalizer, frames, timers, controller }) => {
+    const page = controller();
+    initFooterEqualizer(page.signal);
+    const push = () => {
+      root.scrollTop = root.scrollHeight - window.innerHeight;
+      dispatch(window, 'wheel', { deltaX: 0, deltaY: 120, deltaMode: 0 });
+      drain(frames);
+    };
+    push();
+    window.innerHeight += 30;
+    dispatch(window, 'resize');
+    assert.notEqual(equalizer.style.getPropertyValue('--equalizer-level'), '0');
+    window.innerWidth += 100;
+    dispatch(window, 'resize');
+    assert.equal(equalizer.style.getPropertyValue('--equalizer-level'), '0');
+    push();
+    root.scrollTop -= 100;
+    dispatch(window, 'scroll');
+    assert.equal(equalizer.style.getPropertyValue('--equalizer-level'), '0');
+    push();
+    document.hidden = true;
+    dispatch(document, 'visibilitychange');
+    assert.equal(equalizer.style.getPropertyValue('--equalizer-level'), '0');
+    dispatch(window, 'wheel', { deltaX: 0, deltaY: 120, deltaMode: 0 });
+    assert.equal(frames.size, 1);
+    page.abort();
+    assert.equal(frames.size, 0);
+    assert.equal(timers.size, 0);
+    assert.equal(equalizer.attributes.size, 0);
+    assert.equal(equalizer.style.getPropertyValue('--equalizer-level'), '');
+    dispatch(window, 'wheel', { deltaX: 0, deltaY: 120, deltaMode: 0 });
+    assert.equal(frames.size, 0);
+  });
+});
+
+test('desktop header uses direction thresholds, returns near the top and reveals for keyboard focus', async () => {
+  await withBrowser(({ window, header, desktop, frames, controller }) => {
+    const page = controller();
+    initHeaderScroll(page.signal);
+    const scroll = y => { window.scrollY = y; dispatch(window, 'scroll'); drain(frames); };
+    scroll(140);
+    assert.equal(header.classes.has('is-hidden'), false);
+    assert.equal(header.classes.has('is-scrolled'), true);
+    scroll(170);
+    assert.equal(header.classes.has('is-hidden'), false);
+    scroll(190);
+    assert.equal(header.classes.has('is-hidden'), true);
+    scroll(186);
+    assert.equal(header.classes.has('is-hidden'), true);
+    scroll(178);
+    assert.equal(header.classes.has('is-hidden'), false);
+    scroll(250);
+    assert.equal(header.classes.has('is-hidden'), true);
+    dispatch(header, 'focusin');
+    assert.equal(header.classes.has('is-hidden'), false);
+    header.keyboardFocus = true;
+    scroll(500);
+    assert.equal(header.classes.has('is-hidden'), false);
+    header.keyboardFocus = false;
+    scroll(600);
+    assert.equal(header.classes.has('is-hidden'), true);
+    scroll(80);
+    assert.equal(header.classes.has('is-hidden'), false);
+    assert.equal(header.classes.has('is-scrolled'), false);
+    scroll(700);
+    assert.equal(header.classes.has('is-hidden'), true);
+    desktop.matches = false;
+    dispatch(desktop, 'change');
+    assert.equal(header.classes.has('is-hidden'), false);
+    scroll(900);
+    assert.equal(header.classes.has('is-hidden'), false);
+    dispatch(window, 'scroll');
+    page.abort();
+    assert.equal(frames.size, 0);
+    assert.equal(header.classes.size, 0);
+  }, { desktop: true });
+});
+
+test('mobile and reduced-motion headers stay visible while keeping the scrolled backdrop', async () => {
+  for (const options of [{ desktop: false }, { desktop: true, reduced: true }]) {
+    await withBrowser(({ window, header, frames, controller }) => {
+      initHeaderScroll(controller().signal, options.reduced);
+      window.scrollY = 600;
+      dispatch(window, 'scroll');
+      drain(frames);
+      assert.equal(header.classes.has('is-hidden'), false);
+      assert.equal(header.classes.has('is-scrolled'), true);
+    }, options);
+  }
 });

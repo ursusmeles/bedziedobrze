@@ -22,8 +22,9 @@ import sbgblokImg from '../imgs/blok.webp';
     <img src="/img/heading.svg" alt="" aria-hidden="true" class="hero-svg" draggable="false" loading="eager" width="2000" height="216" fetchpriority="high"/>
   </section>
   <!-- BANNER -->
-  <div class="layout-grid full-bleed overlap-group studio-overlap">
-    <section id="studio" class="full-bleed-wrapper studio-banner" aria-label="Studio">
+  <!-- Keep fragment targets on stationary wrappers, outside the sticky panels. -->
+  <div id="studio" class="layout-grid full-bleed overlap-group studio-overlap">
+    <section class="full-bleed-wrapper studio-banner" aria-label="Studio">
       <Image
         src={sbgblokImg}
         alt=""
@@ -69,8 +70,8 @@ import sbgblokImg from '../imgs/blok.webp';
     </div>
   </section>
   <!-- PROCES -->
-  <div class="layout-grid full-bleed overlap-group process-overlap">
-    <section id="proces" class="features" aria-labelledby="h-proces" data-variant="proces" data-scroll-pin="bottom">
+  <div id="proces" class="layout-grid full-bleed overlap-group process-overlap">
+    <section class="features" aria-labelledby="h-proces" data-variant="proces" data-scroll-pin="bottom">
       <img src="/img/glyph-b.svg" alt="" aria-hidden="true" loading="lazy" width="500" height="661" draggable="false" />
       <h2 id="h-proces">Prosty proces</h2>
       <ol class="features-list" role="list">

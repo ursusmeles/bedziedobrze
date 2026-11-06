@@ -1,3 +1,5 @@
+import { initHeaderScroll } from './header-scroll.ts';
+import { initFooterEqualizer } from './footer-equalizer.ts';
 import { initParallax } from './parallax.ts';
 import { initScrollOverlaps } from './scroll-overlap.ts';
 import { initTextReveals } from './text-reveal.ts';
@@ -18,12 +20,14 @@ export const mountMotion = () => {
     if (body === document.body) return;
     stop();
     body = document.body;
-    if (preference.matches) return;
     page = new AbortController();
     try {
+      initHeaderScroll(page.signal, preference.matches);
+      if (preference.matches) return;
       initTextReveals(page.signal);
       initScrollOverlaps(page.signal);
       initParallax(page.signal);
+      initFooterEqualizer(page.signal);
     } catch (error) {
       page.abort();
       console.warn('Motion enhancement skipped:', error);

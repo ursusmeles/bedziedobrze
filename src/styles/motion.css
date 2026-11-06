@@ -1,3 +1,7 @@
+.footer-equalizer {
+  display: none;
+}
+
 /* Optional motion stays separate from layout and is static in print. */
 @media screen and (prefers-reduced-motion: no-preference) {
   .text-reveal-pending {
@@ -20,6 +24,36 @@
     top: calc(100svh - var(--overlap-height));
   }
 
+  .footer-equalizer[data-equalizer-ready] {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    grid-column: full;
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: var(--space-3xs);
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .footer-equalizer > span {
+    background-color: var(--c-hot);
+    transform: scaleY(calc(var(--equalizer-level, 0) * var(--bar-height)));
+    transform-origin: bottom;
+    transition: transform var(--duration-panel) var(--ease-circ-in-out);
+  }
+
+  .footer-equalizer[data-equalizer-active] > span {
+    transition-timing-function: var(--ease-circ-out);
+  }
+
+  @media (max-width: 43.99rem) {
+    .footer-equalizer[data-equalizer-ready] {
+      height: 50svh;
+    }
+  }
+
   @supports (animation-timeline: view()) and (view-timeline-name: --image-zoom) and (animation-duration: auto) and (animation-range: entry 75% exit 100%) {
     .founder-photo {
       view-timeline-name: --image-zoom;
@@ -39,7 +73,7 @@
 
 @keyframes image-zoom {
   from { transform: scale(1); }
-  to { transform: scale(1.1); }
+  to { transform: scale(1.12); }
 }
 
 @media print, (prefers-reduced-motion: reduce) {

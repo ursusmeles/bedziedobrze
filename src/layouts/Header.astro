@@ -236,6 +236,23 @@
 
 /* DESKTOP LAYOUT (>= 44rem) */
 @media (min-width: 44rem) {
+  .site-header {
+    transform: translateY(0);
+    transition: transform var(--duration-panel) var(--ease-circ-in-out);
+  }
+
+  .site-header.is-hidden {
+    transform: translateY(-100%);
+  }
+
+  .site-header::before {
+    transition-timing-function: var(--ease-circ-in-out);
+  }
+
+  .site-header.is-hidden::before {
+    opacity: 0;
+  }
+
   .menu-toggle {
     display: none; /* Hide toggle on desktop */
   }
