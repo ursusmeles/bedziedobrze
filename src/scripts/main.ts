@@ -1,5 +1,7 @@
 // src/scripts/main.ts
 
+import './heading-reveal';
+
 const initHeaderScroll = () => {
   const header = document.querySelector('.site-header');
   if (!header) return;
