@@ -16,7 +16,8 @@
   }
 
   .studio-overlap > .studio-banner {
-    top: 0;
+    /* Let two lines scroll past the top before the banner pins. */
+    top: -2lh;
   }
 
   .process-overlap > [data-scroll-pin="bottom"][data-pin-ready] {
