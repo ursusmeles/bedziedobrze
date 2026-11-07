@@ -39,10 +39,6 @@
   grid-template-columns: 1fr;
 }
 
-.hero-content > p {
-  max-width: 50ch;
-}
-
 /* BOTTOM ROW & SITE TITLE (Default: Mobile text visible, SVG hidden) */
 .hero-text {
   display: block;
