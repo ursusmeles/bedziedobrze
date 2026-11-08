@@ -9,7 +9,6 @@ export interface Service {
   title: string;
   paragraphs: string[];
   highlight?: string;
-  toolsLabel?: string;
   tools: ServiceTool[];
 }
 
@@ -20,7 +19,6 @@ export const services: Service[] = [
     paragraphs: [
       'Aby biznes mógł stabilnie rosnąć, trzeba nieustannie testować, optymalizować i szukać nowych rozwiązań. Zdejmujemy z Ciebie ten ciężar. Nasze kreatywne pomysły opieramy na danych, a ich skuteczność sprawdzamy i raportujemy.',
     ],
-    toolsLabel: 'Usługi',
     highlight: 'Zdejmujemy z Ciebie ten ciężar.',
     tools: [
       { id: 'strategia', label: 'strategia', description: 'Przekujemy Twoje przewagi w konkretny plan biznesowy. Zdefiniujemy Twoich klientów, ich potrzeby i jak do nich trafić. Rozplanujemy działania marketingowe na kolejne miesiące.' },
@@ -35,7 +33,6 @@ export const services: Service[] = [
     paragraphs: [
       'Klienci poznają Twoją firmę na różne sposoby. Dbamy o to, żeby za każdym razem rozpoznawali tę samą markę i rozumieli, co ma do zaoferowania. Porządkujemy Twoją komunikację, by jasno i czytelnie pokazywała cechy, które chcemy podkreślić.',
     ],
-    toolsLabel: 'Usługi',
     highlight: 'Porządkujemy Twoją komunikację',
     tools: [
       { id: 'brand-design', label: 'brand design', description: 'Uporządkujemy lub odświeżymy identyfikację wizualną Twojej marki. Ustalimy, jak korzystać z logo, kolorów i typografii. Przygotujemy materiały, które ułatwią zachowanie spójności na co dzień.' },
@@ -50,7 +47,6 @@ export const services: Service[] = [
     paragraphs: [
       'Startupy wymagają ogromnej ilości uwagi od swoich founderów. Pomagamy ustalić, co jest potrzebne na początek, a co może poczekać. Przygotowujemy markę na launch i usprawniamy Twoją codzienną pracę.',
     ],
-    toolsLabel: 'Usługi',
     highlight: 'Pomagamy ustalić, co jest potrzebne',
     tools: [
       { id: 'strategia-marki', label: 'strategia marki', description: 'Na warsztatach ustalimy profil Twojego klienta, najważniejsze wyróżniki Twojej oferty i sposób ich komunikacji. Przygotujemy plan działań potrzebnych do wprowadzenia marki na rynek i osiągnięcia PMF.' },

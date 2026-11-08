@@ -27,8 +27,7 @@ const tools = service.tools.map(tool => ({
     ))}
   </div>
   <div class="stack" data-service-tools style="--gutter: var(--space-m);">
-    <span class="eyebrow">{service.toolsLabel ?? 'Nasze narzędzia'}</span>
-    <div class="cluster" role="tablist">
+    <div class="cluster" role="tablist" aria-label={`Usługi — ${service.title}`}>
       {tools.map((tool, index) => (
         <button type="button" role="tab" aria-selected={index === 0 ? 'true' : 'false'} tabindex={index === 0 ? 0 : -1} aria-controls={tool.panelId} id={tool.tabId} class="tab-btn">
           <span class="grid-overlap">
